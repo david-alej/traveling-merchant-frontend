@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1710972062793" clover="3.2.0">
+  <project timestamp="1710972062794" name="All files">
+    <metrics statements="14" coveredstatements="14" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4" elements="24" coveredelements="24" complexity="0" loc="14" ncloc="14" packages="1" files="1" classes="1"/>
+    <file name="formatters.js" path="/home/david/Programming/projects/Full-Stack/traveling-merchant/src/util/formatters.js">
+      <metrics statements="14" coveredstatements="14" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="4" type="cond" truecount="4" falsecount="0"/>
+      <line num="3" count="3" type="stmt"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="12" count="1" type="stmt"/>
+      <line num="13" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="14" count="2" type="stmt"/>
+      <line num="17" count="3" type="stmt"/>
+      <line num="19" count="3" type="stmt"/>
+      <line num="30" count="3" type="stmt"/>
+      <line num="33" count="1" type="stmt"/>
+      <line num="34" count="3" type="stmt"/>
+      <line num="36" count="1" type="stmt"/>
+      <line num="37" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

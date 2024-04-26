@@ -1,0 +1,71 @@
+import { addValue, removeValue } from "../columnFiltersSlice"
+import "./MultiSelectFilter.css"
+
+import PropTypes from "prop-types"
+import { FaAngleDown } from "react-icons/fa"
+import { useState } from "react"
+import { useDispatch } from "react-redux"
+import { useLocation } from "react-router-dom"
+
+export default function MultiSelectFilter({
+  uniqueValues,
+  columnFilter: { id, value },
+}) {
+  const dispatch = useDispatch()
+  const route = useLocation().pathname.split("/")[1]
+  const [selectIsOpened, setSelectIsOpened] = useState(false)
+
+  const onAddValue = (value) => () => dispatch(addValue({ route, id, value }))
+
+  const onClearValue = (value) => () =>
+    dispatch(removeValue({ route, id, value }))
+
+  return (
+    <div className="multi-select-container">
+      <div className={"custom-select" + (selectIsOpened ? " open" : "")}>
+        <div className="select-box">
+          <div className="selected-options">
+            {value.map((selectedOption) => (
+              <span className="tag" key={selectedOption}>
+                {selectedOption}
+                <span
+                  className="remove-tag"
+                  onClick={onClearValue(selectedOption)}
+                >
+                  &times;
+                </span>
+              </span>
+            ))}
+          </div>
+          <div
+            className="arrow"
+            onClick={() => setSelectIsOpened(!selectIsOpened)}
+          >
+            <FaAngleDown size={20} />
+          </div>
+        </div>
+        <div className="options">
+          {uniqueValues.map((uniqueValue) => {
+            return (
+              <div
+                className={
+                  "option" + (value.includes(uniqueValue) ? " active" : "")
+                }
+                value={uniqueValue}
+                key={uniqueValue}
+                onClick={onAddValue(uniqueValue)}
+              >
+                {uniqueValue}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+MultiSelectFilter.propTypes = {
+  uniqueValues: PropTypes.array.isRequired,
+  columnFilter: PropTypes.object.isRequired,
+}

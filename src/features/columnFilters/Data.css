@@ -1,0 +1,23 @@
+.data {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.row {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  min-height: 2rem;
+  border-bottom: 1px solid var(--faded-color);
+}
+
+.property {
+  padding: 0 0 0 1rem;
+}
+
+.value {
+  position: absolute;
+  left: 50%;
+}

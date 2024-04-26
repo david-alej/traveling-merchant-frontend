@@ -1,0 +1,146 @@
+/* Filters */
+.data-header {
+  display: inline-flex;
+}
+
+.filters-container {
+  width: 100%;
+}
+
+.filters-title {
+  display: flex;
+  justify-content: center;
+  font-size: 1rem;
+  border-radius: 1rem;
+  padding: 0.7rem;
+  width: 100%;
+  margin: 0.4rem;
+}
+
+.filters-title:hover {
+  cursor: pointer;
+  background-color: var(--secondary-color);
+  color: #fff;
+}
+
+.filters-title.active {
+  cursor: pointer;
+  background-color: var(--main-color);
+  color: #fff;
+}
+
+.filters-box {
+  display: none;
+  background-color: var(--faded-color);
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+
+.is-open {
+  display: flex;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filter {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 18rem;
+  min-height: 4.5rem;
+  flex: 1 1 auto;
+}
+
+.is-open {
+  display: inline-flex;
+}
+
+.filter-break {
+  height: 0.3rem;
+}
+
+.arrow {
+  cursor: pointer;
+}
+
+/* Table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  overflow-y: auto;
+}
+
+th,
+td {
+  text-align: center;
+  border-bottom: 1px solid var(--faded-color);
+}
+
+th {
+  color: var(--secondary-color);
+  padding: 4px 8px;
+  border-top: 1px solid var(--faded-color);
+  height: 3rem;
+}
+
+.header-cell {
+  display: inline-flex;
+  align-items: center;
+}
+
+.sorting-buttons {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0.8rem;
+  cursor: pointer;
+}
+
+.sorting-button {
+  border: none;
+  color: var(--faded-color);
+  font-size: 0.9rem;
+  margin: -0.2rem 0;
+}
+
+tbody tr:hover {
+  background-color: var(--faded-color);
+}
+
+td {
+  padding: 8px;
+}
+
+/* Actions Column */
+.actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  column-gap: 0.5rem;
+}
+
+.action {
+  cursor: pointer;
+}
+
+/* Pagination */
+.page-count,
+.page-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.page-button {
+  font-size: 1.5rem;
+  background-color: var(--main-color);
+  color: #fff;
+  width: 1.5rem;
+  border-radius: 0.5rem;
+  margin: 0.5rem 0.05rem;
+  border: 0;
+}
+
+button:disabled {
+  background-color: var(--faded-color);
+}
