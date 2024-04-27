@@ -93,7 +93,7 @@ const reformColumn = (column) => {
 
         column.cell = (props) => {
           const id = props.getValue()
-          console.log(column.accessorKey, route, id)
+
           return id ? <Link to={`/${route}/${id}`}>{id}</Link> : <p>{id}</p>
         }
       }
@@ -200,6 +200,7 @@ export default function Datum() {
   } else if (isError) {
     content = <div>{error.toString()}</div>
   } else if (isSuccess) {
+    console.log(data)
     content = (
       <>
         <div className="data-header">

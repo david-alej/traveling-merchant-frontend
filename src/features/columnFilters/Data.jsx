@@ -32,7 +32,18 @@ export default function Data() {
             let content
 
             if (Array.isArray(value)) {
-              content = ""
+              if (typeof value[0] !== "string") {
+                const columns = Object.keys(value).filter((key) => {
+                  if (key) return key
+                })
+              }
+
+              content = (
+                <>
+                  <div className="property">{property}</div>
+                  <div className="value"> </div>
+                </>
+              )
             } else if (isIsoStr(value)) {
               content = (
                 <>
@@ -43,7 +54,6 @@ export default function Data() {
             } else if (typeof value === "object" && value !== null) {
               content = ""
             } else {
-              console.log(value)
               content = (
                 <>
                   <div className="property">{property}</div>
