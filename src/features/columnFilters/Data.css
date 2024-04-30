@@ -1,23 +1,66 @@
 .data {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
 }
 
-.row {
-  display: inline-flex;
+.row,
+.sub-row {
+  display: flex;
+  flex-direction: row;
   align-items: center;
+  flex: 0 0 50%;
   width: 100%;
+  height: auto;
   min-height: 2rem;
-  border-bottom: 1px solid var(--faded-color);
+  border-bottom: 1px solid var(--secondary-color);
 }
 
 .property {
+  width: 30%;
   padding: 0 0 0 1rem;
 }
 
 .value {
-  position: absolute;
-  left: 50%;
+  /* flex: 1; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.extended-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.extended-row .property {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  min-height: 2rem;
+  border-bottom: 1px solid var(--secondary-color);
+}
+
+.extended-row .value {
+  display: none;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.extended-row .value.open {
+  display: flex;
+}
+
+.sub-row {
+  background-color: var(--faded-color);
+}
+
+.sub-row .sub-property {
+  padding: 0 0 0 5rem;
+  width: 40%;
+}
+
+.sub-row .sub-value {
 }

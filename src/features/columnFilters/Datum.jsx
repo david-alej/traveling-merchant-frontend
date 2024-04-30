@@ -200,7 +200,6 @@ export default function Datum() {
   } else if (isError) {
     content = <div>{error.toString()}</div>
   } else if (isSuccess) {
-    console.log(data)
     content = (
       <>
         <div className="data-header">
