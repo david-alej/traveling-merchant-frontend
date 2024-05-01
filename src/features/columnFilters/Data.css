@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding: 1rem;
 }
 
 .row,
@@ -16,7 +17,7 @@
   border-bottom: 1px solid var(--secondary-color);
 }
 
-.property {
+.header {
   width: 30%;
   padding: 0 0 0 1rem;
 }
@@ -33,7 +34,7 @@
   flex-direction: column;
 }
 
-.extended-row .property {
+.extended-row .header {
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -47,6 +48,18 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  padding: 0.25rem;
+  border-radius: 1rem;
+  background-color: var(--faded-color);
+}
+
+.extended-row .value.table {
+  justify-content: center;
+  align-items: center;
+}
+
+.extended-row .value.table .sorting-button {
+  color: #fff;
 }
 
 .extended-row .value.open {
@@ -54,13 +67,14 @@
 }
 
 .sub-row {
-  background-color: var(--faded-color);
+  border-bottom: none;
 }
 
-.sub-row .sub-property {
+.sub-row.not-first {
+  border-top: 1px solid var(--secondary-color);
+}
+
+.sub-row .sub-header {
   padding: 0 0 0 5rem;
   width: 40%;
-}
-
-.sub-row .sub-value {
 }

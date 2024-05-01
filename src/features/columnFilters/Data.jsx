@@ -1,65 +1,34 @@
-import { useGetDataQuery } from "../../util/data-utils.jsx"
+import { useGetDataQuery } from "../../util/query-utils.jsx"
 import Spinner from "../../components/Spinner.jsx"
-import { formatFullDate, isIsoStr } from "../../util/formatters.js"
+import { camelToFlat, formatValue } from "../../util/data-utils.jsx"
 import "./Data.css"
 
 import { useLocation, useParams } from "react-router-dom"
-import { FaAngleDown } from "react-icons/fa"
-import { useState } from "react"
+import PropTypes from "prop-types"
+import MiniTable from "../../components/MiniTable.jsx"
+import MiniData from "../../components/MiniData.jsx"
 
-const chooseDisplayValue = (value) => {
-  let displayValue = value
-  let isExtendedRow = false
-
-  if (Array.isArray(value)) {
-    // const columns = Object.keys(value[0])
-
-    displayValue = ""
-    //   (
-    //   <table>
-    //     <thead>
-    //       <tr>
-    //         {columns.map((header, index) => (
-    //           <th key={index}>
-    //             <div className="header-cell">
-    //               <div className="header-text">{header}</div>
-    //             </div>
-    //           </th>
-    //         ))}
-    //       </tr>
-    //     </thead>
-    //     <tbody>
-    //       {value.map((object, index) => (
-    //         <tr key={index}>
-    //           {columns.map((column, columnIndex) => (
-    //             <td key={columnIndex}>{chooseDisplayValue(object[column])}</td>
-    //           ))}
-    //         </tr>
-    //       ))}
-    //     </tbody>
-    //   </table>
-    // )
-  } else if (isIsoStr(value)) {
-    displayValue = formatFullDate(value)
-  } else if (typeof value === "object" && value !== null) {
-    displayValue = Object.keys(value).map((property, index) => (
-      <div className="sub-row" key={index}>
-        <div className="sub-property">{property}</div>
-        <div className="sub-value">{chooseDisplayValue(value[property])}</div>
+function RegularValue({ index, property, header, value }) {
+  return (
+    <div key={index} className="row">
+      <div className="header">
+        <div className="header-text">{header}</div>
       </div>
-    ))
+      <div className="value">{formatValue(property, value)}</div>
+    </div>
+  )
+}
 
-    isExtendedRow = true
-  }
-
-  return [displayValue, isExtendedRow]
+RegularValue.propTypes = {
+  index: PropTypes.number.isRequired,
+  property: PropTypes.string.isRequired,
+  value: PropTypes.any.isRequired,
+  header: PropTypes.string.isRequired,
 }
 
 export default function Data() {
   const { id } = useParams()
-  const { pathname } = useLocation()
-  const route = pathname.split("/")[1]
-  const [selectIsOpened, setSelectIsOpened] = useState(false)
+  const route = useLocation().pathname.split("/")[1]
 
   const { data, error, isFetching, isSuccess, isError } = useGetDataQuery(
     route,
@@ -76,28 +45,33 @@ export default function Data() {
     content = (
       <div className="data">
         {Object.keys(data).map((property, index) => {
-          const [displayValue, isExtendedRow] = chooseDisplayValue(
-            data[property]
-          )
+          const value = data[property]
+          const header = camelToFlat(property)
+          const props = { index, property, value, header }
 
-          return (
-            <div key={index} className={isExtendedRow ? "extended-row" : "row"}>
-              <div className="property">
-                {isExtendedRow && (
-                  <div
-                    className="arrow"
-                    onClick={() => setSelectIsOpened(!selectIsOpened)}
-                  >
-                    <FaAngleDown size={20} />
-                  </div>
-                )}
-                <div className="property-text">{property}</div>
-              </div>
-              <div className={"value" + (selectIsOpened ? " open" : "")}>
-                {displayValue}
-              </div>
-            </div>
-          )
+          let row
+
+          if (Array.isArray(value)) {
+            if (typeof value[0] === "string") {
+              let arrStr = value[0]
+
+              for (let i = 1; i < value.length; i++) {
+                arrStr += ", " + value[parseInt(i)]
+              }
+
+              props.value = arrStr
+
+              row = <RegularValue {...props} />
+            } else {
+              row = <MiniTable {...props} />
+            }
+          } else if (typeof value === "object" && value !== null) {
+            row = <MiniData {...props} />
+          } else {
+            row = <RegularValue {...props} />
+          }
+
+          return row
         })}
       </div>
     )

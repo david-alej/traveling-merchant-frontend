@@ -1,42 +1,42 @@
-import Spinner from "../../components/Spinner.jsx"
-import { useGetDatumQuery } from "../../util/query-utils.jsx"
-import { reformColumns } from "../../util/datum-utils.jsx"
-import Filters from "./filters/Filters.jsx"
-import routesColumnDefinitions from "./routesColumnDefinitions.js"
-import "./Datum.css"
+import { camelToFlat, formatValue } from "../util/data-utils.jsx"
 
+import PropTypes from "prop-types"
+import { useState } from "react"
+import { FaAngleDown } from "react-icons/fa"
+import { FaEdit } from "react-icons/fa"
+import { FaDeleteLeft } from "react-icons/fa6"
 import {
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { useState } from "react"
-import { FaEdit } from "react-icons/fa"
-import { FaDeleteLeft } from "react-icons/fa6"
-import { useLocation } from "react-router-dom"
-import { useSelector } from "react-redux"
-import { selectRouteColumnFilters } from "./columnFiltersSlice.js"
+import { isIsoStr } from "../util/formatters.js"
 
-export default function Datum() {
-  const route = useLocation().pathname.split("/")[1]
-  const columns = routesColumnDefinitions[route]
-  const columnFilters = useSelector(selectRouteColumnFilters(route))
-  const [filtersIsOpened, setFiltersIsOpened] = useState(false)
+export default function MiniTable({ index, value, header }) {
+  const columns = Object.keys(value[0]).map((columnId) => {
+    const columnDef = {
+      accessorKey: columnId,
+      header: camelToFlat(columnId),
+      // eslint-disable-next-line react/prop-types
+      cell: (props) => formatValue(columnId, props.getValue(), header),
+    }
 
-  const { data, error, isFetching, isSuccess, isError } =
-    useGetDatumQuery(route)
+    if (isIsoStr(value)) columnDef.sortingFn = "dateSorting"
 
-  reformColumns(columns)
+    return columnDef
+  })
+  const [isOpen, setIsOpen] = useState(false)
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 5,
+  })
 
   const table = useReactTable({
-    data,
+    data: value,
     columns,
-    state: {
-      columnFilters,
-    },
+    state: { pagination },
     sortingFns: {
       dateSorting: (rowA, rowB, columnId) => {
         const dateA = rowA.getValue(columnId)
@@ -45,94 +45,21 @@ export default function Datum() {
         return dateA < dateB ? 1 : dateA > dateB ? -1 : 0
       },
     },
-    filterFns: {
-      typeFilter: (row, columnId, filterValue) => {
-        const type = row.getValue(columnId)
-
-        if (filterValue.length === 0) {
-          return true
-        } else {
-          return type === filterValue
-        }
-      },
-      tagsFilter: (row, columnId, filterValue) => {
-        const tagArray = row.getValue(columnId)
-
-        if (filterValue.length === 0) {
-          return true
-        } else {
-          return filterValue.every((value) => tagArray.includes(value))
-        }
-      },
-      dateFilter: (row, columnId, filterValue) => {
-        const date = new Date(row.getValue(columnId))
-        const minDateStr = filterValue[0]
-        const maxDateStr = filterValue[1]
-
-        if (filterValue.every((element) => element === "")) {
-          return true
-        } else {
-          const minDate = new Date(minDateStr)
-          const maxDate = new Date(maxDateStr)
-
-          return filterValue.every((dateStr) => dateStr)
-            ? minDate <= date && date <= maxDate
-            : minDateStr
-            ? minDate <= date
-            : date <= maxDate
-        }
-      },
-      arrayLengthFilter: (row, columnId, filterValue) => {
-        const arrLen = row.getValue(columnId).length
-        const [min, max] = filterValue
-
-        if (!min && !max) {
-          return true
-        } else if (min && max) {
-          return min <= arrLen && arrLen <= max
-        } else {
-          return min ? min <= arrLen : arrLen <= max
-        }
-      },
-      objectNameFilter: (row, columnId, filterValue) => {
-        const propertyName = Object.keys(row.getValue(columnId)).find((key) =>
-          key.toLowerCase().includes("name")
-        )
-        const name = row.getValue(columnId)[propertyName]
-
-        return filterValue ? name.toLowerCase().includes(filterValue) : true
-      },
-    },
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
   })
 
-  let content
-
-  if (isFetching) {
-    content = <Spinner />
-  } else if (isError) {
-    content = <div>{error.toString()}</div>
-  } else if (isSuccess) {
-    content = (
-      <>
-        <div className="data-header">
-          <div className="filters-container">
-            <div
-              className={"filters-title" + (filtersIsOpened ? " active" : "")}
-              onClick={() => setFiltersIsOpened(!filtersIsOpened)}
-            >
-              <strong>Filter Search</strong>
-            </div>
-            <div
-              className={"filters-box" + (filtersIsOpened ? " is-open" : "")}
-            >
-              <Filters table={table} />
-            </div>
-          </div>
+  return (
+    <div key={index} className="extended-row">
+      <div className="header">
+        <div className="arrow" onClick={() => setIsOpen(!isOpen)}>
+          <FaAngleDown size={20} />
         </div>
+        <div className="header-text">{header}</div>
+      </div>
+      <div className={"value table" + (isOpen ? " open" : "")}>
         <table>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -241,9 +168,14 @@ export default function Datum() {
             {">>"}
           </button>
         </div>
-      </>
-    )
-  }
+      </div>
+    </div>
+  )
+}
 
-  return <>{content}</>
+MiniTable.propTypes = {
+  index: PropTypes.number.isRequired,
+  property: PropTypes.string.isRequired,
+  value: PropTypes.array.isRequired,
+  header: PropTypes.string.isRequired,
 }
