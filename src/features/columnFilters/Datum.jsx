@@ -16,11 +16,12 @@ import {
 import { useState } from "react"
 import { FaEdit } from "react-icons/fa"
 import { FaDeleteLeft } from "react-icons/fa6"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { selectRouteColumnFilters } from "./columnFiltersSlice.js"
 
 export default function Datum() {
+  const navigate = useNavigate()
   const route = useLocation().pathname.split("/")[1]
   const columns = routesColumnDefinitions[route]
   const columnFilters = useSelector(selectRouteColumnFilters(route))
@@ -183,7 +184,10 @@ export default function Datum() {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
+              <tr
+                key={row.id}
+                onDoubleClick={() => navigate(`/${route}/${row.original.id}`)}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

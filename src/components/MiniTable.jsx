@@ -1,4 +1,9 @@
-import { camelToFlat, formatValue } from "../util/data-utils.jsx"
+import {
+  camelToFlat,
+  findIndentyInformation,
+  orderProperties,
+} from "../util/data-utils.jsx"
+import FormatValue from "./Formatvalue.jsx"
 
 import PropTypes from "prop-types"
 import { useState } from "react"
@@ -14,19 +19,22 @@ import {
 } from "@tanstack/react-table"
 import { isIsoStr } from "../util/formatters.js"
 
-export default function MiniTable({ index, value, header }) {
-  const columns = Object.keys(value[0]).map((columnId) => {
+export default function MiniTable({ index, value, header, excludedId }) {
+  const { nameValue } = findIndentyInformation(value)
+
+  const columns = orderProperties(value[0], excludedId).map((columnId) => {
     const columnDef = {
       accessorKey: columnId,
       header: camelToFlat(columnId),
       // eslint-disable-next-line react/prop-types
-      cell: (props) => formatValue(columnId, props.getValue(), header),
+      cell: (props) => FormatValue(columnId, props.getValue(), header),
     }
 
     if (isIsoStr(value)) columnDef.sortingFn = "dateSorting"
 
     return columnDef
   })
+
   const [isOpen, setIsOpen] = useState(false)
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -58,6 +66,7 @@ export default function MiniTable({ index, value, header }) {
           <FaAngleDown size={20} />
         </div>
         <div className="header-text">{header}</div>
+        <div className="name-value">{nameValue}</div>
       </div>
       <div className={"value table" + (isOpen ? " open" : "")}>
         <table>
@@ -178,4 +187,5 @@ MiniTable.propTypes = {
   property: PropTypes.string.isRequired,
   value: PropTypes.array.isRequired,
   header: PropTypes.string.isRequired,
+  excludedId: PropTypes.number.isRequired,
 }

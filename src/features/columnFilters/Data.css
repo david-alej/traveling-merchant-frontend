@@ -41,6 +41,18 @@
   width: 100%;
   min-height: 2rem;
   border-bottom: 1px solid var(--secondary-color);
+  padding: 0;
+}
+
+.extended-row .header .arrow {
+  width: 5%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.extended-row .header .header-text {
+  width: 25%;
 }
 
 .extended-row .value {

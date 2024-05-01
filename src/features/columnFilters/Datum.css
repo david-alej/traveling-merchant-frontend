@@ -108,6 +108,11 @@ tbody tr:hover {
   background-color: var(--faded-color);
 }
 
+tbody tr:active {
+  background-color: var(--main-color);
+  color: var(#fff);
+}
+
 td {
   padding: 8px;
 }

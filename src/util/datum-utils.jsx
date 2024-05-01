@@ -83,5 +83,14 @@ export const reformColumn = (column) => {
   }
 }
 
-export const reformColumns = (columns) =>
+export const reformColumns = (columns) => {
   columns.forEach((column) => reformColumn(column))
+
+  if (columns[0].accessorKey !== "id") {
+    columns.unshift({
+      accessorKey: "id",
+      header: "Id",
+      meta: { dataType: "int" },
+    })
+  }
+}

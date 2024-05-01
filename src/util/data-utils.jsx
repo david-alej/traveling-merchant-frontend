@@ -1,6 +1,7 @@
-import { formatFullDate, formatPhoneNumber, isIsoStr } from "./formatters"
+export const isArray = (value) => Array.isArray(value)
 
-import { Link } from "react-router-dom"
+export const isObject = (value) =>
+  !Array.isArray(value) && typeof value === "object" && value !== null
 
 export const camelToFlat = (property) => {
   const camelCase = property.replace(/([a-z])([A-Z])/g, "$1 $2").split(" ")
@@ -14,44 +15,87 @@ export const camelToFlat = (property) => {
   return flat.slice(0, -1)
 }
 
-export const formatValue = (property, value, miniTableName = "") => {
-  let formattedValue
+export const findIndentyInformation = (value) => {
+  let obj = value[0]
+  let nameValue = value.length
 
-  if (isIsoStr(value)) {
-    formattedValue = formatFullDate(value)
-  } else if (property === "phoneNumber") {
-    formattedValue = formatPhoneNumber(value)
-  } else if (Array.isArray(value)) {
-    formattedValue = value.length
-  } else if (typeof value === "object" && value !== null) {
+  if (!isArray(value)) {
+    obj = value
+
     const nameKey =
-      Object.keys(value).find((key) => key.toLowerCase().includes("name")) ||
-      "id"
-    const { id, [nameKey]: name } = value
+      Object.keys(obj).find((key) => key.toLowerCase().includes("name")) || "id"
 
-    formattedValue = (
-      <Link to={`/${property.toLowerCase()}s/${id}`}>{name}</Link>
-    )
-  } else if (
-    !(
-      miniTableName === "Wares Bought" ||
-      miniTableName === "Wares Sold" ||
-      miniTableName === "Bought" ||
-      miniTableName === "Sold"
-    ) &&
-    property === "id" &&
-    value
-  ) {
-    formattedValue = (
-      <Link to={`/${miniTableName.toLowerCase()}/${value}`}>{value}</Link>
-    )
-  } else if (property.includes("Id") && value) {
-    const route = property.slice(0, -2) + "s"
-
-    formattedValue = <Link to={`/${route}/${value}`}>{value}</Link>
-  } else {
-    formattedValue = value
+    nameValue = obj[nameKey]
   }
 
-  return formattedValue
+  return {
+    nameValue,
+    id: obj.id,
+  }
+}
+
+export const orderProperties = (data, excludedId = false) => {
+  const properties = Object.keys(data)
+  const foreignId = properties.filter(
+    (property) => property.length > 2 && property.includes("Id")
+  )
+
+  const id = []
+  const miniData = []
+  const regulars = []
+  const dates = []
+  const description = ["description"]
+  const miniTable = []
+  const lastProperties = ["updatedAt", "createdAt"]
+
+  for (const property of properties) {
+    const value = data[property]
+    const isUndefinedForeignId = foreignId.some(
+      (id) => id === property && !data[id]
+    )
+    const isUndefinedForeignName = foreignId.some((id) => {
+      const foreignName = id.slice(0, -2)
+
+      return foreignName === property && !data[foreignName]
+    })
+    const foreignNameExists = (foreignId) => {
+      const foreignName = foreignId.slice(0, -2)
+
+      return data[foreignName] && true
+    }
+    const isDefinedForeignId = foreignId.some((id) => id === property)
+
+    if (
+      property === "updatedAt" ||
+      property === "createdAt" ||
+      property === "description" ||
+      isUndefinedForeignId ||
+      isUndefinedForeignName ||
+      (isDefinedForeignId && foreignNameExists(property)) ||
+      property === excludedId
+    ) {
+      continue
+    } else if (property === "id") {
+      id.push("id")
+    } else if (property.slice(-2) === "At") {
+      dates.push(property)
+    } else if (isArray(value)) {
+      miniTable.push(property)
+    } else if (isObject(value)) {
+      miniData.push(property)
+      // } else if (!value) {
+      //   continue
+    } else {
+      regulars.push(property)
+    }
+  }
+
+  return id.concat(
+    miniData,
+    regulars,
+    dates,
+    description,
+    miniTable,
+    lastProperties
+  )
 }

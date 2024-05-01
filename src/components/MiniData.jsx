@@ -1,4 +1,5 @@
-import { camelToFlat, formatValue } from "../util/data-utils.jsx"
+import { camelToFlat, findIndentyInformation } from "../util/data-utils.jsx"
+import FormatValue from "./Formatvalue.jsx"
 
 import PropTypes from "prop-types"
 import { useState } from "react"
@@ -7,6 +8,7 @@ import { Link } from "react-router-dom"
 
 export default function MiniData({ index, value, header }) {
   const [isOpen, setIsOpen] = useState(false)
+  const { nameValue } = findIndentyInformation(value)
 
   return (
     <div key={index} className="extended-row">
@@ -15,6 +17,7 @@ export default function MiniData({ index, value, header }) {
           <FaAngleDown size={20} />
         </div>
         <div className="header-text">{header}</div>
+        <div className="name-value">{nameValue}</div>
       </div>
       <div className={"value" + (isOpen ? " open" : "")}>
         {Object.keys(value).map((property, index) => (
@@ -32,7 +35,7 @@ export default function MiniData({ index, value, header }) {
               <>
                 <div className="sub-header">{camelToFlat(property)}</div>
                 <div className="sub-value">
-                  {formatValue(property, value[property])}
+                  {FormatValue(property, value[property])}
                 </div>
               </>
             )}
