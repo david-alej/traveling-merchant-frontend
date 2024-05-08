@@ -3,6 +3,9 @@ import { useGetDatumQuery } from "../../util/query-utils.jsx"
 import { reformColumns } from "../../util/datum-utils.jsx"
 import Filters from "./filters/Filters.jsx"
 import routesColumnDefinitions from "./routesColumnDefinitions.js"
+import { selectRouteColumnFilters } from "./columnFiltersSlice.js"
+import EditButton from "../../components/EditButton.jsx"
+import DeleteButton from "../../components/DeleteButton.jsx"
 import "./Datum.css"
 
 import {
@@ -14,11 +17,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { useState } from "react"
-import { FaEdit } from "react-icons/fa"
-import { FaDeleteLeft } from "react-icons/fa6"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { selectRouteColumnFilters } from "./columnFiltersSlice.js"
 
 export default function Datum() {
   const navigate = useNavigate()
@@ -119,7 +119,7 @@ export default function Datum() {
   } else if (isSuccess) {
     content = (
       <>
-        <div className="data-header">
+        <div className="datum-header">
           <div className="filters-container">
             <div
               className={"filters-title" + (filtersIsOpened ? " active" : "")}
@@ -195,12 +195,8 @@ export default function Datum() {
                 ))}
                 <td key={`${row.id}_actions`}>
                   <div className="actions">
-                    <div className="action edit" onClick={() => {}}>
-                      <FaEdit size={23} />
-                    </div>
-                    <div className="action delete">
-                      <FaDeleteLeft size={23} />
-                    </div>
+                    <EditButton route={route} id={row.original.id} />
+                    <DeleteButton route={route} id={row.original.id} />
                   </div>
                 </td>
               </tr>

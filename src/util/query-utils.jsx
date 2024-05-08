@@ -4,6 +4,15 @@ export const getRouteApi = (route) => {
   return routeApis[route.toLowerCase().slice(0, -1) + "Api"]
 }
 
+export const useGetDatumQuery = (route) => {
+  const routeApi = getRouteApi(route)
+
+  return routeApi[`useGet${route[0].toUpperCase() + route.slice(1)}Query`](
+    {},
+    { refetchOnMountOrArgChange: true }
+  )
+}
+
 export const useGetDataQuery = (route, id) => {
   const routeApi = getRouteApi(route)
 
@@ -13,11 +22,10 @@ export const useGetDataQuery = (route, id) => {
   )
 }
 
-export const useGetDatumQuery = (route) => {
+export const useUpdateDataQuery = (route) => {
   const routeApi = getRouteApi(route)
 
-  return routeApi[`useGet${route[0].toUpperCase() + route.slice(1)}Query`](
-    {},
-    { refetchOnMountOrArgChange: true }
-  )
+  return routeApi[
+    `useUpdate${route[0].toUpperCase() + route.slice(1, -1)}Mutation`
+  ]()
 }

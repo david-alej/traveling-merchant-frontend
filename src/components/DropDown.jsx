@@ -1,3 +1,5 @@
+import "./DropDown.css"
+
 import PropTypes from "prop-types"
 import { useState } from "react"
 import { FaAngleDown } from "react-icons/fa"

@@ -1,3 +1,39 @@
+.data-headers {
+  width: 100%;
+}
+
+.data-headers,
+.data-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.data-header {
+  border-radius: 1rem;
+  width: 20%;
+  min-height: 2rem;
+  max-height: 3rem;
+}
+
+.data-header:hover {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
+
+.data-header:active,
+.data-header.active {
+  background-color: var(--main-color);
+  color: #fff;
+}
+
+.edit-text,
+.data-text,
+.data-header .action-button {
+  padding: 0.5rem;
+}
+
 .data {
   display: flex;
   flex-direction: column;

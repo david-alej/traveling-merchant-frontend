@@ -14,7 +14,7 @@ export default function Root() {
     if (merchantName.length === 0) {
       navigate("/login")
     }
-  }, [merchantName])
+  }, [merchantName, navigate])
 
   return (
     <>

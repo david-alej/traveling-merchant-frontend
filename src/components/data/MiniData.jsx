@@ -1,4 +1,8 @@
-import { camelToFlat, findIndentyInformation } from "../util/data-utils.jsx"
+import {
+  camelToFlat,
+  findIndentyInformation,
+  orderProperties,
+} from "../../util/data-utils.jsx"
 import FormatValue from "./Formatvalue.jsx"
 
 import PropTypes from "prop-types"
@@ -20,7 +24,7 @@ export default function MiniData({ index, value, header }) {
         <div className="name-value">{nameValue}</div>
       </div>
       <div className={"value" + (isOpen ? " open" : "")}>
-        {Object.keys(value).map((property, index) => (
+        {orderProperties(value).map((property, index) => (
           <div className={"sub-row" + (index ? " not-first" : "")} key={index}>
             {property === "id" ? (
               <>

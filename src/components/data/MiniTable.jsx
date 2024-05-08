@@ -2,8 +2,9 @@ import {
   camelToFlat,
   findIndentyInformation,
   orderProperties,
-} from "../util/data-utils.jsx"
+} from "../../util/data-utils.jsx"
 import FormatValue from "./Formatvalue.jsx"
+import { isIsoStr } from "../../util/formatters.js"
 
 import PropTypes from "prop-types"
 import { useState } from "react"
@@ -17,7 +18,6 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { isIsoStr } from "../util/formatters.js"
 
 export default function MiniTable({ index, value, header, excludedId }) {
   const { nameValue } = findIndentyInformation(value)
@@ -127,7 +127,7 @@ export default function MiniTable({ index, value, header, excludedId }) {
                 ))}
                 <td key={`${row.id}_actions`}>
                   <div className="actions">
-                    <div className="action edit" onClick={() => {}}>
+                    <div className="action edit">
                       <FaEdit size={23} />
                     </div>
                     <div className="action delete">

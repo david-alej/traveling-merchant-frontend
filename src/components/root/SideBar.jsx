@@ -1,6 +1,7 @@
-import { NavLink } from "react-router-dom"
 import { SidebarData } from "./SidebarData"
-import "../app/App.css"
+import "./SideBar.css"
+
+import { NavLink } from "react-router-dom"
 import { IconContext } from "react-icons"
 
 export default function Sidebar() {

@@ -1,0 +1,31 @@
+/* Header CSS */
+header {
+  display: inline-flex;
+  grid-row: 1 / 2;
+  grid-column: 1 / 8;
+  position: relative;
+}
+
+header.accessed {
+  grid-column: 2 / 8;
+  align-items: center;
+}
+
+header.accessed p {
+  font-size: 18px;
+  margin: 10px;
+}
+
+#left-header {
+  position: absolute;
+  width: 50%;
+  left: 0;
+}
+
+#right-header {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  right: 0;
+}

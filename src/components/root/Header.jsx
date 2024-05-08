@@ -1,4 +1,5 @@
-import LogoutButton from "../features/session/LogoutButton"
+import LogoutButton from "../../features/session/LogoutButton"
+import "./Header.css"
 
 import { useSelector } from "react-redux"
 

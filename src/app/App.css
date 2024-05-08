@@ -4,94 +4,11 @@
   --faded-color: #bbb;
 }
 
-/* Header CSS */
-header {
-  display: inline-flex;
-  grid-row: 1 / 2;
-  grid-column: 1 / 8;
-  position: relative;
-}
-
-header.accessed {
-  grid-column: 2 / 8;
-  align-items: center;
-}
-
-header.accessed p {
-  font-size: 18px;
-  margin: 10px;
-}
-
-#left-header {
-  position: absolute;
-  width: 50%;
-  left: 0;
-}
-
-#right-header {
-  display: inline-flex;
-  justify-content: flex-end;
-  align-items: center;
-  position: absolute;
-  right: 0;
-}
-
 /* Logo CSS */
 #logo {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-/* Sidebar CSS */
-.sidebar {
-  display: flex;
-  grid-area: 2 / 1 / span 10 / 2;
-}
-
-.nav-menu {
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
-}
-
-.nav-text {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0px 0px 0px 16px;
-  list-style: none;
-  height: 3rem;
-}
-
-.nav-text a {
-  text-decoration: none;
-  color: #151414;
-  font-size: 1.25rem;
-  width: 95%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  border-radius: 12px;
-}
-
-.nav-text a:hover {
-  background-color: var(--secondary-color);
-  color: #fff;
-}
-
-.nav-text a.active {
-  background-color: var(--main-color);
-  color: #fff;
-}
-
-.nav-menu-items {
-  width: 100%;
-}
-
-span {
-  margin-left: 16px;
 }
 
 /* Main CSS */
@@ -105,69 +22,17 @@ main.accessed {
   grid-column: 2 / 8;
 }
 
-/* DropDown CSS */
-.select-container {
+/* Spinner */
+.spinner {
   display: flex;
-  align-items: flex-start;
   justify-content: center;
-  gap: 1.4rem;
-  height: 100%;
-}
-
-.custom-select {
-  position: relative;
-  width: 30rem;
-}
-
-.custom-select.single {
-  max-width: 17rem;
-  min-width: 7rem;
-}
-
-.select-box {
-  border-radius: 1rem;
-  background-color: #fff;
-  border: 1px solid #000;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  min-height: 2.5rem;
-  padding: 0 0.625rem;
+  height: 70%;
 }
 
-.arrow {
-  margin: 0 0.65rem;
-}
-
-.options {
-  display: none;
-  position: absolute;
-  width: 100%;
-  border-radius: 1rem;
-  background-color: #fff;
-  border: 1px solid var(--faded-color);
-  border-top: none;
-  max-height: 15rem;
-  overflow-y: auto;
-  z-index: 1;
-  box-shadow: 0 0.25rem 0.5rem #000;
-}
-
-.open .options {
-  display: block;
-}
-
-.option {
-  padding: 0.75rem;
-  cursor: pointer;
-}
-
-.option.active {
-  color: #000;
-  background-color: var(--faded-color);
-  border-bottom: 1px solid #fff;
-}
-
-.option:hover {
-  background-color: var(--secondary-color);
+/* Action Buttons: */
+/* EditButton, DeleteButton */
+.action-button:active {
+  background-color: var(--main-color);
+  color: #fff;
 }

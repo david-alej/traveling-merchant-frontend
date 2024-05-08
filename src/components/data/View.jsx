@@ -1,40 +1,28 @@
-import { useGetDataQuery } from "../../util/query-utils.jsx"
-import Spinner from "../../components/Spinner.jsx"
 import {
   camelToFlat,
   isArray,
   isObject,
   orderProperties,
-} from "../../util/data-utils.jsx"
-import FormatValue from "../../components/Formatvalue.jsx"
-import "./Data.css"
+} from "../../util/data-utils"
+import RegularValue from "./RegularValue.jsx"
+import MiniTable from "./MiniTable.jsx"
+import MiniData from "./MiniData.jsx"
+import { useGetDataQuery } from "../../util/query-utils.jsx"
+import Spinner from "../Spinner.jsx"
 
 import { useLocation, useParams } from "react-router-dom"
 import PropTypes from "prop-types"
-import MiniTable from "../../components/MiniTable.jsx"
-import MiniData from "../../components/MiniData.jsx"
 
-function RegularValue({ index, property, header, value }) {
-  return (
-    <div key={index} className="row">
-      <div className="header">
-        <div className="header-text">{header}</div>
-      </div>
-      <div className="value">
-        {property === "id" ? value : FormatValue(property, value)}
-      </div>
-    </div>
+const isEditableProperty = (property, value) =>
+  !(
+    isObject(value) ||
+    Array.isArray(value) ||
+    property === "id" ||
+    property === "updatedAt" ||
+    property === "createdAt"
   )
-}
 
-RegularValue.propTypes = {
-  index: PropTypes.number.isRequired,
-  property: PropTypes.string.isRequired,
-  value: PropTypes.any.isRequired,
-  header: PropTypes.string.isRequired,
-}
-
-export default function Data() {
+export default function View({ body, onChangeBody }) {
   const { id } = useParams()
   const route = useLocation().pathname.split("/")[1]
 
@@ -79,6 +67,10 @@ export default function Data() {
           } else if (isObject(value)) {
             row = <MiniData {...props} />
           } else {
+            if (body && onChangeBody && isEditableProperty(property, value)) {
+              props.onChangeBody = onChangeBody
+            }
+
             row = <RegularValue {...props} />
           }
 
@@ -88,5 +80,7 @@ export default function Data() {
     )
   }
 
-  return <>{content}</>
+  return content
 }
+
+View.propTypes = { body: PropTypes.object, onChangeBody: PropTypes.func }

@@ -1,5 +1,9 @@
-import { findIndentyInformation } from "../util/data-utils"
-import { formatFullDate, formatPhoneNumber, isIsoStr } from "../util/formatters"
+import { findIndentyInformation } from "../../util/data-utils"
+import {
+  formatFullDate,
+  formatPhoneNumber,
+  isIsoStr,
+} from "../../util/formatters"
 
 import { Link } from "react-router-dom"
 
