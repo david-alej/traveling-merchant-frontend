@@ -4,8 +4,7 @@ import { reformColumns } from "../../util/datum-utils.jsx"
 import Filters from "./filters/Filters.jsx"
 import routesColumnDefinitions from "./routesColumnDefinitions.js"
 import { selectRouteColumnFilters } from "./columnFiltersSlice.js"
-import EditButton from "../../components/EditButton.jsx"
-import DeleteButton from "../../components/DeleteButton.jsx"
+import ActionButton from "../../components/ActionButton.jsx"
 import "./Datum.css"
 
 import {
@@ -19,6 +18,7 @@ import {
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
+import Button from "../../components/Button.jsx"
 
 export default function Datum() {
   const navigate = useNavigate()
@@ -195,8 +195,16 @@ export default function Datum() {
                 ))}
                 <td key={`${row.id}_actions`}>
                   <div className="actions">
-                    <EditButton route={route} id={row.original.id} />
-                    <DeleteButton route={route} id={row.original.id} />
+                    <ActionButton
+                      type={"edit"}
+                      route={route}
+                      id={row.original.id}
+                    />
+                    <ActionButton
+                      type={"delete"}
+                      route={route}
+                      id={row.original.id}
+                    />
                   </div>
                 </td>
               </tr>
@@ -212,34 +220,30 @@ export default function Datum() {
           } results)`}
         </div>
         <div className="page-buttons">
-          <button
+          <Button
+            className="page-button"
             onClick={() => table.firstPage()}
-            className="page-button"
             disabled={!table.getCanPreviousPage()}
-          >
-            {"<<"}
-          </button>
-          <button
+            text={"<<"}
+          />
+          <Button
+            className="page-button"
             onClick={() => table.previousPage()}
-            className="page-button"
             disabled={!table.getCanPreviousPage()}
-          >
-            {"<"}
-          </button>
-          <button
+            text={"<"}
+          />
+          <Button
+            className="page-button"
             onClick={() => table.nextPage()}
-            className="page-button"
             disabled={!table.getCanNextPage()}
-          >
-            {">"}
-          </button>
-          <button
+            text={">"}
+          />
+          <Button
+            className="page-button"
             onClick={() => table.lastPage()}
-            className="page-button"
             disabled={!table.getCanNextPage()}
-          >
-            {">>"}
-          </button>
+            text={">>"}
+          />
         </div>
       </>
     )

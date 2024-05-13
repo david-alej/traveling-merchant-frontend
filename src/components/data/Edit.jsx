@@ -4,6 +4,7 @@ import { useUpdateDataQuery } from "../../util/query-utils.jsx"
 import { useParams, useLocation } from "react-router-dom"
 import View from "./View.jsx"
 import { useState } from "react"
+import Button from "../Button.jsx"
 
 export default function Edit() {
   const { id } = useParams()
@@ -21,7 +22,7 @@ export default function Edit() {
     },
   ] = useUpdateDataQuery(route)
 
-  let content = <></>
+  let content
 
   if (isUpdating) {
     content = <Spinner />
@@ -50,20 +51,19 @@ export default function Edit() {
   }
 
   return (
-    <>
+    <form
+      onSubmit={async () => {
+        try {
+          await updateData({ id, body })
+        } catch (err) {
+          console.log(err)
+        }
+      }}
+    >
       {content}
-      <button
-        className="submit-edit"
-        onClick={async (body) => {
-          try {
-            await updateData({ id, body })
-          } catch (err) {
-            console.log(err)
-          }
-        }}
-      >
-        Submit
-      </button>
-    </>
+      <div className="submit-edit">
+        <Button type="submit" className="submit-button" text={"Submit"} />
+      </div>
+    </form>
   )
 }

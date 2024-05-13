@@ -18,6 +18,7 @@ export const camelToFlat = (property) => {
 export const findIndentyInformation = (value) => {
   let obj = value[0]
   let nameValue = value.length
+  if (value.length === 0) return { nameValue, id: 0 }
 
   if (!isArray(value)) {
     obj = value
@@ -35,6 +36,7 @@ export const findIndentyInformation = (value) => {
 }
 
 export const orderProperties = (data, excludedId = false) => {
+  if (!data) return []
   const properties = Object.keys(data)
   const foreignId = properties.filter(
     (property) => property.length > 2 && property.includes("Id")
@@ -44,7 +46,7 @@ export const orderProperties = (data, excludedId = false) => {
   const miniData = []
   const regulars = []
   const dates = []
-  const description = ["description"]
+  const description = properties.includes("description") ? ["description"] : []
   const miniTable = []
   const lastProperties = ["updatedAt", "createdAt"]
 

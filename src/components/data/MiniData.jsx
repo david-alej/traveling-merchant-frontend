@@ -39,7 +39,7 @@ export default function MiniData({ index, value, header }) {
               <>
                 <div className="sub-header">{camelToFlat(property)}</div>
                 <div className="sub-value">
-                  {FormatValue(property, value[property])}
+                  <FormatValue property={property} value={value[property]} />
                 </div>
               </>
             )}

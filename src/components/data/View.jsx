@@ -4,11 +4,12 @@ import {
   isObject,
   orderProperties,
 } from "../../util/data-utils"
-import RegularValue from "./RegularValue.jsx"
+import RegularValue from "./Row.jsx"
 import MiniTable from "./MiniTable.jsx"
 import MiniData from "./MiniData.jsx"
 import { useGetDataQuery } from "../../util/query-utils.jsx"
 import Spinner from "../Spinner.jsx"
+import Row from "./Row.jsx"
 
 import { useLocation, useParams } from "react-router-dom"
 import PropTypes from "prop-types"
@@ -59,6 +60,8 @@ export default function View({ body, onChangeBody }) {
               }
 
               props.value = arrStr
+              props.onChangeBody = onChangeBody
+              props.body = body
 
               row = <RegularValue {...props} />
             } else {
@@ -69,9 +72,10 @@ export default function View({ body, onChangeBody }) {
           } else {
             if (body && onChangeBody && isEditableProperty(property, value)) {
               props.onChangeBody = onChangeBody
+              props.body = body
             }
 
-            row = <RegularValue {...props} />
+            row = <Row {...props} />
           }
 
           return row

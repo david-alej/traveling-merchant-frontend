@@ -6,8 +6,9 @@ import {
 } from "../../util/formatters"
 
 import { Link } from "react-router-dom"
+import PropTypes from "prop-types"
 
-export default function FormatValue(property, value, miniTableName = "") {
+export default function FormatValue({ property, value, miniTableName = "" }) {
   let formattedValue
 
   if (isIsoStr(value)) {
@@ -44,4 +45,10 @@ export default function FormatValue(property, value, miniTableName = "") {
   }
 
   return formattedValue
+}
+
+FormatValue.propTypes = {
+  property: PropTypes.string.isRequired,
+  value: PropTypes.any,
+  miniTableName: PropTypes.string,
 }

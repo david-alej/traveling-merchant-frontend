@@ -36,11 +36,16 @@
 }
 
 .search-filter-clear-button {
-  margin-top: 0.25rem;
+  /* margin-top: 0.25rem; */
   border: 0;
   z-index: 2;
   background: none;
   color: var(--main-color);
   border-radius: 6.25rem;
   cursor: pointer;
+  padding: 0.1rem;
+}
+
+.search-filter-clear-button .button-icon {
+  padding: 0.5rem;
 }

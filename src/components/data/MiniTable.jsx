@@ -4,7 +4,7 @@ import {
   orderProperties,
 } from "../../util/data-utils.jsx"
 import FormatValue from "./Formatvalue.jsx"
-import { isIsoStr } from "../../util/formatters.js"
+import Button from "../Button.jsx"
 
 import PropTypes from "prop-types"
 import { useState } from "react"
@@ -26,11 +26,17 @@ export default function MiniTable({ index, value, header, excludedId }) {
     const columnDef = {
       accessorKey: columnId,
       header: camelToFlat(columnId),
-      // eslint-disable-next-line react/prop-types
-      cell: (props) => FormatValue(columnId, props.getValue(), header),
+      cell: (props) => (
+        <FormatValue
+          property={columnId}
+          // eslint-disable-next-line react/prop-types
+          value={props.getValue()}
+          miniTableName={header}
+        />
+      ),
     }
 
-    if (isIsoStr(value)) columnDef.sortingFn = "dateSorting"
+    if (columnId.slice(-2) === "At") columnDef.sortingFn = "dateSorting"
 
     return columnDef
   })
@@ -109,11 +115,13 @@ export default function MiniTable({ index, value, header, excludedId }) {
                     </div>
                   </th>
                 ))}
-                <th key="actions">
-                  <div className="header-cell">
-                    <div className="header-text">Actions</div>
-                  </div>
-                </th>
+                {value.length && (
+                  <th key="actions">
+                    <div className="header-cell">
+                      <div className="header-text">Actions</div>
+                    </div>
+                  </th>
+                )}
               </tr>
             ))}
           </thead>
@@ -148,34 +156,30 @@ export default function MiniTable({ index, value, header, excludedId }) {
           } results)`}
         </div>
         <div className="page-buttons">
-          <button
+          <Button
+            className="page-button"
             onClick={() => table.firstPage()}
-            className="page-button"
             disabled={!table.getCanPreviousPage()}
-          >
-            {"<<"}
-          </button>
-          <button
+            text={"<<"}
+          />
+          <Button
+            className="page-button"
             onClick={() => table.previousPage()}
-            className="page-button"
             disabled={!table.getCanPreviousPage()}
-          >
-            {"<"}
-          </button>
-          <button
+            text={"<"}
+          />
+          <Button
+            className="page-button"
             onClick={() => table.nextPage()}
-            className="page-button"
             disabled={!table.getCanNextPage()}
-          >
-            {">"}
-          </button>
-          <button
+            text={">"}
+          />
+          <Button
+            className="page-button"
             onClick={() => table.lastPage()}
-            className="page-button"
             disabled={!table.getCanNextPage()}
-          >
-            {">>"}
-          </button>
+            text={">>"}
+          />
         </div>
       </div>
     </div>

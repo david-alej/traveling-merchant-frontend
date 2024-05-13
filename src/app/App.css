@@ -30,9 +30,37 @@ main.accessed {
   height: 70%;
 }
 
-/* Action Buttons: */
-/* EditButton, DeleteButton */
+/* Buttons: */
+button {
+  background-color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+}
+
+.button-text,
+.button-icon {
+  padding: 0.5rem;
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
+button:active,
+button.active {
+  background-color: var(--main-color);
+  color: #fff;
+}
+
 .action-button:active {
   background-color: var(--main-color);
+  color: #fff;
+}
+
+button:disabled {
+  background-color: var(--faded-color);
   color: #fff;
 }

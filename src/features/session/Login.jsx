@@ -3,6 +3,7 @@ import { login } from "./sessionSlice.js"
 import { useDispatch, useSelector } from "react-redux"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import Button from "../../components/Button.jsx"
 
 export default function Login() {
   const dispatch = useDispatch()
@@ -76,9 +77,12 @@ export default function Login() {
             maxLength="20"
             required
           />
-          <button type="submit" className="primary">
-            Sign Up
-          </button>
+          <Button
+            type="submit"
+            className="primary"
+            text="Sign In"
+            onClick={() => {}}
+          />
         </div>
       </form>
     </section>

@@ -1,4 +1,5 @@
 import { changeValue } from "../columnFiltersSlice"
+import Button from "../../../components/Button"
 import "./SearchFilter.css"
 
 import PropTypes from "prop-types"
@@ -21,16 +22,22 @@ export default function SearchFilter({ header, columnFilter: { id, value } }) {
     <div className="search-filter-container">
       <div className="search-box">
         {value?.length > 0 ? (
-          <button
+          <Button
             onClick={onSearchClearHandler(id)}
             type="button"
             className="search-filter-clear-button"
-          >
-            <div className="search-filter-clear-icon">
-              <MdOutlineClear />
-            </div>
-          </button>
+            icon={<MdOutlineClear />}
+          />
         ) : (
+          // <button
+          //   onClick={onSearchClearHandler(id)}
+          //   type="button"
+          //   className="search-filter-clear-button"
+          // >
+          //   <div className="search-filter-clear-icon">
+
+          //   </div>
+          // </button>
           <div className="search-filter-icon">
             <LiaSearchSolid />
           </div>
