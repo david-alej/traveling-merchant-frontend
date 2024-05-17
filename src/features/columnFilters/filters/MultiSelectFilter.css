@@ -18,8 +18,7 @@
   background-color: var(--faded-color);
   color: #000;
   border-radius: 0.3rem;
-  margin-left: 0;
-  margin-right: 0.3rem;
+  margin: 0.09rem 0.3rem 0.09rem 0;
   padding: 0.2rem 1rem;
   display: flex;
   align-items: center;

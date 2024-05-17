@@ -3,7 +3,7 @@ import {
   findIndentyInformation,
   orderProperties,
 } from "../../util/data-utils.jsx"
-import FormatValue from "./Formatvalue.jsx"
+import FormatValue from "./FormatValue.jsx"
 
 import PropTypes from "prop-types"
 import { useState } from "react"

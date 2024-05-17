@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import routesColumnsDefinitions from "./routesColumnDefinitions"
+import routesColumnsDefinitions from "../../util/routesColumnDefinitions"
 
 const createInitialState = () => {
   const initialState = {}

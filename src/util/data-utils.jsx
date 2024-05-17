@@ -1,3 +1,5 @@
+import routesColumnDefinitions from "./routesColumnDefinitions"
+
 export const isArray = (value) => Array.isArray(value)
 
 export const isObject = (value) =>
@@ -100,4 +102,40 @@ export const orderProperties = (data, excludedId = false) => {
     miniTable,
     lastProperties
   )
+}
+
+export const isEditable = (route, property) => {
+  const routeColumnDefs = routesColumnDefinitions[route]
+  const columnDef = routeColumnDefs.find((def) => def.accessorKey === property)
+
+  return columnDef?.meta.isEditable
+}
+
+export const camelToHyphen = (camel) =>
+  camel.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase())
+
+export const createTagOption = (tags, onAddTag, tag, className, tagType) => (
+  <div
+    className={"option " + className + (tags.includes(tag) ? " active" : "")}
+    value={tag}
+    key={tag}
+    onClick={onAddTag(tag, tagType)}
+  >
+    {tag}
+  </div>
+)
+
+export const createTagOptions = (arr, allTags) => {
+  let tagOptions = []
+
+  for (const [tagType, typeOfTags] of Object.entries(allTags)) {
+    const className = camelToHyphen(tagType)
+    const typeOfTagOptions = typeOfTags.map((tag) =>
+      createTagOption(...arr, tag, className, tagType)
+    )
+
+    tagOptions = tagOptions.concat(typeOfTagOptions)
+  }
+
+  return tagOptions
 }

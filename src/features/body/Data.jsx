@@ -1,4 +1,4 @@
-import ActionButton from "../ActionButton.jsx"
+import ActionButton from "../../components/ActionButton"
 import "./Data.css"
 
 import { Outlet } from "react-router-dom"
@@ -21,7 +21,7 @@ export default function Data() {
             }
             type={action}
             route={route}
-            id={id}
+            id={parseInt(id)}
             text={action[0].toUpperCase() + action.slice(1)}
             isTrashIcon={action === "delete"}
           />

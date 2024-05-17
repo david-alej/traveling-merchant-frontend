@@ -29,15 +29,6 @@ export default function SearchFilter({ header, columnFilter: { id, value } }) {
             icon={<MdOutlineClear />}
           />
         ) : (
-          // <button
-          //   onClick={onSearchClearHandler(id)}
-          //   type="button"
-          //   className="search-filter-clear-button"
-          // >
-          //   <div className="search-filter-clear-icon">
-
-          //   </div>
-          // </button>
           <div className="search-filter-icon">
             <LiaSearchSolid />
           </div>

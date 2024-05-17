@@ -3,8 +3,8 @@ import {
   findIndentyInformation,
   orderProperties,
 } from "../../util/data-utils.jsx"
-import FormatValue from "./Formatvalue.jsx"
-import Button from "../Button.jsx"
+import FormatValue from "./FormatValue.jsx"
+import Button from "../../components/Button.jsx"
 
 import PropTypes from "prop-types"
 import { useState } from "react"
@@ -191,5 +191,5 @@ MiniTable.propTypes = {
   property: PropTypes.string.isRequired,
   value: PropTypes.array.isRequired,
   header: PropTypes.string.isRequired,
-  excludedId: PropTypes.number.isRequired,
+  excludedId: PropTypes.string.isRequired,
 }

@@ -16,7 +16,17 @@ export default function FormatValue({ property, value, miniTableName = "" }) {
   } else if (property === "phoneNumber") {
     formattedValue = <p>{formatPhoneNumber(value)}</p>
   } else if (Array.isArray(value)) {
-    formattedValue = <p>{value.length}</p>
+    formattedValue = value.length
+
+    if (typeof value[0] === "string") {
+      formattedValue = value[0]
+
+      for (let i = 1; i < value.length; i++) {
+        formattedValue += `, ${value[i]}`
+      }
+    }
+
+    formattedValue = <p>{formattedValue}</p>
   } else if (typeof value === "object" && value !== null) {
     const { nameValue, id } = findIndentyInformation(value)
 

@@ -1,16 +1,26 @@
-import Spinner from "../Spinner.jsx"
 import { useUpdateDataQuery } from "../../util/query-utils.jsx"
+import Spinner from "../../components/Spinner.jsx"
+import Button from "../../components/Button.jsx"
+import View from "./View.jsx"
 
 import { useParams, useLocation } from "react-router-dom"
-import View from "./View.jsx"
-import { useState } from "react"
-import Button from "../Button.jsx"
+import { useDispatch, useSelector } from "react-redux"
+import { selectBody } from "./bodySlice.js"
+
+const checkForErrors = (bodyError) => {
+  for (const value of Object.values(bodyError)) {
+    if (value) return false
+  }
+
+  return true
+}
 
 export default function Edit() {
+  const dispatch = useDispatch()
   const { id } = useParams()
   const route = useLocation().pathname.split("/")[1]
-  const [body, setBody] = useState({})
-
+  const { error: bodyError, ...body } = useSelector(selectBody)
+  console.log(body, bodyError)
   const [
     updateData,
     {
@@ -47,23 +57,31 @@ export default function Edit() {
       </>
     )
   } else {
-    content = <View body={body} onChangeBody={setBody} />
+    content = <View />
   }
 
   return (
     <form
-      onSubmit={async () => {
-        try {
-          await updateData({ id, body })
-        } catch (err) {
-          console.log(err)
-        }
+      onSubmit={async (e) => {
+        e.preventDefault()
+
+        // try {
+        //   await updateData({ id, body })
+        // } catch (err) {
+        //   console.log(err)
+        // }
       }}
     >
       {content}
       <div className="submit-edit">
-        <Button type="submit" className="submit-button" text={"Submit"} />
+        <Button
+          type="submit"
+          className="submit-button"
+          text={"Submit"}
+          disabled={checkForErrors(bodyError)}
+        />
       </div>
+      {checkForErrors(bodyError) && <span>Please fill valid inputs above</span>}
     </form>
   )
 }

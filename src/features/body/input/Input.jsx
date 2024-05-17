@@ -2,36 +2,42 @@ import { isIsoStr } from "../../../util/formatters"
 import PhoneNumberInput from "./PhoneNumberInput"
 import DateInput from "./DateInput"
 import StringInput from "./StringInput"
-import NumberInput from "./NumberInput"
 import TagsInput from "./TagsInput"
+import FloatInput from "./FloatInput"
 import "./Input.css"
 
 import PropTypes from "prop-types"
-import EmailInput from "./EmailInput"
 
 const allStrColumns = ["description", "paymentPlan", "address"]
 const allNumColumns = ["cost", "payment", "unitPrice", "tax", "shipment"]
 
-export default function Input({ property, value, body, onChangeBody }) {
+export default function Input({ property, value }) {
   const lowerCase = property.toLowerCase()
-  let content = <></>
+  const props = { property, value }
+
+  let content
 
   if (isIsoStr(value) || property.slice(-2) === "At") {
-    content = <DateInput value={value} />
+    content = <DateInput {...props} />
   } else if (property === "phoneNumber") {
-    content = <PhoneNumberInput value={value} />
+    content = <PhoneNumberInput {...props} />
   } else if (property === "email") {
-    content = <EmailInput value={value} />
+    content = <StringInput {...props} isEmail={true} />
   } else if (property === "tags") {
-    content = <TagsInput value={value} />
+    content = <TagsInput {...props} />
   } else if (allNumColumns.includes(property)) {
-    content = <NumberInput value={value} />
+    content = (
+      <FloatInput
+        {...props}
+        floatType={property === "unitPrice" ? "positive" : "nonNegative"}
+      />
+    )
   } else if (
     lowerCase.includes("name") ||
     lowerCase.includes("type") ||
     allStrColumns.includes(property)
   ) {
-    content = <StringInput value={value} />
+    content = <StringInput {...props} />
   }
 
   return <div className="input">{content}</div>

@@ -2,7 +2,7 @@ import SearchFilter from "./SearchFilter"
 import MultiSelectFilter from "./MultiSelectFilter"
 import SelectFilter from "./SelectFilter"
 import EqualitiesFilter from "./EqualitiesFilter"
-import routesColumnDefinitions from "../routesColumnDefinitions"
+import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
 
 import PropTypes from "prop-types"
 import { useSelector } from "react-redux"

@@ -1,16 +1,14 @@
-import FormatValue from "./Formatvalue"
+import FormatValue from "./FormatValue"
+import { isEditable } from "../../util/data-utils"
 
 import PropTypes from "prop-types"
 import Input from "./input/Input"
+import { useLocation } from "react-router-dom"
 
-export default function Row({
-  index,
-  property,
-  header,
-  value,
-  body,
-  onChangeBody,
-}) {
+export default function Row({ index, property, header, value }) {
+  const route = useLocation().pathname.split("/")[1]
+  const action = useLocation().pathname.split("/").at(-1) || "view"
+
   return (
     <div key={index} className="row">
       <div className="header">
@@ -23,14 +21,8 @@ export default function Row({
           <FormatValue property={property} value={value} />
         )}
       </div>
-      {body && onChangeBody && (
-        <Input
-          property={property}
-          value={value}
-          header={header}
-          body={body}
-          onChangeBody={onChangeBody}
-        />
+      {action === "edit" && isEditable(route, property) && (
+        <Input property={property} value={value} header={header} />
       )}
     </div>
   )
@@ -41,6 +33,4 @@ Row.propTypes = {
   property: PropTypes.string.isRequired,
   value: PropTypes.any,
   header: PropTypes.string.isRequired,
-  body: PropTypes.object,
-  onChangeBody: PropTypes.func,
 }

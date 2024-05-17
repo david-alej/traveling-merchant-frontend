@@ -46,7 +46,7 @@
   box-shadow: 0 0.25rem 0.5rem #000;
 }
 
-.open .options {
+.options.open {
   display: block;
 }
 

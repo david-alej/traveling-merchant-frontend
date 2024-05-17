@@ -8,7 +8,7 @@ export default {
     {
       accessorKey: "cost",
       header: "Cost",
-      meta: { dataType: "num" },
+      meta: { dataType: "num", isEditable: true },
     },
     {
       accessorKey: "paid",
@@ -28,7 +28,7 @@ export default {
     {
       accessorKey: "paymentPlan",
       header: "Payment Plan",
-      meta: { dataType: "type" },
+      meta: { dataType: "type", isEditable: true },
     },
     {
       accessorKey: "payments",
@@ -43,7 +43,7 @@ export default {
     {
       accessorKey: "description",
       header: "Description",
-      meta: { dataType: "str" },
+      meta: { dataType: "str", isEditable: true },
     },
   ],
   transactions: [
@@ -60,17 +60,17 @@ export default {
     {
       accessorKey: "payment",
       header: "payment",
-      meta: { dataType: "num" },
+      meta: { dataType: "num", isEditable: true },
     },
     {
       accessorKey: "paymentType",
       header: "Payment Type",
-      meta: { dataType: "type" },
+      meta: { dataType: "type", isEditable: true },
     },
     {
       accessorKey: "paidAt",
       header: "Paid At",
-      meta: { dataType: "date" },
+      meta: { dataType: "date", isEditable: true },
     },
   ],
   clients: [
@@ -82,62 +82,62 @@ export default {
     {
       accessorKey: "fullname",
       header: "Fullname",
-      meta: { dataType: "str" },
+      meta: { dataType: "str", isEditable: true },
     },
     {
       accessorKey: "address",
       header: "Address",
-      meta: { dataType: "str" },
+      meta: { dataType: "str", isEditable: true },
     },
     {
       accessorKey: "phoneNumber",
       header: "Phone Number",
-      meta: { dataType: "str" },
+      meta: { dataType: "str", isEditable: true },
     },
     {
       accessorKey: "description",
       header: "Description",
-      meta: { dataType: "str" },
+      meta: { dataType: "str", isEditable: true },
     },
   ],
   works: [
     {
       accessorKey: "name",
       header: "Name",
-      meta: { dataType: "str" },
+      meta: { dataType: "str", isEditable: true },
     },
     {
       accessorKey: "address",
       header: "Address",
-      meta: { dataType: "str" },
+      meta: { dataType: "str", isEditable: true },
     },
     {
       accessorKey: "phoneNumber",
       header: "Phone Number",
-      meta: { dataType: "str" },
+      meta: { dataType: "str", isEditable: true },
     },
   ],
   wares: [
     {
       accessorKey: "name",
       header: "Name",
-      meta: { dataType: "str" },
+      meta: { dataType: "str", isEditable: true },
     },
     {
       accessorKey: "type",
       header: "Type",
-      meta: { dataType: "type" },
+      meta: { dataType: "type", isEditable: true },
       filterFn: "typeFilter",
     },
     {
       accessorKey: "tags",
       header: "Tags",
-      meta: { dataType: "itr" },
+      meta: { dataType: "itr", isEditable: true },
     },
     {
       accessorKey: "unitPrice",
       header: "Unit Price",
-      meta: { dataType: "num" },
+      meta: { dataType: "num", isEditable: true },
     },
     {
       accessorKey: "stock",
@@ -154,37 +154,49 @@ export default {
     {
       accessorKey: "cost",
       header: "Cost",
-      meta: { dataType: "num" },
+      meta: { dataType: "num", isEditable: true },
     },
     {
       accessorKey: "tax",
       header: "Tax",
-      meta: { dataType: "num" },
+      meta: { dataType: "num", isEditable: true },
     },
     {
       accessorKey: "shipment",
       header: "Shipment",
-      meta: { dataType: "num" },
+      meta: { dataType: "num", isEditable: true },
     },
     {
       accessorKey: "expectedAt",
       header: "Expected At",
-      meta: { dataType: "date" },
+      meta: { dataType: "date", isEditable: true },
     },
     {
       accessorKey: "actualAt",
       header: "Actual At",
-      meta: { dataType: "date" },
+      meta: { dataType: "date", isEditable: true },
     },
   ],
   providers: [
-    { accessorKey: "name", header: "Name", meta: { dataType: "str" } },
-    { accessorKey: "address", header: "Address", meta: { dataType: "str" } },
+    {
+      accessorKey: "name",
+      header: "Name",
+      meta: { dataType: "str", isEditable: true },
+    },
+    {
+      accessorKey: "address",
+      header: "Address",
+      meta: { dataType: "str", isEditable: true },
+    },
     {
       accessorKey: "phoneNumber",
       header: "Phone Number",
-      meta: { dataType: "str" },
+      meta: { dataType: "str", isEditable: true },
     },
-    { accessorKey: "email", header: "Email", meta: { dataType: "str" } },
+    {
+      accessorKey: "email",
+      header: "Email",
+      meta: { dataType: "str", isEditable: true },
+    },
   ],
 }

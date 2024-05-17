@@ -22,7 +22,7 @@ export default function MultiSelectFilter({
 
   return (
     <div className="multi-select-container">
-      <div className={"custom-select" + (selectIsOpened ? " open" : "")}>
+      <div className="custom-select">
         <div className="select-box">
           <div className="selected-options">
             {value.map((selectedOption) => (
@@ -37,28 +37,25 @@ export default function MultiSelectFilter({
               </span>
             ))}
           </div>
-          <div
+          <FaAngleDown
+            size={20}
             className="arrow"
             onClick={() => setSelectIsOpened(!selectIsOpened)}
-          >
-            <FaAngleDown size={20} />
-          </div>
+          />
         </div>
-        <div className="options">
-          {uniqueValues.map((uniqueValue) => {
-            return (
-              <div
-                className={
-                  "option" + (value.includes(uniqueValue) ? " active" : "")
-                }
-                value={uniqueValue}
-                key={uniqueValue}
-                onClick={onAddValue(uniqueValue)}
-              >
-                {uniqueValue}
-              </div>
-            )
-          })}
+        <div className={"options" + (selectIsOpened ? " open" : "")}>
+          {uniqueValues.map((uniqueValue) => (
+            <div
+              className={
+                "option" + (value.includes(uniqueValue) ? " active" : "")
+              }
+              value={uniqueValue}
+              key={uniqueValue}
+              onClick={onAddValue(uniqueValue)}
+            >
+              {uniqueValue}
+            </div>
+          ))}
         </div>
       </div>
     </div>
