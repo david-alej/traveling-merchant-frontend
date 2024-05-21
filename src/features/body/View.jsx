@@ -31,7 +31,7 @@ export default function View() {
     const properties = orderProperties(data)
 
     content = (
-      <div className="data" key={route}>
+      <div className="data" key={`${route}-${id}`}>
         {properties.map((property, index) => {
           const value = data[property]
           const header = camelToFlat(property)

@@ -1,13 +1,14 @@
 /* Filters */
-.datum-header {
+.datum-headers {
   display: inline-flex;
-}
-
-.filters-container {
   width: 100%;
 }
 
-.filters-title {
+.datum-header {
+  width: 100%;
+}
+
+.title {
   display: flex;
   justify-content: center;
   font-size: 1rem;
@@ -15,15 +16,16 @@
   padding: 0.7rem;
   width: 100%;
   margin: 0.4rem;
+  max-height: 3rem;
 }
 
-.filters-title:hover {
+.title:hover {
   cursor: pointer;
   background-color: var(--secondary-color);
   color: #fff;
 }
 
-.filters-title.active {
+.title.active {
   cursor: pointer;
   background-color: var(--main-color);
   color: #fff;

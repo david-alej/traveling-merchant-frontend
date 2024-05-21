@@ -22,7 +22,7 @@ export default function Input({ property, value }) {
   } else if (property === "phoneNumber") {
     content = <PhoneNumberInput {...props} />
   } else if (property === "email") {
-    content = <StringInput {...props} isEmail={true} />
+    content = <StringInput {...props} />
   } else if (property === "tags") {
     content = <TagsInput {...props} />
   } else if (allNumColumns.includes(property)) {

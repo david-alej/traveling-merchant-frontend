@@ -1,7 +1,3 @@
-import PropTypes from "prop-types"
-import { useEffect, useRef, useState } from "react"
-import { validate } from "email-validator"
-import { useDispatch, useSelector } from "react-redux"
 import {
   changeValue,
   changeError,
@@ -9,10 +5,15 @@ import {
   selectErrorProperty,
 } from "../bodySlice"
 
-export default function StringInput({ property, value, isEmail }) {
+import PropTypes from "prop-types"
+import { useEffect, useRef, useState } from "react"
+import { validate } from "email-validator"
+import { useDispatch, useSelector } from "react-redux"
+
+export default function StringInput({ property, value }) {
   const dispatch = useDispatch()
   const string = useSelector(selectBodyProperty(property))
-  const emailError = useSelector(selectErrorProperty("email"))
+  const error = useSelector(selectErrorProperty(property))
   const [width, setWidth] = useState("25%")
   const span = useRef()
 
@@ -28,28 +29,34 @@ export default function StringInput({ property, value, isEmail }) {
     }
   }, [string])
 
-  const handleStringChange = ({ target }) =>
-    dispatch(changeValue({ property, value: target.value }))
+  const handleChange = ({ target }) => {
+    let { value: newValue } = target
+    let newError = false
 
-  const handleEmailChange = ({ target }) => {
-    const { value } = target
+    if (property === "type") newValue = newValue.trim()
 
-    dispatch(changeError({ property: "email", value: !validate(value) }))
-    dispatch(changeValue({ property, value }))
+    if (newValue === value) {
+      newError = "Please choose a different value from the current one."
+    } else if (property === "email" && !validate(value)) {
+      newError = "Email is not a valid."
+    }
+
+    dispatch(changeError({ property, error: newError }))
+    dispatch(changeValue({ property, value: newValue }))
   }
 
   return (
     <>
       <input
         placeholder={value}
-        value={string}
-        onChange={isEmail ? handleEmailChange : handleStringChange}
+        value={string || ""}
+        onChange={handleChange}
         style={{ width }}
       />
       <span id="hidden-span" ref={span}>
         {string}
       </span>
-      {emailError && <span className="error">Email is not a valid.</span>}
+      {error && <span className="error">{error}</span>}
     </>
   )
 }
@@ -57,5 +64,4 @@ export default function StringInput({ property, value, isEmail }) {
 StringInput.propTypes = {
   property: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  isEmail: PropTypes.bool,
 }

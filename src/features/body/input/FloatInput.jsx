@@ -16,23 +16,25 @@ export default function FloatInput({ property, value, floatType }) {
   const header = camelToFlat(property)
 
   const handleChange = ({ target }) => {
-    const { value } = target
+    const { value: newValue } = target
     let newError
 
-    if (value !== 0 && !value) {
+    if (newValue !== 0 && !newValue) {
       newError = ""
-    } else if (isNaN(value)) {
+    } else if (isNaN(newValue)) {
       newError = "a number"
-    } else if (floatType === "nonNegative" && value < 0) {
+    } else if (newValue === value) {
+      newError = "different than the current number"
+    } else if (floatType === "nonNegative" && newValue < 0) {
       newError = "positive or zero"
-    } else if (floatType === "positive" && value <= 0) {
+    } else if (floatType === "positive" && newValue <= 0) {
       newError = "positive"
-    } else if (value?.split(".")[1]?.length > 2) {
+    } else if (newValue?.split(".")[1]?.length > 2) {
       newError = "a numver with only two decimal points"
     }
 
     dispatch(changeError({ property, value: newError }))
-    dispatch(changeValue({ property, value }))
+    dispatch(changeValue({ property, value: newValue }))
   }
 
   return (

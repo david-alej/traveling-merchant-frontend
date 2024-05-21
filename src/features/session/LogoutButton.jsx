@@ -1,8 +1,10 @@
 import { logout } from "./sessionSlice.js"
+import Button from "../../components/Button.jsx"
 
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { MdLogout } from "react-icons/md"
 
 export default function LogoutButton() {
   const dispatch = useDispatch()
@@ -10,7 +12,7 @@ export default function LogoutButton() {
 
   const [failedLogout, setFailedLogout] = useState("")
 
-  const handleSubmit = async (e) => {
+  const handleClick = async (e) => {
     e.preventDefault()
 
     const { payload } = await dispatch(logout())
@@ -27,11 +29,17 @@ export default function LogoutButton() {
           <p>{failedLogout}</p>
         </>
       )}
-      <form onSubmit={handleSubmit}>
+      <Button
+        className="primary"
+        onClick={handleClick}
+        text="Logout"
+        icon={<MdLogout size={23} />}
+      />
+      {/* <form onSubmit={handleSubmit}>
         <button type="submit" className="primary">
           <p>Logout</p>
         </button>
-      </form>
+      </form> */}
     </>
   )
 }

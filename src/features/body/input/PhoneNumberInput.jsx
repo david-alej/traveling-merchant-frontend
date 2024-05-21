@@ -1,22 +1,63 @@
 import { formatPhoneNumber } from "../../../util/formatters"
-import { changeValue, selectBodyProperty } from "../bodySlice"
+import {
+  changeError,
+  changeValue,
+  selectBodyProperty,
+  selectErrorProperty,
+} from "../bodySlice"
 
 import PropTypes from "prop-types"
 import { useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
-export default function PhoneNumberInput({ property, value }) {
+const formatValue = (value) => {
+  if (!value) return ""
+
+  value = value.replace(/[^0-9]/g, "")
+  const len = value.length
+
+  let phoneNumber
+
+  if (len) {
+    phoneNumber = `(${value.slice(0, 3)})`
+  }
+
+  if (len > 3) {
+    phoneNumber += `${value.slice(3, 6)}`
+  }
+
+  if (len > 6) {
+    phoneNumber += `-${value.slice(6, 10)}`
+  }
+
+  return phoneNumber || ""
+}
+
+export default function PhoneNumberInput({ value }) {
   const dispatch = useDispatch()
-  const phoneNumber = useSelector(selectBodyProperty(property))
+  const phoneNumber = useSelector(selectBodyProperty("phoneNumber"))
+  const error = useSelector(selectErrorProperty("phoneNumber"))
   const ref = useRef(null)
 
   const handleChange = ({ target }) => {
-    const { value, selectionStart, selectionEnd } = target
-    const digits = value.replace(/[^0-9]/g, "")
+    const { value: newValue, selectionStart, selectionEnd } = target
+    const digits = newValue.replace(/[^0-9]/g, "")
+    const formattedNumber = formatValue(digits)
+    let newError = false
 
-    dispatch(changeValue({ property, value: digits }))
+    if (digits && digits.length < 10) {
+      newError = "Please complete phone number."
+    } else if (digits === value) {
+      newError = "Please choose a different phone number than the current one."
+    }
 
-    const formattedNumber = formatPhoneNumber(digits)
+    dispatch(changeValue({ property: "phoneNumber", value: digits }))
+    dispatch(
+      changeError({
+        property: "phoneNumber",
+        value: newError,
+      })
+    )
 
     setTimeout(() => {
       if (ref.current) {
@@ -29,21 +70,22 @@ export default function PhoneNumberInput({ property, value }) {
   }
 
   return (
-    <input
-      className="phone-number"
-      ref={ref}
-      type="tel"
-      name="phone"
-      placeholder={formatPhoneNumber(value)}
-      value={formatPhoneNumber(phoneNumber)}
-      onChange={handleChange}
-      maxLength="14"
-      required
-    ></input>
+    <>
+      <input
+        className="phone-number"
+        ref={ref}
+        type="tel"
+        name="phone"
+        placeholder={formatPhoneNumber(value)}
+        value={formatValue(phoneNumber)}
+        onChange={handleChange}
+        maxLength="14"
+      ></input>
+      {error && <span className="error">{}</span>}
+    </>
   )
 }
 
 PhoneNumberInput.propTypes = {
-  property: PropTypes.string.isRequired,
   value: PropTypes.any,
 }

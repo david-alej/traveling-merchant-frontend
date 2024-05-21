@@ -11,13 +11,17 @@ export default function DateInput({ value, property }) {
   const date = useSelector(selectBodyProperty(property))
 
   const handleChange = (newValue) =>
-    dispatch(changeValue({ property, value: newValue.toJSON() }))
+    dispatch(
+      changeValue({
+        property,
+        value: newValue.toJSON() === value ? "" : newValue.toJSON(),
+      })
+    )
 
   return (
     <DateTimePicker
       className="date"
-      defaultValue={dayjs(value)}
-      value={dayjs(date)}
+      value={date ? dayjs(date) : dayjs(value)}
       onChange={handleChange}
       format="MMM DD YYYY hh:mm A"
     />

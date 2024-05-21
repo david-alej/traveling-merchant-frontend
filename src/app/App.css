@@ -42,6 +42,8 @@ button {
 
 .button-text,
 .button-icon {
+  display: flex;
+  align-items: center;
   padding: 0.5rem;
 }
 
@@ -49,6 +51,7 @@ button:hover {
   background-color: var(--secondary-color);
   color: #fff;
 }
+
 button:active,
 button.active {
   background-color: var(--main-color);
@@ -63,4 +66,9 @@ button.active {
 button:disabled {
   background-color: var(--faded-color);
   color: #fff;
+}
+
+button:disabled.not-active {
+  background-color: #fff;
+  color: #000;
 }

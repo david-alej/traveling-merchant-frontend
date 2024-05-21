@@ -9,8 +9,8 @@ export default function Login() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState("missioneros")
+  const [password, setPassword] = useState("nissiJire2")
   const [failedLogin, setFailedLogin] = useState("")
 
   const { hasError } = useSelector((state) => state.session)

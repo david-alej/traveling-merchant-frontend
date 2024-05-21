@@ -1,7 +1,9 @@
 import LogoutButton from "../../features/session/LogoutButton"
+import Button from "../Button"
 import "./Header.css"
 
 import { useSelector } from "react-redux"
+import { FaUser } from "react-icons/fa"
 
 export default function Header() {
   const merchantName = useSelector((state) => state.session.merchantName)
@@ -13,7 +15,14 @@ export default function Header() {
           <>
             <div id="left-header"></div>
             <div id="right-header">
-              <p>{merchantName}</p>
+              <Button
+                className="merchant"
+                text={merchantName}
+                icon={<FaUser size={23} />}
+                disabled={true}
+                notActive={true}
+              />
+              <div className="vertical-line"></div>
               <LogoutButton />
             </div>
           </>

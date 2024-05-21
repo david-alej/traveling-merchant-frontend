@@ -1,26 +1,34 @@
 import { useUpdateDataQuery } from "../../util/query-utils.jsx"
+import { selectBody } from "./bodySlice.js"
 import Spinner from "../../components/Spinner.jsx"
 import Button from "../../components/Button.jsx"
 import View from "./View.jsx"
 
 import { useParams, useLocation } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
-import { selectBody } from "./bodySlice.js"
+import { useSelector } from "react-redux"
 
 const checkForErrors = (bodyError) => {
   for (const value of Object.values(bodyError)) {
-    if (value) return false
+    if (value) return true
   }
 
-  return true
+  return false
+}
+
+const filterBody = (body) => {
+  for (const [key, value] of Object.entries(body)) {
+    if ((Array.isArray(value) && !value.length) || !value) {
+      delete body[key]
+    }
+  }
 }
 
 export default function Edit() {
-  const dispatch = useDispatch()
   const { id } = useParams()
   const route = useLocation().pathname.split("/")[1]
+
   const { error: bodyError, ...body } = useSelector(selectBody)
-  console.log(body, bodyError)
+
   const [
     updateData,
     {
@@ -65,11 +73,13 @@ export default function Edit() {
       onSubmit={async (e) => {
         e.preventDefault()
 
-        // try {
-        //   await updateData({ id, body })
-        // } catch (err) {
-        //   console.log(err)
-        // }
+        filterBody(body)
+
+        try {
+          await updateData({ id, ...body })
+        } catch (err) {
+          console.log(err)
+        }
       }}
     >
       {content}
@@ -77,7 +87,7 @@ export default function Edit() {
         <Button
           type="submit"
           className="submit-button"
-          text={"Submit"}
+          text="Submit"
           disabled={checkForErrors(bodyError)}
         />
       </div>

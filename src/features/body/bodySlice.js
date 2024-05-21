@@ -10,8 +10,8 @@ export const bodySlice = createSlice({
     changeValue: (state, { payload: { property, value } }) => {
       state[property] = value
     },
-    changeError: (state, { payload: { property, value } }) => {
-      state.error[property] = value
+    changeError: (state, { payload: { property, error } }) => {
+      state.error[property] = error
     },
     initializeTags: (state) => {
       state.tags = []

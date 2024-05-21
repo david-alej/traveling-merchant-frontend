@@ -1,9 +1,10 @@
-import Spinner from "../../components/Spinner.jsx"
-import { useGetDatumQuery } from "../../util/query-utils.jsx"
-import { reformColumns } from "../../util/datum-utils.jsx"
-import Filters from "./filters/Filters.jsx"
 import routesColumnDefinitions from "../../util/routesColumnDefinitions.js"
 import { selectRouteColumnFilters } from "./columnFiltersSlice.js"
+import { useGetDatumQuery } from "../../util/query-utils.jsx"
+import { reformColumns } from "../../util/datum-utils.jsx"
+import Button from "../../components/Button.jsx"
+import Spinner from "../../components/Spinner.jsx"
+import Filters from "./filters/Filters.jsx"
 import ActionButton from "../../components/ActionButton.jsx"
 import "./Datum.css"
 
@@ -18,7 +19,7 @@ import {
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import Button from "../../components/Button.jsx"
+import { FaFilter, FaCirclePlus } from "react-icons/fa6"
 
 export default function Datum() {
   const navigate = useNavigate()
@@ -119,20 +120,36 @@ export default function Datum() {
   } else if (isSuccess) {
     content = (
       <>
-        <div className="datum-header">
-          <div className="filters-container">
-            <div
+        <div className="datum-headers">
+          <div className="datum-header">
+            <Button
+              className="title"
+              onClick={() => setFiltersIsOpened(!filtersIsOpened)}
+              text={<strong>Filter Search</strong>}
+              icon={<FaFilter size={23} />}
+            />
+            {/* <div
               className={"filters-title" + (filtersIsOpened ? " active" : "")}
               onClick={() => setFiltersIsOpened(!filtersIsOpened)}
             >
               <strong>Filter Search</strong>
-            </div>
+            </div> */}
             <div
               className={"filters-box" + (filtersIsOpened ? " is-open" : "")}
             >
               <Filters table={table} />
             </div>
           </div>
+          {!filtersIsOpened && (
+            <div className="datum-header">
+              <Button
+                className="title"
+                onClick={() => navigate(`/${route}/`)}
+                text={<strong>Create</strong>}
+                icon={<FaCirclePlus size={23} />}
+              />
+            </div>
+          )}
         </div>
         <table>
           <thead>
