@@ -7,6 +7,7 @@ import Data from "../features/body/Data"
 import View from "../features/body/View"
 import Edit from "../features/body/Edit"
 import Delete from "../features/body/Delete"
+import Create from "../features/body/Create"
 import "./App.css"
 
 import {
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
           <Route index path="" element={<View />} />
           <Route path="edit" element={<Edit />} />
           <Route path="delete" element={<Delete />} />
+          <Route path="create" element={<Create />} />
         </Route>
       </Route>
     </Route>

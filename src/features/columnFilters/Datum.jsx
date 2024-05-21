@@ -128,12 +128,6 @@ export default function Datum() {
               text={<strong>Filter Search</strong>}
               icon={<FaFilter size={23} />}
             />
-            {/* <div
-              className={"filters-title" + (filtersIsOpened ? " active" : "")}
-              onClick={() => setFiltersIsOpened(!filtersIsOpened)}
-            >
-              <strong>Filter Search</strong>
-            </div> */}
             <div
               className={"filters-box" + (filtersIsOpened ? " is-open" : "")}
             >

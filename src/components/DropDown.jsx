@@ -15,7 +15,7 @@ export default function DropDown({
 
   return (
     <div className="select-container">
-      <div className={"custom-select single" + (selectIsOpened ? " open" : "")}>
+      <div className="custom-select single">
         <div className="select-box">
           {value.length > 0 && (
             <div className="select-filter-clear-icon" onClick={onClearValue}>
@@ -33,7 +33,7 @@ export default function DropDown({
             <FaAngleDown size={20} />
           </div>
         </div>
-        <div className="options">
+        <div className={"options" + (selectIsOpened ? " open" : "")}>
           {options.map((option) => (
             <div
               className={"option" + (value === option ? " active" : "")}
