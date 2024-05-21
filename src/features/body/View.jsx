@@ -3,18 +3,22 @@ import {
   isArray,
   isObject,
   orderProperties,
+  isEditable,
 } from "../../util/data-utils"
+import { useGetDataQuery } from "../../util/query-utils.jsx"
 import MiniTable from "./MiniTable.jsx"
 import MiniData from "./MiniData.jsx"
-import { useGetDataQuery } from "../../util/query-utils.jsx"
 import Spinner from "../../components/Spinner.jsx"
+import FormatValue from "./FormatValue"
 import Row from "./Row.jsx"
+import Input from "./input/Input.jsx"
 
 import { useLocation, useParams } from "react-router-dom"
 
 export default function View() {
   const { id } = useParams()
   const route = useLocation().pathname.split("/")[1]
+  const action = useLocation().pathname.split("/").at(-1) || "view"
 
   const { data, error, isFetching, isSuccess, isError } = useGetDataQuery(
     route,
@@ -33,9 +37,9 @@ export default function View() {
     content = (
       <div className="data" key={`${route}-${id}`}>
         {properties.map((property, index) => {
-          const value = data[property]
+          let value = data[property]
           const header = camelToFlat(property)
-          const props = { index, property, value, header }
+          const props = { index, value, header }
 
           let row
 
@@ -46,6 +50,19 @@ export default function View() {
           } else if (isObject(value)) {
             row = <MiniData {...props} />
           } else {
+            props.value =
+              property === "id" ? (
+                value
+              ) : (
+                <FormatValue property={property} value={value} />
+              )
+
+            if (action === "edit" && isEditable(route, property)) {
+              props.input = (
+                <Input property={property} value={value} header={header} />
+              )
+            }
+
             row = <Row {...props} />
           }
 

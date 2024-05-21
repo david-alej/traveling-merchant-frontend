@@ -62,8 +62,10 @@ export default function PhoneNumberInput({ value }) {
     setTimeout(() => {
       if (ref.current) {
         const position =
-          formattedNumber.indexOf(value[selectionStart - 1], selectionEnd - 1) +
-            1 || selectionEnd
+          formattedNumber.indexOf(
+            newValue[selectionStart - 1],
+            selectionEnd - 1
+          ) + 1 || selectionEnd
         ref.current.setSelectionRange(position, position)
       }
     }, 0)
@@ -76,7 +78,7 @@ export default function PhoneNumberInput({ value }) {
         ref={ref}
         type="tel"
         name="phone"
-        placeholder={formatPhoneNumber(value)}
+        placeholder={value && formatPhoneNumber(value)}
         value={formatValue(phoneNumber)}
         onChange={handleChange}
         maxLength="14"

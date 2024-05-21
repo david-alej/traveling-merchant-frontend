@@ -26,11 +26,11 @@ const router = createBrowserRouter(
       <Route path="dashboard" element={<Dashboard />} />
       <Route path=":route" element={<ParentRoute />}>
         <Route index path="" element={<Datum />} />
+        <Route path="create" element={<Create />} />
         <Route path=":id" element={<Data />}>
           <Route index path="" element={<View />} />
           <Route path="edit" element={<Edit />} />
           <Route path="delete" element={<Delete />} />
-          <Route path="create" element={<Create />} />
         </Route>
       </Route>
     </Route>

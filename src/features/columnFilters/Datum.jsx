@@ -124,6 +124,7 @@ export default function Datum() {
           <div className="datum-header">
             <Button
               className="title"
+              isActive={filtersIsOpened}
               onClick={() => setFiltersIsOpened(!filtersIsOpened)}
               text={<strong>Filter Search</strong>}
               icon={<FaFilter size={23} />}
@@ -138,7 +139,7 @@ export default function Datum() {
             <div className="datum-header">
               <Button
                 className="title"
-                onClick={() => navigate(`/${route}/`)}
+                onClick={() => navigate(`/${route}/create`)}
                 text={<strong>Create</strong>}
                 icon={<FaCirclePlus size={23} />}
               />

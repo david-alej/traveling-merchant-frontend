@@ -1,4 +1,3 @@
-import { isIsoStr } from "../../../util/formatters"
 import PhoneNumberInput from "./PhoneNumberInput"
 import DateInput from "./DateInput"
 import StringInput from "./StringInput"
@@ -17,7 +16,7 @@ export default function Input({ property, value }) {
 
   let content
 
-  if (isIsoStr(value) || property.slice(-2) === "At") {
+  if (property.slice(-2) === "At") {
     content = <DateInput {...props} />
   } else if (property === "phoneNumber") {
     content = <PhoneNumberInput {...props} />
@@ -46,7 +45,4 @@ export default function Input({ property, value }) {
 Input.propTypes = {
   property: PropTypes.string.isRequired,
   value: PropTypes.any,
-  header: PropTypes.string.isRequired,
-  body: PropTypes.object,
-  onChangeBody: PropTypes.func,
 }

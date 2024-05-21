@@ -87,8 +87,6 @@ export const orderProperties = (data, excludedId = false) => {
       miniTable.push(property)
     } else if (isObject(value)) {
       miniData.push(property)
-      // } else if (!value) {
-      //   continue
     } else {
       regulars.push(property)
     }
@@ -104,11 +102,37 @@ export const orderProperties = (data, excludedId = false) => {
   )
 }
 
-export const isEditable = (route, property) => {
+export const getMetaClass = (route, property) => {
   const routeColumnDefs = routesColumnDefinitions[route]
   const columnDef = routeColumnDefs.find((def) => def.accessorKey === property)
+  if (!columnDef) return false
 
-  return columnDef?.meta.isEditable
+  // eslint-disable-next-line no-unused-vars
+  const { dataType, property: foreignProperty, ...metaClass } = columnDef.meta
+
+  return metaClass
+}
+
+export const isEditable = (route, property) => {
+  const meta = getMetaClass(route, property)
+
+  for (const [key, value] of Object.entries(meta)) {
+    if (value === true && ["isOriginal", "isOptional"].includes(key)) {
+      return true
+    }
+  }
+
+  return false
+}
+
+export const isCreateable = (route, property) => {
+  const meta = getMetaClass(route, property)
+
+  for (const value of Object.values(meta)) {
+    if (value === true) return true
+  }
+
+  return false
 }
 
 export const camelToHyphen = (camel) =>

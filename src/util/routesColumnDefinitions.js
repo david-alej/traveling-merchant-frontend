@@ -3,12 +3,12 @@ export default {
     {
       accessorKey: "client",
       header: "Client Name",
-      meta: { dataType: "obj", property: "fullname" },
+      meta: { dataType: "obj", property: "fullname", isForeign: true },
     },
     {
       accessorKey: "cost",
       header: "Cost",
-      meta: { dataType: "num", isEditable: true },
+      meta: { dataType: "num", isOptional: true },
     },
     {
       accessorKey: "paid",
@@ -28,116 +28,116 @@ export default {
     {
       accessorKey: "paymentPlan",
       header: "Payment Plan",
-      meta: { dataType: "type", isEditable: true },
+      meta: { dataType: "type", isOriginal: true },
     },
     {
       accessorKey: "payments",
       header: "Payments",
-      meta: { dataType: "len" },
+      meta: { dataType: "len", isForeigns: true },
     },
     {
       accessorKey: "waresSold",
       header: "Wares Sold",
-      meta: { dataType: "len" },
+      meta: { dataType: "len", isForeigns: true },
     },
     {
       accessorKey: "description",
       header: "Description",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOptional: true },
     },
   ],
   transactions: [
     {
       accessorKey: "ticketId",
       header: "Ticket Id",
-      meta: { dataType: "int" },
+      meta: { dataType: "int", isForeign: true },
     },
     {
       accessorKey: "orderId",
       header: "Order Id",
-      meta: { dataType: "int" },
+      meta: { dataType: "int", isForeign: true },
     },
     {
       accessorKey: "payment",
       header: "payment",
-      meta: { dataType: "num", isEditable: true },
+      meta: { dataType: "num", isOriginal: true },
     },
     {
       accessorKey: "paymentType",
       header: "Payment Type",
-      meta: { dataType: "type", isEditable: true },
+      meta: { dataType: "type", isOriginal: true },
     },
     {
       accessorKey: "paidAt",
       header: "Paid At",
-      meta: { dataType: "date", isEditable: true },
+      meta: { dataType: "date", isOriginal: true },
     },
   ],
   clients: [
     {
       accessorKey: "work",
       header: "Work",
-      meta: { dataType: "obj", property: "name" },
+      meta: { dataType: "obj", property: "name", isForeign: true },
     },
     {
       accessorKey: "fullname",
       header: "Fullname",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOriginal: true },
     },
     {
       accessorKey: "address",
       header: "Address",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOriginal: true },
     },
     {
       accessorKey: "phoneNumber",
       header: "Phone Number",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOriginal: true },
     },
     {
       accessorKey: "description",
       header: "Description",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOptional: true },
     },
   ],
   works: [
     {
       accessorKey: "name",
       header: "Name",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOriginal: true },
     },
     {
       accessorKey: "address",
       header: "Address",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOriginal: true },
     },
     {
       accessorKey: "phoneNumber",
       header: "Phone Number",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOriginal: true },
     },
   ],
   wares: [
     {
       accessorKey: "name",
       header: "Name",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOriginal: true },
     },
     {
       accessorKey: "type",
       header: "Type",
-      meta: { dataType: "type", isEditable: true },
+      meta: { dataType: "type", isOriginal: true },
       filterFn: "typeFilter",
     },
     {
       accessorKey: "tags",
       header: "Tags",
-      meta: { dataType: "itr", isEditable: true },
+      meta: { dataType: "itr", isOptional: true },
     },
     {
       accessorKey: "unitPrice",
       header: "Unit Price",
-      meta: { dataType: "num", isEditable: true },
+      meta: { dataType: "num", isOriginal: true },
     },
     {
       accessorKey: "stock",
@@ -149,54 +149,54 @@ export default {
     {
       accessorKey: "provider",
       header: "Provider",
-      meta: { dataType: "obj", property: "name" },
+      meta: { dataType: "obj", property: "name", isForeign: true },
     },
     {
       accessorKey: "cost",
       header: "Cost",
-      meta: { dataType: "num", isEditable: true },
+      meta: { dataType: "num", isOriginal: true },
     },
     {
       accessorKey: "tax",
       header: "Tax",
-      meta: { dataType: "num", isEditable: true },
+      meta: { dataType: "num", isOptional: true },
     },
     {
       accessorKey: "shipment",
       header: "Shipment",
-      meta: { dataType: "num", isEditable: true },
+      meta: { dataType: "num", isOptional: true },
     },
     {
       accessorKey: "expectedAt",
       header: "Expected At",
-      meta: { dataType: "date", isEditable: true },
+      meta: { dataType: "date", isOriginal: true },
     },
     {
       accessorKey: "actualAt",
       header: "Actual At",
-      meta: { dataType: "date", isEditable: true },
+      meta: { dataType: "date", isOptional: true },
     },
   ],
   providers: [
     {
       accessorKey: "name",
       header: "Name",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOriginal: true },
     },
     {
       accessorKey: "address",
       header: "Address",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOriginal: true },
     },
     {
       accessorKey: "phoneNumber",
       header: "Phone Number",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOriginal: true },
     },
     {
       accessorKey: "email",
       header: "Email",
-      meta: { dataType: "str", isEditable: true },
+      meta: { dataType: "str", isOptional: true },
     },
   ],
 }

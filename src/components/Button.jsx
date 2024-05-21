@@ -5,6 +5,7 @@ export default function Button({
   className,
   text,
   icon,
+  isActive,
   onClick,
   disabled,
   notActive,
@@ -13,7 +14,11 @@ export default function Button({
   return (
     <button
       key={key}
-      className={className + " " + (notActive ? "not-active" : "")}
+      className={
+        className +
+        (isActive ? " active" : "") +
+        (notActive ? " not-active" : "")
+      }
       onClick={onClick}
       disabled={disabled}
       type={type}
@@ -31,6 +36,7 @@ Button.propTypes = {
   icon: PropTypes.any,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
+  isActive: PropTypes.bool,
   notActive: PropTypes.bool,
   type: PropTypes.string,
 }
