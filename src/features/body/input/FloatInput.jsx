@@ -41,7 +41,7 @@ export default function FloatInput({ property, value, floatType }) {
     <>
       <input
         className="float"
-        placeholder={value}
+        placeholder={value || `${camelToFlat(floatType)} Number`}
         value={float}
         onChange={handleChange}
       />

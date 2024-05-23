@@ -1,59 +1,58 @@
 import { camelToFlat } from "../../util/data-utils"
 import routesColumnDefinitions from "../../util/routesColumnDefinitions"
+import { orderColDefs } from "../../util/create-utils"
+import Button from "../../components/Button"
 import Input from "./input/Input"
 import Row from "./Row"
 
 import { useLocation } from "react-router-dom"
-
-const orderColDefs = (colDefs) => {
-  const foreign = []
-  const originals = []
-  const optionals = []
-  const dates = []
-  const foreigns = []
-  const description = []
-
-  for (const colDef of colDefs) {
-    const {
-      accessorKey: property,
-      meta: { isOriginal, isOptional, isForeign, isForeigns },
-    } = colDef
-
-    if (property.slice(-2) === "At") {
-      dates.push(colDef)
-    } else if (property === "description") {
-      description.push(colDef)
-    } else if (isOriginal) {
-      originals.push(colDef)
-    } else if (isOptional) {
-      optionals.push(colDef)
-    } else if (isForeign) {
-      foreign.push(colDef)
-    } else if (isForeigns) {
-      foreigns.push(colDef)
-    }
-  }
-
-  return foreign.concat(originals, optionals, dates, foreigns, description)
-}
+import ForeignInput from "./input/ForeignInput"
+import MiniData from "./MiniData"
 
 export default function Create() {
   const route = useLocation().pathname.split("/")[1]
   const routeColDefs = routesColumnDefinitions[route]
 
   return (
-    <div className="create">
-      {orderColDefs(routeColDefs).map(
-        ({ accessorKey: property, meta: { isOriginal, isForeign } }, index) => (
-          // eslint-disable-next-line react/jsx-key
-          <Row
-            index={index}
-            header={camelToFlat(property)}
-            value={isOriginal || isForeign ? "Required" : "Optional"}
-            input={<Input property={property} header={camelToFlat(property)} />}
-          />
-        )
-      )}
-    </div>
+    <form>
+      <div className="create">
+        {orderColDefs(routeColDefs).map(
+          (
+            { accessorKey: property, meta: { isOriginal, isForeign } },
+            index
+          ) => {
+            const header = camelToFlat(property)
+
+            let content
+
+            if (isForeign) {
+              content = <MiniData index={index} header={header} />
+            } else {
+              content = (
+                <Row
+                  index={index}
+                  header={header}
+                  value={isOriginal || isForeign ? "Required" : "Optional"}
+                  input={
+                    <Input property={property} header={camelToFlat(property)} />
+                  }
+                />
+              )
+            }
+
+            return <>{content}</>
+          }
+        )}
+      </div>
+      <div className="submit-edit">
+        <Button
+          type="submit"
+          className="submit-button"
+          text="Submit"
+          // disabled={checkForErrors(bodyError)}
+        />
+      </div>
+      {/* {checkForErrors(bodyError) && <span>Please fill valid inputs above</span>} */}
+    </form>
   )
 }

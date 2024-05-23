@@ -48,7 +48,7 @@ export default function StringInput({ property, value }) {
   return (
     <>
       <input
-        placeholder={value}
+        placeholder={value || "Text"}
         value={string || ""}
         onChange={handleChange}
         style={{ width }}

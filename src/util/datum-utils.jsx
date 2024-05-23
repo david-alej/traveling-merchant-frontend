@@ -50,7 +50,7 @@ export const reformColumn = (column) => {
 
         if (id === "phoneNumber") return formatPhoneNumber(propValue)
 
-        return propValue.length <= 45
+        return propValue?.length <= 45
           ? props.getValue()
           : props.getValue().slice(0, 40) + "..."
       }

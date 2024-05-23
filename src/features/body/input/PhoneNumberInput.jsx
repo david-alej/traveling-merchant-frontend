@@ -78,7 +78,7 @@ export default function PhoneNumberInput({ value }) {
         ref={ref}
         type="tel"
         name="phone"
-        placeholder={value && formatPhoneNumber(value)}
+        placeholder={(value && formatPhoneNumber(value)) || "(123)456-7890"}
         value={formatValue(phoneNumber)}
         onChange={handleChange}
         maxLength="14"

@@ -1,4 +1,4 @@
-import { findIndentyInformation } from "../../util/data-utils"
+import { getNameValue } from "../../util/data-utils"
 import {
   formatFullDate,
   formatPhoneNumber,
@@ -28,10 +28,13 @@ export default function FormatValue({ property, value, miniTableName = "" }) {
 
     formattedValue = <p>{formattedValue}</p>
   } else if (typeof value === "object" && value !== null) {
-    const { nameValue, id } = findIndentyInformation(value)
+    const nameValue = getNameValue(value)
+    const { id } = value
 
     formattedValue = (
-      <Link to={`/${property.toLowerCase()}s/${id}`}>{nameValue}</Link>
+      <Link to={`/${property.toLowerCase()}s/${id}`}>
+        {nameValue.length > 40 ? nameValue.slice(0, 40) + "..." : nameValue}
+      </Link>
     )
   } else if (
     !(

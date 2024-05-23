@@ -17,12 +17,11 @@ export const camelToFlat = (property) => {
   return flat.slice(0, -1)
 }
 
-export const findIndentyInformation = (value) => {
+export const getNameValue = (value) => {
   let obj = value[0]
   let nameValue = value.length
-  if (value.length === 0) return { nameValue, id: 0 }
 
-  if (!isArray(value)) {
+  if (value.length !== 0 && !isArray(value) && value) {
     obj = value
 
     const nameKey =
@@ -31,10 +30,7 @@ export const findIndentyInformation = (value) => {
     nameValue = obj[nameKey]
   }
 
-  return {
-    nameValue,
-    id: obj.id,
-  }
+  return nameValue || ""
 }
 
 export const orderProperties = (data, excludedId = false) => {
