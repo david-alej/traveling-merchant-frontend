@@ -1,4 +1,9 @@
-import { changeValue, initializeArray, selectBodyProperty } from "../bodySlice"
+import {
+  addElement,
+  changeValue,
+  initializeArray,
+  selectBodyProperty,
+} from "../bodySlice"
 import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
 import { useGetDatumQuery } from "../../../util/query-utils"
 import { reformColumns } from "../../../util/datum-utils"
@@ -13,19 +18,23 @@ import { MdOutlineClear } from "react-icons/md"
 import { LiaSearchSolid } from "react-icons/lia"
 import IntegerInput from "./IntegerInput"
 
+const initialState = {
+  ware: {},
+  amount: 0,
+  returned: 0,
+  unitPrice: 0.01,
+}
+
 export default function ArrayInput({ value = [], header }) {
   const dispatch = useDispatch()
   const length = value.length
   const property = header === "Wares Sold" ? "waresTickets" : "ordersWares"
   const route = "wares"
+
   const array = useSelector(selectBodyProperty(property)) || {}
   const [popupVisisble, setPopupVisible] = useState(false)
-  const [selected, setSelected] = useState({
-    ware: {},
-    amount: undefined,
-    returned: undefined,
-    unitPrice: undefined,
-  })
+  const [selected, setSelected] = useState(initialState)
+
   const columns = routesColumnDefinitions[route]
   const newLength = array.length
   const integers = ["amount", "returned", "unitPrice"]
@@ -68,7 +77,7 @@ export default function ArrayInput({ value = [], header }) {
         <Button
           className="visibility-button"
           icon={<LiaSearchSolid />}
-          type={"button"}
+          type="button"
           onClick={() => setPopupVisible(true)}
         ></Button>
         {newLength !== 0 && (
@@ -97,13 +106,14 @@ export default function ArrayInput({ value = [], header }) {
               onClick={() => setPopupVisible(!popupVisisble)}
             />
           </div>
+          <br />
           <div className="add-element">
             <div className="element-part ware" key={0}>
-              <p>ware</p>
+              <p>Ware:</p>
               <input
                 className="ware-obj"
                 placeholder="Ware"
-                value={selected.ware.name}
+                value={selected.ware.name || ""}
                 readOnly
               />
             </div>
@@ -115,7 +125,35 @@ export default function ArrayInput({ value = [], header }) {
                 setSelected={setSelected}
               />
             ))}
+            <Button
+              type="button"
+              className="add-element-button"
+              text="Add Element"
+              disabled={
+                !(
+                  selected.ware.id &&
+                  selected.amount &&
+                  selected.amount >= selected.returned
+                )
+              }
+              onClick={() => {
+                const element = { ...selected }
+
+                element.wareId = selected.ware.id
+                element.id = selected.ware.id
+
+                dispatch(
+                  addElement({
+                    property,
+                    element,
+                  })
+                )
+
+                setSelected(initialState)
+              }}
+            />
           </div>
+          <br />
           {content}
         </div>
       )}

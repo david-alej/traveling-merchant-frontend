@@ -97,11 +97,12 @@ input.array:focus {
 }
 
 .add-element input {
-  width: auto;
+  max-width: 4rem;
 }
 
 .add-element input.ware-obj {
-  width: 80%;
+  max-width: none;
+  width: 85%;
 }
 
 .add-element .element-part {
@@ -109,12 +110,18 @@ input.array:focus {
   flex: 1;
   align-items: center;
   justify-content: center;
+  padding: 0.2rem;
 }
 
 .add-element .element-part.ware {
-  flex: 10;
+  flex: 7;
 }
 
 .element-part p {
-  margin-right: 1rem;
+  padding-right: 1rem;
+}
+
+.add-element-button {
+  border: 0.1rem solid #000;
+  margin: 0.2rem;
 }

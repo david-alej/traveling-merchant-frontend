@@ -1,3 +1,4 @@
+import { removeElement, selectBodyProperty } from "./bodySlice.js"
 import {
   camelToFlat,
   getNameValue,
@@ -7,18 +8,21 @@ import FormatValue from "./FormatValue.jsx"
 import Table from "../columnFilters/Table.jsx"
 import ArrayInput from "./input/ArrayInput.jsx"
 import Arrow from "../../components/Arrow.jsx"
+import Button from "../../components/Button.jsx"
 
 import PropTypes from "prop-types"
 import { useState } from "react"
 import { useLocation } from "react-router-dom"
-import { useSelector } from "react-redux"
-import { selectBodyProperty } from "./bodySlice.js"
+import { useSelector, useDispatch } from "react-redux"
+import { FaDeleteLeft } from "react-icons/fa6"
 
 export default function MiniTable({ value, header, excludedId }) {
+  const dispatch = useDispatch()
   const nameValue = getNameValue(value)
   const route = header.toLowerCase()
   const path = useLocation().pathname.split("/").at(-1)
   const arrayProperty = header === "Wares Sold" ? "waresTickets" : "ordersWares"
+
   const array = useSelector(selectBodyProperty(arrayProperty)) || []
   const [isOpen, setIsOpen] = useState(false)
   const [pagination, setPagination] = useState({
@@ -29,6 +33,7 @@ export default function MiniTable({ value, header, excludedId }) {
     pageIndex: 0,
     pageSize: 5,
   })
+
   const isProperAction = path === "edit" || path === "create"
   const isProperHeader = header === "Wares Sold" || header === "Wares Bought"
   const canInput = isProperAction && isProperHeader
@@ -79,10 +84,25 @@ export default function MiniTable({ value, header, excludedId }) {
               <strong>Input</strong>
               <Table
                 route={route}
-                columns={columns}
+                columns={columns.slice(0, -2)}
                 data={array}
                 state={{ pagination: arrayPagination }}
                 onPaginationChange={setArrayPagination}
+                customAction={(row) => (
+                  <Button
+                    type="button"
+                    className="delete-element-button"
+                    icon={<FaDeleteLeft />}
+                    onClick={() =>
+                      dispatch(
+                        removeElement({
+                          property: arrayProperty,
+                          element: { id: row.original.id },
+                        })
+                      )
+                    }
+                  />
+                )}
               />
             </>
           )}

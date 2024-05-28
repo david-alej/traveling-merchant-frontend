@@ -25,6 +25,7 @@ export default function Table({
   onDoubleClick,
   hasExtraOptions = false,
   hasActions = false,
+  customAction,
 }) {
   const navigate = useNavigate()
   const [filtersIsOpened, setFiltersIsOpened] = useState(false)
@@ -185,7 +186,7 @@ export default function Table({
                   </div>
                 </th>
               ))}
-              {hasActions && (
+              {(hasActions || customAction) && (
                 <th key="actions" className="actions">
                   <div className="header-cell">
                     <div className="header-text">Actions</div>
@@ -203,19 +204,24 @@ export default function Table({
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
-              {hasActions && (
+              {(hasActions || customAction) && (
                 <td key={`${row.id}_actions`}>
                   <div className="actions">
-                    <ActionButton
-                      type={"edit"}
-                      route={route}
-                      id={row.original.id}
-                    />
-                    <ActionButton
-                      type={"delete"}
-                      route={route}
-                      id={row.original.id}
-                    />
+                    {customAction && customAction(row)}
+                    {hasActions && (
+                      <>
+                        <ActionButton
+                          type={"edit"}
+                          route={route}
+                          id={row.original.id}
+                        />
+                        <ActionButton
+                          type={"delete"}
+                          route={route}
+                          id={row.original.id}
+                        />
+                      </>
+                    )}
                   </div>
                 </td>
               )}
@@ -266,6 +272,7 @@ Table.propTypes = {
   columns: PropTypes.array,
   data: PropTypes.array,
   state: PropTypes.object,
+  customAction: PropTypes.func,
   onPaginationChange: PropTypes.func,
   onDoubleClick: PropTypes.func,
   hasExtraOptions: PropTypes.bool,

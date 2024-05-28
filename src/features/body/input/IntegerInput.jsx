@@ -6,8 +6,8 @@ export default function IntegerInput({ property, selected, setSelected }) {
   const integer = selected[property]
 
   return (
-    <div className="element-part">
-      <p>{camelToFlat(property)}</p>
+    <div className="element-part integer">
+      <p>{camelToFlat(property) + ":"}</p>
       <input
         placeholder="integer"
         value={integer}
