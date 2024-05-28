@@ -5,19 +5,33 @@ import {
 } from "../../util/data-utils.jsx"
 import FormatValue from "./FormatValue.jsx"
 import Table from "../columnFilters/Table.jsx"
+import ArrayInput from "./input/ArrayInput.jsx"
+import Arrow from "../../components/Arrow.jsx"
 
 import PropTypes from "prop-types"
 import { useState } from "react"
-import { FaAngleDown } from "react-icons/fa"
+import { useLocation } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { selectBodyProperty } from "./bodySlice.js"
 
-export default function MiniTable({ index, value, header, excludedId }) {
+export default function MiniTable({ value, header, excludedId }) {
   const nameValue = getNameValue(value)
   const route = header.toLowerCase()
+  const path = useLocation().pathname.split("/").at(-1)
+  const arrayProperty = header === "Wares Sold" ? "waresTickets" : "ordersWares"
+  const array = useSelector(selectBodyProperty(arrayProperty)) || []
   const [isOpen, setIsOpen] = useState(false)
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 5,
   })
+  const [arrayPagination, setArrayPagination] = useState({
+    pageIndex: 0,
+    pageSize: 5,
+  })
+  const isProperAction = path === "edit" || path === "create"
+  const isProperHeader = header === "Wares Sold" || header === "Wares Bought"
+  const canInput = isProperAction && isProperHeader
 
   const columns = orderProperties(value[0], excludedId).map((columnId) => {
     const columnDef = {
@@ -39,29 +53,46 @@ export default function MiniTable({ index, value, header, excludedId }) {
   })
 
   return (
-    <div key={index} className="mini-table">
+    <div className="mini-table">
       <div className="header">
-        <div className="arrow" onClick={() => setIsOpen(!isOpen)}>
-          <FaAngleDown size={20} />
-        </div>
+        <Arrow onClick={() => setIsOpen(!isOpen)} />
         <div className="header-text">{header}</div>
         <div className="name-value">{nameValue}</div>
+        {canInput && (
+          <div className="input">
+            <ArrayInput value={value} header={header} />
+          </div>
+        )}
       </div>
-      <div className={"value" + (isOpen ? " open" : "")}>
-        <Table
-          route={route}
-          columns={columns}
-          data={value}
-          state={{ pagination }}
-          onPaginationChange={setPagination}
-        />
-      </div>
+      {isOpen && (
+        <div className="value">
+          <strong>Value</strong>
+          <Table
+            route={route}
+            columns={columns}
+            data={value}
+            state={{ pagination }}
+            onPaginationChange={setPagination}
+          />
+          {canInput && (
+            <>
+              <strong>Input</strong>
+              <Table
+                route={route}
+                columns={columns}
+                data={array}
+                state={{ pagination: arrayPagination }}
+                onPaginationChange={setArrayPagination}
+              />
+            </>
+          )}
+        </div>
+      )}
     </div>
   )
 }
 
 MiniTable.propTypes = {
-  index: PropTypes.number.isRequired,
   value: PropTypes.array.isRequired,
   header: PropTypes.string.isRequired,
   excludedId: PropTypes.string.isRequired,

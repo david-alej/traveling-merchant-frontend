@@ -6,10 +6,10 @@ import {
   removeTag,
   initializeTags,
 } from "../bodySlice"
+import Arrow from "../../../components/Arrow"
 import "./TagsInput.css"
 
 import { useEffect, useState } from "react"
-import { FaAngleDown } from "react-icons/fa"
 import { MdCreate, MdOutlineClear, MdOutlineAddCircle } from "react-icons/md"
 import { useSelector, useDispatch } from "react-redux"
 
@@ -63,11 +63,7 @@ export default function TagsInput() {
                 </span>
               ))}
             </div>
-            <FaAngleDown
-              className="arrow"
-              size={20}
-              onClick={() => setIsOpen(!isOpen)}
-            />
+            <Arrow onClick={() => setIsOpen(!isOpen)} />
           </div>
           <div className={"options" + (isOpen ? " open" : "")}>
             <div className="make-tag-container">

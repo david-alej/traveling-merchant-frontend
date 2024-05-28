@@ -1,8 +1,8 @@
 import PropTypes from "prop-types"
 
-export default function Row({ index, value, header, input = <></> }) {
+export default function Row({ value, header, input = <></> }) {
   return (
-    <div key={index} className="row">
+    <div className="row">
       <div className="header">
         <div className="header-text">{header}</div>
       </div>
@@ -13,7 +13,6 @@ export default function Row({ index, value, header, input = <></> }) {
 }
 
 Row.propTypes = {
-  index: PropTypes.number.isRequired,
   value: PropTypes.any.isRequired,
   header: PropTypes.string.isRequired,
   input: PropTypes.object,

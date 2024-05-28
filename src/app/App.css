@@ -72,3 +72,14 @@ button:disabled.not-active {
   background-color: #fff;
   color: #000;
 }
+
+/* Arrow */
+.arrow {
+  transform: rotate(0deg);
+  transition: 0.2s ease transform;
+}
+
+.arrow.down {
+  transform: rotate(90deg);
+  transition: 0.2s ease transform;
+}

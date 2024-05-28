@@ -16,6 +16,31 @@ export const bodySlice = createSlice({
     initializeTags: (state) => {
       state.tags = []
     },
+    initializeArray: (state, { payload: property }) => {
+      if (!state[property]) state[property] = []
+    },
+    addElement: (state, { payload: { property, element: elementToAdd } }) => {
+      const isUnique =
+        typeof elementToAdd === "object"
+          ? state[property].every((obj) => obj.id !== elementToAdd.id)
+          : !state[property].includes(elementToAdd)
+
+      if (isUnique) state[property] = [...state[property], elementToAdd]
+    },
+    removeElement: (
+      state,
+      { payload: { property, element: elementToRemove } }
+    ) => {
+      if (typeof elementToRemove === "object") {
+        state[property] = state[property].filter(
+          (obj) => obj.id !== elementToRemove.id
+        )
+      } else {
+        state[property] = state[property].filter(
+          (str) => str !== elementToRemove
+        )
+      }
+    },
     addTag: (state, { payload: tag }) => {
       state.tags = [...state.tags, tag]
     },
@@ -29,6 +54,9 @@ export const {
   reset,
   changeValue,
   changeError,
+  initializeArray,
+  addElement,
+  removeElement,
   initializeTags,
   addTag,
   removeTag,

@@ -13,16 +13,18 @@ import { LiaSearchSolid } from "react-icons/lia"
 import { MdOutlineClear } from "react-icons/md"
 import PropTypes from "prop-types"
 
-export default function ForeignInput({ value = {}, header }) {
+export default function ObjectInput({ value = {}, header }) {
   const dispatch = useDispatch()
-  const nameValue = getNameValue(value)
-  const foreign = useSelector(selectBodyProperty(header.toLowerCase())) || {}
+  const name = getNameValue(value)
+  const property = header.toLowerCase()
+  const object = useSelector(selectBodyProperty(property)) || {}
   const [popupVisisble, setPopupVisible] = useState(false)
-  const foreignRoute = header.toLowerCase() + "s"
-  const columns = routesColumnDefinitions[foreignRoute]
+  const route = property + "s"
+  const columns = routesColumnDefinitions[route]
+  const newName = getNameValue(object)
 
   const { data, error, isFetching, isSuccess, isError } =
-    useGetDatumQuery(foreignRoute)
+    useGetDatumQuery(route)
 
   reformColumns(columns)
 
@@ -37,34 +39,45 @@ export default function ForeignInput({ value = {}, header }) {
       <Table
         columns={columns}
         data={data}
-        route={foreignRoute}
+        route={route}
         onDoubleClick={(row) => () => {
           dispatch(
             changeValue({
-              property: header.toLowerCase(),
-              value: value.id === row.original.id ? {} : row.original,
+              property,
+              value: value.id === row.original.id ? undefined : row.original,
             })
           )
 
-          setPopupVisible(!popupVisisble)
+          setPopupVisible(false)
         }}
       />
     )
   }
 
+  const handleClear = () =>
+    dispatch(changeValue({ property, value: undefined }))
+
   return (
     <>
-      <div className="foreign-header">
+      <div className="object-header">
         <Button
           className="visibility-button"
           icon={<LiaSearchSolid />}
           type={"button"}
           onClick={() => setPopupVisible(true)}
         ></Button>
+        {newName && (
+          <Button
+            onClick={handleClear}
+            type="button"
+            className="object-clear-button"
+            icon={<MdOutlineClear />}
+          />
+        )}
         <input
-          className="foreign"
-          placeholder={nameValue || "Foreign"}
-          value={getNameValue(foreign)}
+          className="object"
+          placeholder={name || "Reference"}
+          value={newName}
           readOnly
         />
       </div>
@@ -86,7 +99,7 @@ export default function ForeignInput({ value = {}, header }) {
   )
 }
 
-ForeignInput.propTypes = {
+ObjectInput.propTypes = {
   value: PropTypes.object,
   header: PropTypes.string.isRequired,
 }

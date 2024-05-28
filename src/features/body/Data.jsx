@@ -1,21 +1,13 @@
-import { reset } from "./bodySlice"
 import ActionButton from "../../components/ActionButton"
 import "./Data.css"
 
 import { Outlet } from "react-router-dom"
 import { useParams, useLocation } from "react-router-dom"
-import { useEffect } from "react"
-import { useDispatch } from "react-redux"
 
 export default function Data() {
-  const dispatch = useDispatch()
   const { id } = useParams()
   const route = useLocation().pathname.split("/")[1]
   const currentAction = useLocation().pathname.split("/")[3] || "view"
-
-  useEffect(() => {
-    dispatch(reset())
-  }, [dispatch, route])
 
   return (
     <>

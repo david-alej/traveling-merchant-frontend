@@ -37,16 +37,24 @@ input.phone-number {
 }
 
 /* Foreign Input */
-.foreign-header {
+.object-header,
+.array-header {
   display: flex;
   flex-direction: row;
 }
 
-input.foreign {
+input.object,
+input.array {
   width: 100%;
   border: none;
 }
 
+input.object:focus,
+input.array:focus {
+  outline: none;
+}
+
+/* Pop Up */
 .pop-up {
   position: fixed;
   top: 50%;
@@ -54,7 +62,7 @@ input.foreign {
   transform: translate(-50%, -50%);
   box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.5);
   background-color: #fff;
-  width: 75%;
+  width: 90%;
   border-radius: 1rem;
   z-index: 1;
 }
@@ -80,4 +88,33 @@ input.foreign {
 
 .pop-up-header .no-visibility-button {
   flex: 0.1;
+}
+
+.add-element {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.add-element input {
+  width: auto;
+}
+
+.add-element input.ware-obj {
+  width: 80%;
+}
+
+.add-element .element-part {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-element .element-part.ware {
+  flex: 10;
+}
+
+.element-part p {
+  margin-right: 1rem;
 }

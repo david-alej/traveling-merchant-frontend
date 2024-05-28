@@ -13,7 +13,6 @@ export default function Datum() {
   const route = useLocation().pathname.split("/")[1]
   const columns = routesColumnDefinitions[route]
   const columnFilters = useSelector(selectRouteColumnFilters(route))
-
   const { data, error, isFetching, isSuccess, isError } =
     useGetDatumQuery(route)
 

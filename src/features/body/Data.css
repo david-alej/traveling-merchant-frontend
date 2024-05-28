@@ -43,7 +43,8 @@
   padding: 1rem;
 }
 
-.data .arrow {
+.data .arrow,
+.mini-data .arrow {
   width: 5%;
   margin: 0;
   display: flex;
@@ -97,17 +98,13 @@
 .mini-data .value,
 .mini-table .value {
   width: 100%;
-  display: none;
+  display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
   padding: 0.25rem;
   border-radius: 1rem;
   background-color: var(--faded-color);
-}
-
-.value.open {
-  display: flex;
 }
 
 /* Mini Table */

@@ -88,13 +88,15 @@ export const orderProperties = (data, excludedId = false) => {
     }
   }
 
-  return id.concat(
-    miniData,
+  const middleProperties = miniData.concat(
     regulars,
     dates,
     description,
-    miniTable,
-    lastProperties
+    miniTable
+  )
+
+  return (
+    middleProperties.length > 0 && id.concat(middleProperties, lastProperties)
   )
 }
 

@@ -1,8 +1,8 @@
+import Arrow from "./Arrow"
 import "./DropDown.css"
 
 import PropTypes from "prop-types"
 import { useState } from "react"
-import { FaAngleDown } from "react-icons/fa"
 import { MdOutlineClear } from "react-icons/md"
 
 export default function DropDown({
@@ -25,13 +25,7 @@ export default function DropDown({
           <span className="selected-option" key={value}>
             {value}
           </span>
-
-          <div
-            className="arrow"
-            onClick={() => setSelectIsOpened(!selectIsOpened)}
-          >
-            <FaAngleDown size={20} />
-          </div>
+          <Arrow onClick={() => setSelectIsOpened(!selectIsOpened)} />
         </div>
         <div className={"options" + (selectIsOpened ? " open" : "")}>
           {options.map((option) => (

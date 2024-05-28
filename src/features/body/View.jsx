@@ -39,7 +39,7 @@ export default function View() {
         {properties.map((property, index) => {
           let value = data[property]
           const header = camelToFlat(property)
-          const props = { index, value, header }
+          const props = { key: index, value, header }
 
           let row
 

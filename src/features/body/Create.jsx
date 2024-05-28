@@ -3,11 +3,10 @@ import routesColumnDefinitions from "../../util/routesColumnDefinitions"
 import { orderColDefs } from "../../util/create-utils"
 import Button from "../../components/Button"
 import Input from "./input/Input"
+import MiniData from "./MiniData"
 import Row from "./Row"
 
 import { useLocation } from "react-router-dom"
-import ForeignInput from "./input/ForeignInput"
-import MiniData from "./MiniData"
 
 export default function Create() {
   const route = useLocation().pathname.split("/")[1]

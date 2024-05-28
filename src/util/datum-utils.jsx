@@ -6,7 +6,7 @@ import {
 
 import { Link } from "react-router-dom"
 
-export const reformColumn = (column) => {
+export const reformColumn = (column, shallow = false) => {
   const {
     accessorKey: id,
     meta: { dataType, property },
@@ -47,12 +47,15 @@ export const reformColumn = (column) => {
     case "str": {
       column.cell = (props) => {
         const propValue = props.getValue()
+        const maxLength = shallow ? 20 : 45
 
         if (id === "phoneNumber") return formatPhoneNumber(propValue)
 
-        return propValue?.length <= 45
+        if (!propValue) return propValue
+
+        return propValue.length <= maxLength
           ? props.getValue()
-          : props.getValue().slice(0, 40) + "..."
+          : props.getValue().slice(0, maxLength - 5) + "..."
       }
 
       break

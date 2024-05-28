@@ -150,34 +150,38 @@ export default function Table({
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
                   <div className="header-cell">
-                    <div className="header-text">
-                      {header.column.columnDef.header}
-                    </div>
-                    {header.column.getCanSort() && (
-                      <div
-                        className="sorting-buttons"
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        <p
-                          className="sorting-button"
-                          style={{
-                            color:
-                              header.column.getIsSorted() === "asc" && "black",
-                          }}
-                        >
-                          ▲
-                        </p>
-                        <p
-                          className="sorting-button"
-                          style={{
-                            color:
-                              header.column.getIsSorted() === "desc" && "black",
-                          }}
-                        >
-                          ▼
-                        </p>
+                    <div className="header-container">
+                      <div className="header-text">
+                        {header.column.columnDef.header}
                       </div>
-                    )}
+                      {header.column.getCanSort() && (
+                        <div
+                          className="sorting-buttons"
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          <p
+                            className="sorting-button"
+                            style={{
+                              color:
+                                header.column.getIsSorted() === "asc" &&
+                                "black",
+                            }}
+                          >
+                            ▲
+                          </p>
+                          <p
+                            className="sorting-button"
+                            style={{
+                              color:
+                                header.column.getIsSorted() === "desc" &&
+                                "black",
+                            }}
+                          >
+                            ▼
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </th>
               ))}

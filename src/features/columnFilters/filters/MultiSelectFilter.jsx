@@ -1,8 +1,8 @@
 import { addValue, removeValue } from "../columnFiltersSlice"
+import Arrow from "../../../components/Arrow"
 import "./MultiSelectFilter.css"
 
 import PropTypes from "prop-types"
-import { FaAngleDown } from "react-icons/fa"
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useLocation } from "react-router-dom"
@@ -37,11 +37,7 @@ export default function MultiSelectFilter({
               </span>
             ))}
           </div>
-          <FaAngleDown
-            size={20}
-            className="arrow"
-            onClick={() => setSelectIsOpened(!selectIsOpened)}
-          />
+          <Arrow onClick={() => setSelectIsOpened(!selectIsOpened)} />
         </div>
         <div className={"options" + (selectIsOpened ? " open" : "")}>
           {uniqueValues.map((uniqueValue) => (
