@@ -25,25 +25,15 @@ const initialState = {
   unitPrice: 0.01,
 }
 
-export default function ArrayInput({ value = [], header }) {
+function PopUpContent({ header }) {
   const dispatch = useDispatch()
-  const length = value.length
   const property = header === "Wares Sold" ? "waresTickets" : "ordersWares"
   const route = "wares"
-
-  const array = useSelector(selectBodyProperty(property)) || {}
-  const [popupVisisble, setPopupVisible] = useState(false)
-  const [selected, setSelected] = useState(initialState)
-
   const columns = routesColumnDefinitions[route]
-  const newLength = array.length
-  const integers = ["amount", "returned", "unitPrice"]
+  const [selected, setSelected] = useState(initialState)
+  const integers = ["unitPrice", "amount", "returned"]
 
-  if (header === "Wares Sold") integers.pop()
-
-  useEffect(() => {
-    dispatch(initializeArray(property))
-  }, [dispatch, property])
+  if (header === "Wares Sold") integers.shift()
 
   const { data, error, isFetching, isSuccess, isError } =
     useGetDatumQuery(route)
@@ -69,6 +59,77 @@ export default function ArrayInput({ value = [], header }) {
     )
   }
 
+  return (
+    <>
+      <br />
+      <div className="add-element">
+        <div className="element-part ware" key={0}>
+          <p>Ware:</p>
+          <input
+            className="ware-obj"
+            placeholder="Ware"
+            value={selected.ware.name || ""}
+            readOnly
+          />
+        </div>
+        {integers.map((input, index) => (
+          <IntegerInput
+            key={index + 1}
+            property={input}
+            selected={selected}
+            setSelected={setSelected}
+          />
+        ))}
+        <Button
+          type="button"
+          className="add-element-button"
+          text="Add Element"
+          disabled={
+            !(
+              selected.ware.id &&
+              selected.amount &&
+              selected.amount >= selected.returned
+            )
+          }
+          onClick={() => {
+            const element = { ...selected }
+
+            element.wareId = selected.ware.id
+            element.id = selected.ware.id
+
+            dispatch(
+              addElement({
+                property,
+                element,
+              })
+            )
+
+            setSelected(initialState)
+          }}
+        />
+      </div>
+      <br />
+      {content}
+    </>
+  )
+}
+
+PopUpContent.propTypes = { header: PropTypes.string.isRequired }
+
+export default function ArrayInput({ value = [], header }) {
+  const dispatch = useDispatch()
+  const length = value.length
+  const property = header === "Wares Sold" ? "waresTickets" : "ordersWares"
+
+  const array = useSelector(selectBodyProperty(property)) || {}
+  const [popupVisisble, setPopupVisible] = useState(false)
+
+  const newLength = array.length
+
+  useEffect(() => {
+    dispatch(initializeArray(property))
+  }, [dispatch, property])
+
   const handleClear = () => dispatch(changeValue({ property, value: [] }))
 
   return (
@@ -84,12 +145,12 @@ export default function ArrayInput({ value = [], header }) {
           <Button
             onClick={handleClear}
             type="button"
-            className="object-clear-button"
+            className="array-clear-button"
             icon={<MdOutlineClear />}
           />
         )}
         <input
-          className="object"
+          className="array"
           placeholder={length !== 0 ? length : "List"}
           value={newLength !== 0 ? newLength : ""}
           readOnly
@@ -106,55 +167,7 @@ export default function ArrayInput({ value = [], header }) {
               onClick={() => setPopupVisible(!popupVisisble)}
             />
           </div>
-          <br />
-          <div className="add-element">
-            <div className="element-part ware" key={0}>
-              <p>Ware:</p>
-              <input
-                className="ware-obj"
-                placeholder="Ware"
-                value={selected.ware.name || ""}
-                readOnly
-              />
-            </div>
-            {integers.map((input, index) => (
-              <IntegerInput
-                key={index + 1}
-                property={input}
-                selected={selected}
-                setSelected={setSelected}
-              />
-            ))}
-            <Button
-              type="button"
-              className="add-element-button"
-              text="Add Element"
-              disabled={
-                !(
-                  selected.ware.id &&
-                  selected.amount &&
-                  selected.amount >= selected.returned
-                )
-              }
-              onClick={() => {
-                const element = { ...selected }
-
-                element.wareId = selected.ware.id
-                element.id = selected.ware.id
-
-                dispatch(
-                  addElement({
-                    property,
-                    element,
-                  })
-                )
-
-                setSelected(initialState)
-              }}
-            />
-          </div>
-          <br />
-          {content}
+          <PopUpContent header={header} />
         </div>
       )}
     </>
