@@ -7,39 +7,62 @@ import MiniData from "./MiniData"
 import Row from "./Row"
 
 import { useLocation } from "react-router-dom"
+import { useState } from "react"
 
 export default function Create() {
   const route = useLocation().pathname.split("/")[1]
   const routeColDefs = routesColumnDefinitions[route]
+  const [active, setActive] = useState({
+    Ticket: true,
+    Order: false,
+  })
 
   return (
     <form>
       <div className="create">
         {orderColDefs(routeColDefs).map(
           (
-            { accessorKey: property, meta: { isOriginal, isForeign } },
+            {
+              accessorKey: property,
+              meta: { isOriginal, isForeign, isForeigns },
+            },
             index
           ) => {
             const header = camelToFlat(property)
+            const props = { key: index, header }
 
             let content
 
             if (isForeign) {
-              content = <MiniData index={index} header={header} />
+              if (route === "transactions") {
+                const newHeader = header.slice(0, -3)
+                props.header = newHeader
+                props.isActive = active[newHeader]
+                props.setActivity = () => {
+                  const oppisiteHeader =
+                    newHeader === "Ticket" ? "Order" : "Ticket"
+                  const newState = !active[newHeader]
+
+                  setActive(() => ({
+                    [newHeader]: newState,
+                    [oppisiteHeader]: !newState,
+                  }))
+                }
+              }
+
+              content = <MiniData {...props} />
+            } else if (isForeigns) {
+              //
             } else {
-              content = (
-                <Row
-                  index={index}
-                  header={header}
-                  value={isOriginal || isForeign ? "Required" : "Optional"}
-                  input={
-                    <Input property={property} header={camelToFlat(property)} />
-                  }
-                />
+              props.value = isOriginal || isForeign ? "Required" : "Optional"
+              props.input = (
+                <Input property={property} header={camelToFlat(property)} />
               )
+
+              content = <Row {...props} />
             }
 
-            return <>{content}</>
+            return content
           }
         )}
       </div>

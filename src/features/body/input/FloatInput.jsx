@@ -54,6 +54,6 @@ export default function FloatInput({ property, value, floatType }) {
 
 FloatInput.propTypes = {
   property: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
+  value: PropTypes.number,
   floatType: PropTypes.string,
 }

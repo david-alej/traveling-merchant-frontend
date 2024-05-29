@@ -3,7 +3,7 @@ import {
   getNameValue,
   orderProperties,
 } from "../../util/data-utils.jsx"
-import { selectBodyProperty } from "./bodySlice.js"
+import { changeValue, selectBodyProperty } from "./bodySlice.js"
 import FormatValue from "./FormatValue.jsx"
 import ObjectInput from "./input/ObjectInput.jsx"
 import Arrow from "../../components/Arrow.jsx"
@@ -11,11 +11,11 @@ import Arrow from "../../components/Arrow.jsx"
 import PropTypes from "prop-types"
 import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import Button from "../../components/Button.jsx"
 
 function DataValue({ value, foreign, header }) {
   let modelProperties = orderProperties(value || foreign)
-
   if (!modelProperties.length) return <div className="data-value"></div>
   modelProperties.shift()
 
@@ -88,20 +88,54 @@ DataValue.propTypes = {
   header: PropTypes.string.isRequired,
 }
 
-export default function MiniData({ value, header }) {
+export default function MiniData({ value, header, isActive, setActivity }) {
+  const dispatch = useDispatch()
   const foreign = useSelector(selectBodyProperty(header.toLowerCase()))
   const [isOpen, setIsOpen] = useState(false)
   const action = useLocation().pathname.split("/").at(-1)
   const nameValue = value && getNameValue(value)
   const isProperAction = action === "edit" || action === "create"
+  const hasActivity = setActivity
+
+  if (hasActivity && !isActive) {
+    if (isOpen) setIsOpen(false)
+
+    if (foreign && Object.keys(foreign).length) {
+      dispatch(
+        changeValue({ property: header.toLowerCase(), value: undefined })
+      )
+    }
+  }
 
   return (
-    <div className="mini-data">
+    <div
+      className={"mini-data" + (hasActivity && !isActive ? " not-active" : "")}
+    >
       <div className="header">
         <Arrow onClick={() => setIsOpen(!isOpen)} />
         <div className="header-text">{header}</div>
-        <div className="name-value">{nameValue || "Required"}</div>
-        {isProperAction && (
+        <div className="name-value">
+          {setActivity ? (
+            isActive ? (
+              <Button
+                type="button"
+                className="object-active"
+                onClick={setActivity}
+                text="Required"
+              />
+            ) : (
+              <Button
+                type="button"
+                className="object-not-active"
+                onClick={setActivity}
+                text="Off"
+              />
+            )
+          ) : (
+            nameValue || "Required"
+          )}
+        </div>
+        {isProperAction && (!hasActivity || isActive) && (
           <div className="input">
             <ObjectInput value={value} header={header} />
           </div>
@@ -119,4 +153,6 @@ export default function MiniData({ value, header }) {
 MiniData.propTypes = {
   value: PropTypes.object,
   header: PropTypes.string.isRequired,
+  isActive: PropTypes.bool,
+  setActivity: PropTypes.func,
 }

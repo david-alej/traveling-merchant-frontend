@@ -63,5 +63,5 @@ export default function StringInput({ property, value }) {
 
 StringInput.propTypes = {
   property: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
 }
