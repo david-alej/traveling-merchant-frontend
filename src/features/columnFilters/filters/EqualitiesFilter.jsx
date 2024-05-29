@@ -1,3 +1,4 @@
+import { changeExtremaValue } from "../columnFiltersSlice"
 import "./EqualitiesFilter.css"
 
 import PropTypes from "prop-types"
@@ -8,7 +9,6 @@ import "react-datepicker/dist/react-datepicker.css"
 import { useMemo } from "react"
 import { useLocation } from "react-router-dom"
 import { useDispatch } from "react-redux"
-import { changeExtremaValue } from "../columnFiltersSlice"
 
 export default function EqualitiesFilter({
   header,
