@@ -132,6 +132,20 @@
   background-color: var(--faded-color);
 }
 
+.mini-date .name-value {
+  display: flex;
+  flex-direction: row;
+}
+
+.object-name-value,
+.object-activity-button {
+  flex: 0.33;
+}
+
+button.on {
+  background-color: var(--faded-color);
+}
+
 .mini-data .data-value {
   display: flex;
   flex-direction: column;

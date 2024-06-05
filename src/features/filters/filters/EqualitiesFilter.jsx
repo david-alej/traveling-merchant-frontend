@@ -1,4 +1,4 @@
-import { changeExtremaValue } from "../columnFiltersSlice"
+import { changeExtremaValue } from "../filtersSlice"
 import "./EqualitiesFilter.css"
 
 import PropTypes from "prop-types"
@@ -10,10 +10,7 @@ import { useMemo } from "react"
 import { useLocation } from "react-router-dom"
 import { useDispatch } from "react-redux"
 
-export default function EqualitiesFilter({
-  header,
-  columnFilter: { id, value },
-}) {
+export default function EqualitiesFilter({ header, filter: { id, value } }) {
   const dispatch = useDispatch()
   const route = useLocation().pathname.split("/")[1]
   const isDateColumn = useMemo(() => id.slice(-2) === "At", [id])
@@ -94,5 +91,5 @@ export default function EqualitiesFilter({
 
 EqualitiesFilter.propTypes = {
   header: PropTypes.string.isRequired,
-  columnFilter: PropTypes.object.isRequired,
+  filter: PropTypes.object.isRequired,
 }

@@ -1,6 +1,7 @@
 import Button from "../../components/Button.jsx"
 import ActionButton from "../../components/ActionButton.jsx"
 import Filters from "./filters/Filters.jsx"
+import TableCell from "./TableCell.jsx"
 import "./Table.css"
 
 import {
@@ -16,19 +17,42 @@ import { useNavigate } from "react-router-dom"
 import { FaFilter, FaCirclePlus } from "react-icons/fa6"
 import PropTypes from "prop-types"
 
+Table.propTypes = {
+  route: PropTypes.string.isRequired,
+  columns: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
+  setData: PropTypes.func,
+  state: PropTypes.object,
+  onPaginationChange: PropTypes.func,
+  disabledDoubleClick: PropTypes.bool,
+  onDoubleClick: PropTypes.any,
+  hasExtraOptions: PropTypes.bool,
+  hasActions: PropTypes.bool,
+  customAction: PropTypes.func,
+  editableColumns: PropTypes.array,
+}
+
 export default function Table({
   route,
   columns,
   data,
+  setData,
   state = {},
   onPaginationChange,
   onDoubleClick,
   hasExtraOptions = false,
   hasActions = false,
   customAction,
+  editableColumns,
 }) {
   const navigate = useNavigate()
   const [filtersIsOpened, setFiltersIsOpened] = useState(false)
+
+  if (editableColumns?.length) {
+    for (const col of columns) {
+      if (editableColumns.includes(col.accessorKey)) col.cell = TableCell
+    }
+  }
 
   const reactTableOptions = {
     data,
@@ -104,6 +128,9 @@ export default function Table({
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    meta: {
+      updateData: (element) => setData(element),
+    },
   }
 
   if (onPaginationChange)
@@ -265,16 +292,4 @@ export default function Table({
       </div>
     </>
   )
-}
-
-Table.propTypes = {
-  route: PropTypes.string,
-  columns: PropTypes.array,
-  data: PropTypes.array,
-  state: PropTypes.object,
-  customAction: PropTypes.func,
-  onPaginationChange: PropTypes.func,
-  onDoubleClick: PropTypes.func,
-  hasExtraOptions: PropTypes.bool,
-  hasActions: PropTypes.bool,
 }

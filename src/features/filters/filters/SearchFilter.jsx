@@ -1,4 +1,4 @@
-import { changeValue } from "../columnFiltersSlice"
+import { changeValue } from "../filtersSlice"
 import Button from "../../../components/Button"
 import "./SearchFilter.css"
 
@@ -8,7 +8,7 @@ import { MdOutlineClear } from "react-icons/md"
 import { useDispatch } from "react-redux"
 import { useLocation } from "react-router-dom"
 
-export default function SearchFilter({ header, columnFilter: { id, value } }) {
+export default function SearchFilter({ header, filter: { id, value } }) {
   const dispatch = useDispatch()
   const route = useLocation().pathname.split("/")[1]
 
@@ -47,5 +47,5 @@ export default function SearchFilter({ header, columnFilter: { id, value } }) {
 
 SearchFilter.propTypes = {
   header: PropTypes.string.isRequired,
-  columnFilter: PropTypes.object.isRequired,
+  filter: PropTypes.object.isRequired,
 }

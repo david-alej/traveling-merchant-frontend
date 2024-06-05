@@ -1,4 +1,4 @@
-import { addValue, removeValue } from "../columnFiltersSlice"
+import { addValue, removeValue } from "../filtersSlice"
 import Arrow from "../../../components/Arrow"
 import "./MultiSelectFilter.css"
 
@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom"
 
 export default function MultiSelectFilter({
   uniqueValues,
-  columnFilter: { id, value },
+  filter: { id, value },
 }) {
   const dispatch = useDispatch()
   const route = useLocation().pathname.split("/")[1]
@@ -37,7 +37,10 @@ export default function MultiSelectFilter({
               </span>
             ))}
           </div>
-          <Arrow onClick={() => setSelectIsOpened(!selectIsOpened)} />
+          <Arrow
+            state={selectIsOpened}
+            onClick={() => setSelectIsOpened(!selectIsOpened)}
+          />
         </div>
         <div className={"options" + (selectIsOpened ? " open" : "")}>
           {uniqueValues.map((uniqueValue) => (
@@ -60,5 +63,5 @@ export default function MultiSelectFilter({
 
 MultiSelectFilter.propTypes = {
   uniqueValues: PropTypes.array.isRequired,
-  columnFilter: PropTypes.object.isRequired,
+  filter: PropTypes.object.isRequired,
 }

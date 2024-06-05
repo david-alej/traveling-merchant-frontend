@@ -5,12 +5,15 @@ import {
 } from "./formatters"
 
 import { Link } from "react-router-dom"
+import routesColumnDefinitions from "./routesColumnDefinitions"
 
-export const reformColumn = (column, shallow = false) => {
+export const reformColumn = (column, shallow) => {
   const {
     accessorKey: id,
     meta: { dataType, property },
   } = column
+
+  column.cell = (props) => props.getValue()
 
   switch (dataType) {
     case "len": {
@@ -22,7 +25,10 @@ export const reformColumn = (column, shallow = false) => {
     case "obj": {
       column.filterFn = "objectNameFilter"
       column.cell = (props) => {
-        const { id: objId, [property]: name } = props.getValue()
+        const value = props.getValue()
+
+        if (!value) return <p>0</p>
+        const { id: objId, [property]: name } = value
 
         return <Link to={`/${id}s/${objId}`}>{name}</Link>
       }
@@ -47,15 +53,15 @@ export const reformColumn = (column, shallow = false) => {
     case "str": {
       column.cell = (props) => {
         const propValue = props.getValue()
-        const maxLength = shallow ? 20 : 45
+        const maxLength = shallow && 45
 
         if (id === "phoneNumber") return formatPhoneNumber(propValue)
 
         if (!propValue) return propValue
 
-        return propValue.length <= maxLength
-          ? props.getValue()
-          : props.getValue().slice(0, maxLength - 5) + "..."
+        return maxLength && propValue.length > maxLength
+          ? props.getValue().slice(0, maxLength - 5) + "..."
+          : props.getValue()
       }
 
       break
@@ -70,10 +76,7 @@ export const reformColumn = (column, shallow = false) => {
     }
 
     case "int": {
-      if (
-        column.accessorKey === "orderId" ||
-        column.accessorKey === "ticketId"
-      ) {
+      if (column.accessorKey.toLowerCase().includes("id")) {
         const route = column.accessorKey.slice(0, -2) + "s"
 
         column.cell = (props) => {
@@ -86,14 +89,26 @@ export const reformColumn = (column, shallow = false) => {
   }
 }
 
-export const reformColumns = (columns) => {
-  columns.forEach((column) => reformColumn(column))
+export const reformColumns = (columns, shallow = true) => {
+  columns.forEach((column) => reformColumn(column, shallow))
+
+  let newColumns = columns
 
   if (columns[0].accessorKey !== "id") {
-    columns.unshift({
-      accessorKey: "id",
-      header: "Id",
-      meta: { dataType: "int" },
-    })
+    newColumns = [
+      {
+        accessorKey: "id",
+        header: "Id",
+        meta: { dataType: "int" },
+      },
+    ].concat(columns)
   }
+
+  return newColumns
+}
+
+export const getPartialColumns = (route) => {
+  let columns = routesColumnDefinitions[route]
+
+  return reformColumns(columns)
 }

@@ -1,11 +1,13 @@
-import { removeElement, selectBodyProperty } from "./bodySlice.js"
 import {
-  camelToFlat,
+  removeElement,
+  editObjectElement,
+  selectBodyProperty,
+} from "./bodySlice.js"
+import {
+  getMiniTableInformation,
   getNameValue,
-  orderProperties,
-} from "../../util/data-utils.jsx"
-import FormatValue from "./FormatValue.jsx"
-import Table from "../columnFilters/Table.jsx"
+} from "../../util/body-utils.jsx"
+import Table from "../filters/Table.jsx"
 import ArrayInput from "./input/ArrayInput.jsx"
 import Arrow from "../../components/Arrow.jsx"
 import Button from "../../components/Button.jsx"
@@ -16,20 +18,13 @@ import { useLocation } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { FaDeleteLeft } from "react-icons/fa6"
 
-function Value({ columns, header, value }) {
+function Value({ columns, route, value, canInput }) {
   const dispatch = useDispatch()
-  const route = header.toLowerCase()
-  const arrayProperty = header === "Wares Sold" ? "waresTickets" : "ordersWares"
-  const path = useLocation().pathname.split("/").at(-1)
-  const isProperAction = path === "edit" || path === "create"
-  const isProperHeader = header === "Wares Sold" || header === "Wares Bought"
-  const canInput = isProperAction && isProperHeader
-
+  const array = useSelector(selectBodyProperty(route)) || []
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 5,
   })
-  const array = useSelector(selectBodyProperty(arrayProperty)) || []
   const [arrayPagination, setArrayPagination] = useState({
     pageIndex: 0,
     pageSize: 5,
@@ -44,14 +39,26 @@ function Value({ columns, header, value }) {
         data={value}
         state={{ pagination }}
         onPaginationChange={setPagination}
+        onDoubleClick={
+          !route.toLowerCase().includes("wares") ? false : () => {}
+        }
       />
       {canInput && (
         <>
           <strong>Input</strong>
           <Table
             route={route}
-            columns={columns.slice(0, -2)}
+            columns={columns}
             data={array}
+            setData={(element) =>
+              dispatch(editObjectElement({ property: route, element }))
+            }
+            onDoubleClick={() => {}}
+            editableColumns={
+              route === "ordersWares"
+                ? ["unitPrice", "amount", "returned"]
+                : ["amount", "returned"]
+            }
             state={{ pagination: arrayPagination }}
             onPaginationChange={setArrayPagination}
             customAction={(row) => (
@@ -62,7 +69,7 @@ function Value({ columns, header, value }) {
                 onClick={() =>
                   dispatch(
                     removeElement({
-                      property: arrayProperty,
+                      property: route,
                       element: { id: row.original.id },
                     })
                   )
@@ -78,37 +85,21 @@ function Value({ columns, header, value }) {
 
 Value.propTypes = {
   columns: PropTypes.array.isRequired,
-  header: PropTypes.string.isRequired,
+  route: PropTypes.string.isRequired,
   value: PropTypes.array,
+  canInput: PropTypes.bool.isRequired,
 }
 
 export default function MiniTable({ value, header, excludedId }) {
   const nameValue = getNameValue(value)
-  const path = useLocation().pathname.split("/").at(-1)
-  const isProperAction = path === "edit" || path === "create"
+  const { route, columns } = getMiniTableInformation(header, excludedId)
+
+  const action = useLocation().pathname.split("/").at(-1)
+  const isProperAction = action === "edit" || action === "create"
   const isProperHeader = header === "Wares Sold" || header === "Wares Bought"
   const canInput = isProperAction && isProperHeader
 
   const [isOpen, setIsOpen] = useState(false)
-
-  const columns = orderProperties(value[0], excludedId).map((columnId) => {
-    const columnDef = {
-      accessorKey: columnId,
-      header: camelToFlat(columnId),
-      cell: (props) => (
-        <FormatValue
-          property={columnId}
-          // eslint-disable-next-line react/prop-types
-          value={props.getValue()}
-          miniTableName={header}
-        />
-      ),
-    }
-
-    if (columnId.slice(-2) === "At") columnDef.sortingFn = "dateSorting"
-
-    return columnDef
-  })
 
   return (
     <div className="mini-table">
@@ -122,7 +113,14 @@ export default function MiniTable({ value, header, excludedId }) {
           </div>
         )}
       </div>
-      {isOpen && <Value columns={columns} header={header} value={value} />}
+      {isOpen && (
+        <Value
+          columns={columns}
+          route={route}
+          value={value}
+          canInput={canInput}
+        />
+      )}
     </div>
   )
 }

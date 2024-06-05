@@ -1,4 +1,5 @@
-import { camelToFlat } from "../../util/data-utils"
+import { selectBody } from "./bodySlice"
+import { camelToFlat, filterBody } from "../../util/body-utils"
 import routesColumnDefinitions from "../../util/routesColumnDefinitions"
 import { orderColDefs } from "../../util/create-utils"
 import Button from "../../components/Button"
@@ -8,17 +9,26 @@ import Row from "./Row"
 
 import { useLocation } from "react-router-dom"
 import { useState } from "react"
+import { useSelector } from "react-redux"
 
 export default function Create() {
   const route = useLocation().pathname.split("/")[1]
   const routeColDefs = routesColumnDefinitions[route]
+  const { error: bodyError, ...body } = useSelector(selectBody)
   const [active, setActive] = useState({
     Ticket: true,
     Order: false,
   })
 
   return (
-    <form>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        console.log(body)
+        filterBody(body)
+        console.log(body, bodyError)
+      }}
+    >
       <div className="create">
         {orderColDefs(routeColDefs).map(
           (
@@ -35,16 +45,14 @@ export default function Create() {
 
             if (isForeign) {
               if (route === "transactions") {
-                const newHeader = header.slice(0, -3)
-                props.header = newHeader
-                props.isActive = active[newHeader]
+                props.isActive = active[header]
                 props.setActivity = () => {
                   const oppisiteHeader =
-                    newHeader === "Ticket" ? "Order" : "Ticket"
-                  const newState = !active[newHeader]
+                    header === "Ticket" ? "Order" : "Ticket"
+                  const newState = !active[header]
 
                   setActive(() => ({
-                    [newHeader]: newState,
+                    [header]: newState,
                     [oppisiteHeader]: !newState,
                   }))
                 }

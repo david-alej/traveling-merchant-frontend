@@ -1,4 +1,5 @@
 import { useUpdateDataQuery } from "../../util/query-utils.jsx"
+import { filterBody, checkForErrors } from "../../util/body-utils.jsx"
 import { selectBody } from "./bodySlice.js"
 import Spinner from "../../components/Spinner.jsx"
 import Button from "../../components/Button.jsx"
@@ -6,22 +7,6 @@ import View from "./View.jsx"
 
 import { useParams, useLocation } from "react-router-dom"
 import { useSelector } from "react-redux"
-
-const checkForErrors = (bodyError) => {
-  for (const value of Object.values(bodyError)) {
-    if (value) return true
-  }
-
-  return false
-}
-
-const filterBody = (body) => {
-  for (const [key, value] of Object.entries(body)) {
-    if ((Array.isArray(value) && !value.length) || !value) {
-      delete body[key]
-    }
-  }
-}
 
 export default function Edit() {
   const { id } = useParams()

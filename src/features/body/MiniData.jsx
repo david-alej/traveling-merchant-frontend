@@ -1,83 +1,52 @@
-import {
-  camelToFlat,
-  getNameValue,
-  orderProperties,
-} from "../../util/data-utils.jsx"
+import { getMiniDataColumns, getNameValue } from "../../util/body-utils.jsx"
 import { changeValue, selectBodyProperty } from "./bodySlice.js"
-import FormatValue from "./FormatValue.jsx"
 import ObjectInput from "./input/ObjectInput.jsx"
 import Arrow from "../../components/Arrow.jsx"
 
 import PropTypes from "prop-types"
 import { useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import Button from "../../components/Button.jsx"
 
-function DataValue({ value, foreign, header }) {
-  let modelProperties = orderProperties(value || foreign)
-  if (!modelProperties.length) return <div className="data-value"></div>
-  modelProperties.shift()
-
-  const idSubRow = (
-    <div className="sub-row" key={0}>
-      <div className="sub-header">Id</div>
-      <div className="sub-value">
-        {value ? (
-          <Link to={`/${header.toLowerCase()}s/${value.id}`}>{value.id}</Link>
-        ) : (
-          " "
-        )}
-      </div>
-      <div className="sub-value">
-        {foreign && (
-          <Link to={`/${header.toLowerCase()}s/${foreign.id}`}>
-            {foreign.id}
-          </Link>
-        )}
-      </div>
-    </div>
-  )
-
+function DataValue({ value, foreign, columns }) {
   let createSubValues =
     value && foreign
-      ? (property) => (
+      ? (property, cell) => (
           <>
             <div className="sub-value">
-              <FormatValue property={property} value={value[property]} />
+              {cell({ getValue: () => value[property] })}
             </div>
             <div className="sub-value">
-              <FormatValue property={property} value={foreign[property]} />
+              {cell({ getValue: () => foreign[property] })}
             </div>
           </>
         )
       : !foreign
-      ? (property) => (
+      ? (property, cell) => (
           <>
             <div className="sub-value">
-              <FormatValue property={property} value={value[property]} />
+              {cell({ getValue: () => value[property] })}
             </div>
           </>
         )
-      : (property) => (
+      : (property, cell) => (
           <>
             <div className="sub-value"> </div>
             <div className="sub-value">
-              <FormatValue property={property} value={foreign[property]} />
+              {cell({ getValue: () => foreign[property] })}
             </div>
           </>
         )
 
   return (
     <div className="data-value">
-      {[idSubRow].concat(
-        modelProperties.map((property, index) => (
-          <div className="sub-row not-first" key={index + 1}>
-            <div className="sub-header">{camelToFlat(property)}</div>
-            {createSubValues(property)}
-          </div>
-        ))
-      )}
+      {columns.map(({ accessorKey: property, header, cell }, index) => (
+        <div className={"sub-row" + (index ? " not-first" : "")} key={index}>
+          <div className="sub-header">{header}</div>
+          {createSubValues(property, cell)}
+        </div>
+      ))}
     </div>
   )
 }
@@ -86,25 +55,23 @@ DataValue.propTypes = {
   value: PropTypes.object,
   foreign: PropTypes.object,
   header: PropTypes.string.isRequired,
+  columns: PropTypes.array,
 }
 
 export default function MiniData({ value, header, isActive, setActivity }) {
   const dispatch = useDispatch()
-  const foreign = useSelector(selectBodyProperty(header.toLowerCase()))
-  const [isOpen, setIsOpen] = useState(false)
+  const columns = getMiniDataColumns(header)
   const action = useLocation().pathname.split("/").at(-1)
-  const nameValue = value && getNameValue(value)
+  const nameValue =
+    action !== "create" ? value && getNameValue(value) : "Required"
   const isProperAction = action === "edit" || action === "create"
   const hasActivity = setActivity
 
-  if (hasActivity && !isActive) {
-    if (isOpen) setIsOpen(false)
+  const foreign = useSelector(selectBodyProperty(header.toLowerCase()))
+  const [isOpen, setIsOpen] = useState(false)
 
-    if (foreign && Object.keys(foreign).length) {
-      dispatch(
-        changeValue({ property: header.toLowerCase(), value: undefined })
-      )
-    }
+  if (hasActivity && !isActive && foreign && Object.keys(foreign).length) {
+    dispatch(changeValue({ property: header.toLowerCase(), value: undefined }))
   }
 
   return (
@@ -112,28 +79,26 @@ export default function MiniData({ value, header, isActive, setActivity }) {
       className={"mini-data" + (hasActivity && !isActive ? " not-active" : "")}
     >
       <div className="header">
-        <Arrow onClick={() => setIsOpen(!isOpen)} />
+        <Arrow state={isOpen} onClick={() => setIsOpen(!isOpen)} />
         <div className="header-text">{header}</div>
         <div className="name-value">
-          {setActivity ? (
-            isActive ? (
+          <div className="object-name-value">{nameValue}</div>
+          {hasActivity &&
+            (isActive ? (
               <Button
                 type="button"
-                className="object-active"
+                className="object-activity-button on"
                 onClick={setActivity}
-                text="Required"
+                text={action === "create" ? "Required" : "On"}
               />
             ) : (
               <Button
                 type="button"
-                className="object-not-active"
+                className="object-activity-button"
                 onClick={setActivity}
-                text="Off"
+                text="Disabled"
               />
-            )
-          ) : (
-            nameValue || "Required"
-          )}
+            ))}
         </div>
         {isProperAction && (!hasActivity || isActive) && (
           <div className="input">
@@ -141,9 +106,14 @@ export default function MiniData({ value, header, isActive, setActivity }) {
           </div>
         )}
       </div>
-      {isOpen && (
+      {isOpen && (value || foreign) && (
         <div className="value">
-          <DataValue value={value} foreign={foreign} header={header} />
+          <DataValue
+            value={value}
+            foreign={foreign}
+            header={header}
+            columns={columns}
+          />
         </div>
       )}
     </div>

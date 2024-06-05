@@ -1,4 +1,4 @@
-import { camelToFlat } from "../../../util/data-utils"
+import { camelToFlat } from "../../../util/body-utils"
 
 import PropTypes from "prop-types"
 
@@ -6,16 +6,13 @@ export default function IntegerInput({ property, selected, setSelected }) {
   const integer = selected[property]
 
   return (
-    <div className="element-part integer">
-      <p>{camelToFlat(property) + ":"}</p>
-      <input
-        placeholder="integer"
-        value={integer}
-        onChange={({ target }) =>
-          setSelected((prev) => ({ ...prev, [property]: target.value }))
-        }
-      />
-    </div>
+    <input
+      placeholder="integer"
+      value={integer}
+      onChange={({ target }) =>
+        setSelected((prev) => ({ ...prev, [property]: target.value }))
+      }
+    />
   )
 }
 IntegerInput.propTypes = {

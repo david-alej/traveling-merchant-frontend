@@ -1,4 +1,4 @@
-import { createTagOptions } from "../../../util/data-utils"
+import { createTagOptions } from "../../../util/body-utils"
 import Button from "../../../components/Button"
 import {
   selectBodyProperty,
@@ -42,7 +42,7 @@ export default function TagsInput() {
 
   const onClearValue = (tagToRemove) => () => dispatch(removeTag(tagToRemove))
 
-  const tagOptions = createTagOptions([tags, onAddTag], allTags)
+  const tagOptions = createTagOptions(tags, onAddTag, allTags)
 
   return (
     <>
@@ -63,7 +63,7 @@ export default function TagsInput() {
                 </span>
               ))}
             </div>
-            <Arrow onClick={() => setIsOpen(!isOpen)} />
+            <Arrow state={isOpen} onClick={() => setIsOpen(!isOpen)} />
           </div>
           <div className={"options" + (isOpen ? " open" : "")}>
             <div className="make-tag-container">

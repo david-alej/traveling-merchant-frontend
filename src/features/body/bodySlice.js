@@ -41,6 +41,14 @@ export const bodySlice = createSlice({
         )
       }
     },
+    editObjectElement: (
+      state,
+      { payload: { property, element: newElement } }
+    ) => {
+      const index = state[property].findIndex((el) => el.id === newElement.id)
+
+      if (index !== -1) state[property].splice(index, 1, newElement)
+    },
     addTag: (state, { payload: tag }) => {
       state.tags = [...state.tags, tag]
     },
@@ -57,6 +65,7 @@ export const {
   initializeArray,
   addElement,
   removeElement,
+  editObjectElement,
   initializeTags,
   addTag,
   removeTag,

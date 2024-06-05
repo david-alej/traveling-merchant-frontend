@@ -25,7 +25,10 @@ export default function DropDown({
           <span className="selected-option" key={value}>
             {value}
           </span>
-          <Arrow onClick={() => setSelectIsOpened(!selectIsOpened)} />
+          <Arrow
+            state={selectIsOpened}
+            onClick={() => setSelectIsOpened(!selectIsOpened)}
+          />
         </div>
         <div className={"options" + (selectIsOpened ? " open" : "")}>
           {options.map((option) => (

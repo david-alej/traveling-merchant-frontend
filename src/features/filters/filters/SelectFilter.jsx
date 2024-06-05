@@ -1,14 +1,11 @@
 import DropDown from "../../../components/DropDown"
-import { changeValue } from "../columnFiltersSlice"
+import { changeValue } from "../filtersSlice"
 
 import PropTypes from "prop-types"
 import { useLocation } from "react-router-dom"
 import { useDispatch } from "react-redux"
 
-export default function SelectFilter({
-  uniqueValues,
-  columnFilter: { id, value },
-}) {
+export default function SelectFilter({ uniqueValues, filter: { id, value } }) {
   const dispatch = useDispatch()
   const route = useLocation().pathname.split("/")[1]
 
@@ -29,5 +26,5 @@ export default function SelectFilter({
 
 SelectFilter.propTypes = {
   uniqueValues: PropTypes.array.isRequired,
-  columnFilter: PropTypes.object.isRequired,
+  filter: PropTypes.object.isRequired,
 }

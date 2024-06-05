@@ -1,5 +1,5 @@
 import sessionReducer from "../features/session/sessionSlice.js"
-import columnFiltersReducer from "../features/columnFilters/columnFiltersSlice.js"
+import filtersReducer from "../features/filters/filtersSlice.js"
 import bodyReducer from "../features/body/bodySlice.js"
 import { rootSplitApi } from "../api/apiSlice.js"
 
@@ -11,7 +11,7 @@ export default (preloadedState) =>
     reducer: {
       session: sessionReducer,
       [rootSplitApi.reducerPath]: rootSplitApi.reducer,
-      columnFilters: columnFiltersReducer,
+      filters: filtersReducer,
       body: bodyReducer,
     },
     middleware: (getDefaultMiddleware) =>

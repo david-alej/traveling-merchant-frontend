@@ -1,10 +1,10 @@
 import { changeValue, selectBodyProperty } from "../bodySlice"
-import { getNameValue } from "../../../util/data-utils"
-import { reformColumns } from "../../../util/datum-utils"
+import { getNameValue } from "../../../util/body-utils"
+import { reformColumns } from "../../../util/filters-utils"
 import { useGetDatumQuery } from "../../../util/query-utils"
 import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
 import Spinner from "../../../components/Spinner"
-import Table from "../../columnFilters/Table"
+import Table from "../../filters/Table"
 import Button from "../../../components/Button"
 
 import { useState } from "react"
@@ -44,7 +44,12 @@ export default function ObjectInput({ value = {}, header }) {
           dispatch(
             changeValue({
               property,
-              value: value.id === row.original.id ? undefined : row.original,
+              value:
+                !object ||
+                object.id === row.original.id ||
+                value?.id === row.original.id
+                  ? undefined
+                  : row.original,
             })
           )
 

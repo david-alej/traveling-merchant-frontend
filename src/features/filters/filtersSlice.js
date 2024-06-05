@@ -31,21 +31,21 @@ const createInitialState = () => {
   return initialState
 }
 
-export const columnFiltersSlice = createSlice({
-  name: "columnFilters",
+export const filtersSlice = createSlice({
+  name: "filters",
   initialState: createInitialState(),
   reducers: {
     changeValue: (state, { payload: { route, id, value } }) => {
-      const routeColumnFilters = state[route]
-      routeColumnFilters.forEach((f) => {
+      const routeFilters = state[route]
+      routeFilters.forEach((f) => {
         if (f.id === id) f.value = value
 
         return f
       })
     },
     addValue: (state, { payload: { route, id, value } }) => {
-      const routeColumnFilters = state[route]
-      routeColumnFilters.forEach((f) => {
+      const routeFilters = state[route]
+      routeFilters.forEach((f) => {
         if (f.id === id && !f.value.includes(value)) {
           f.value.push(value)
         }
@@ -54,8 +54,8 @@ export const columnFiltersSlice = createSlice({
       })
     },
     removeValue: (state, { payload: { route, id, value } }) => {
-      const routeColumnFilters = state[route]
-      routeColumnFilters.forEach((f) => {
+      const routeFilters = state[route]
+      routeFilters.forEach((f) => {
         if (f.id === id && f.value.includes(value)) {
           const indexToRemove = f.value.indexOf(value)
 
@@ -69,10 +69,10 @@ export const columnFiltersSlice = createSlice({
       state,
       { payload: { route, id, value, extremaType } }
     ) => {
-      const routeColumnFilters = state[route]
+      const routeFilters = state[route]
       const extremaIdx = extremaType === "min" ? 0 : 1
 
-      routeColumnFilters.forEach((f) => {
+      routeFilters.forEach((f) => {
         if (f.id === id) f.value[extremaIdx] = value
 
         return f
@@ -82,11 +82,10 @@ export const columnFiltersSlice = createSlice({
 })
 
 export const { changeValue, addValue, removeValue, changeExtremaValue } =
-  columnFiltersSlice.actions
+  filtersSlice.actions
 
-export const selectAllColumnFilters = (state) => state.columnFilters
+export const selectAllFilters = (state) => state.filters
 
-export const selectRouteColumnFilters = (route) => (state) =>
-  state.columnFilters[route]
+export const selectRouteFilters = (route) => (state) => state.filters[route]
 
-export default columnFiltersSlice.reducer
+export default filtersSlice.reducer

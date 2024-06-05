@@ -1,7 +1,6 @@
-import routesColumnDefinitions from "../../util/routesColumnDefinitions.js"
-import { selectRouteColumnFilters } from "./columnFiltersSlice.js"
+import { selectRouteFilters } from "./filtersSlice.js"
 import { useGetDatumQuery } from "../../util/query-utils.jsx"
-import { reformColumns } from "../../util/datum-utils.jsx"
+import { getPartialColumns } from "../../util/filters-utils.jsx"
 import Spinner from "../../components/Spinner.jsx"
 import Table from "./Table.jsx"
 import "./Datum.css"
@@ -11,12 +10,10 @@ import { useSelector } from "react-redux"
 
 export default function Datum() {
   const route = useLocation().pathname.split("/")[1]
-  const columns = routesColumnDefinitions[route]
-  const columnFilters = useSelector(selectRouteColumnFilters(route))
+  const columns = getPartialColumns(route)
+  const filters = useSelector(selectRouteFilters(route))
   const { data, error, isFetching, isSuccess, isError } =
     useGetDatumQuery(route)
-
-  reformColumns(columns)
 
   let content
 
@@ -30,12 +27,12 @@ export default function Datum() {
         route={route}
         columns={columns}
         data={data}
-        state={{ columnFilters }}
+        state={{ filters }}
         hasExtraOptions={true}
         hasActions={true}
       />
     )
   }
 
-  return <>{content}</>
+  return content
 }

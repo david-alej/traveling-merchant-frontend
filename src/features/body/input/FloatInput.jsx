@@ -1,4 +1,4 @@
-import { camelToFlat } from "../../../util/data-utils"
+import { camelToFlat } from "../../../util/body-utils"
 import {
   changeError,
   changeValue,
@@ -42,7 +42,7 @@ export default function FloatInput({ property, value, floatType }) {
       <input
         className="float"
         placeholder={value || `${camelToFlat(floatType)} Number`}
-        value={float}
+        value={float || ""}
         onChange={handleChange}
       />
       {error && (

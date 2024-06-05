@@ -31,13 +31,13 @@ export default {
       meta: { dataType: "type", isOriginal: true },
     },
     {
-      accessorKey: "payments",
-      header: "Payments",
+      accessorKey: "waresSold",
+      header: "Wares Sold",
       meta: { dataType: "len", isForeigns: true },
     },
     {
-      accessorKey: "waresSold",
-      header: "Wares Sold",
+      accessorKey: "payments",
+      header: "Payments",
       meta: { dataType: "len", isForeigns: true },
     },
     {
@@ -48,14 +48,14 @@ export default {
   ],
   transactions: [
     {
-      accessorKey: "ticketId",
-      header: "Ticket Id",
-      meta: { dataType: "int", isForeign: true },
+      accessorKey: "ticket",
+      header: "Ticket",
+      meta: { dataType: "obj", property: "id", isForeign: true },
     },
     {
-      accessorKey: "orderId",
-      header: "Order Id",
-      meta: { dataType: "int", isForeign: true },
+      accessorKey: "order",
+      header: "Order",
+      meta: { dataType: "obj", property: "id", isForeign: true },
     },
     {
       accessorKey: "payment",
@@ -95,6 +95,11 @@ export default {
       meta: { dataType: "str", isOriginal: true },
     },
     {
+      accessorKey: "tickets",
+      header: "Tickets",
+      meta: { dataType: "len", isForeigns: true },
+    },
+    {
       accessorKey: "description",
       header: "Description",
       meta: { dataType: "str", isOptional: true },
@@ -115,6 +120,11 @@ export default {
       accessorKey: "phoneNumber",
       header: "Phone Number",
       meta: { dataType: "str", isOriginal: true },
+    },
+    {
+      accessorKey: "employees",
+      header: "Employees",
+      meta: { dataType: "len", isForeigns: true },
     },
   ],
   wares: [
@@ -144,6 +154,16 @@ export default {
       header: "Stock",
       meta: { dataType: "int" },
     },
+    {
+      accessorKey: "bought",
+      header: "Wares Bought",
+      meta: { dataType: "len", isForeigns: true },
+    },
+    {
+      accessorKey: "sold",
+      header: "Wares Sold",
+      meta: { dataType: "len", isForeigns: true },
+    },
   ],
   orders: [
     {
@@ -165,6 +185,11 @@ export default {
       accessorKey: "shipment",
       header: "Shipment",
       meta: { dataType: "num", isOptional: true },
+    },
+    {
+      accessorKey: "waresBought",
+      header: "Wares Bought",
+      meta: { dataType: "len", isForeigns: true },
     },
     {
       accessorKey: "expectedAt",
@@ -198,5 +223,25 @@ export default {
       header: "Email",
       meta: { dataType: "str", isOptional: true },
     },
+    {
+      accessorKey: "orders",
+      header: "Orders",
+      meta: { dataType: "len", isForeigns: true },
+    },
+  ],
+  ordersWares: [
+    { accessorKey: "orderId", header: "Order Id", meta: { dataType: "int" } },
+    {
+      accessorKey: "unitPrice",
+      header: "Unit Price",
+      meta: { dataType: "num" },
+    },
+    { accessorKey: "amount", header: "Amount", meta: { dataType: "num" } },
+    { accessorKey: "returned", header: "Returned", meta: { dataType: "num" } },
+  ],
+  waresTickets: [
+    { accessorKey: "ticketId", header: "Ticket Id", meta: { dataType: "int" } },
+    { accessorKey: "amount", header: "Amount", meta: { dataType: "num" } },
+    { accessorKey: "returned", header: "Returned", meta: { dataType: "num" } },
   ],
 }

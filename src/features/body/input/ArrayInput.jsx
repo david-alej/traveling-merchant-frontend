@@ -6,23 +6,22 @@ import {
 } from "../bodySlice"
 import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
 import { useGetDatumQuery } from "../../../util/query-utils"
-import { reformColumns } from "../../../util/datum-utils"
+import { reformColumns } from "../../../util/filters-utils"
 import Button from "../../../components/Button"
 import Spinner from "../../../components/Spinner"
-import Table from "../../columnFilters/Table"
+import Table from "../../filters/Table"
 
 import PropTypes from "prop-types"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { MdOutlineClear } from "react-icons/md"
 import { LiaSearchSolid } from "react-icons/lia"
-import IntegerInput from "./IntegerInput"
 
 const initialState = {
   ware: {},
   amount: 0,
   returned: 0,
-  unitPrice: 0.01,
+  unitPrice: 0,
 }
 
 function PopUpContent({ header }) {
@@ -31,9 +30,7 @@ function PopUpContent({ header }) {
   const route = "wares"
   const columns = routesColumnDefinitions[route]
   const [selected, setSelected] = useState(initialState)
-  const integers = ["unitPrice", "amount", "returned"]
-
-  if (header === "Wares Sold") integers.shift()
+  const integers = ["amount", "returned"]
 
   const { data, error, isFetching, isSuccess, isError } =
     useGetDatumQuery(route)
@@ -72,13 +69,29 @@ function PopUpContent({ header }) {
             readOnly
           />
         </div>
-        {integers.map((input, index) => (
-          <IntegerInput
-            key={index + 1}
-            property={input}
-            selected={selected}
-            setSelected={setSelected}
-          />
+        {header === "Wares Bought" && (
+          <div className="element-part float" key={1}>
+            <p>Unit Price:</p>
+            <input
+              placeholder="Positive"
+              value={selected.unitPrice}
+              onChange={({ target }) =>
+                setSelected((prev) => ({ ...prev, unitPrice: target.value }))
+              }
+            />
+          </div>
+        )}
+        {integers.map((integer, index) => (
+          <div className="element-part integer" key={index + 2}>
+            <p>{integer}:</p>
+            <input
+              placeholder="integer"
+              value={selected[integer]}
+              onChange={({ target }) =>
+                setSelected((prev) => ({ ...prev, [integer]: target.value }))
+              }
+            />
+          </div>
         ))}
         <Button
           type="button"
@@ -87,6 +100,7 @@ function PopUpContent({ header }) {
           disabled={
             !(
               selected.ware.id &&
+              selected.unitPrice > 0 &&
               selected.amount &&
               selected.amount >= selected.returned
             )

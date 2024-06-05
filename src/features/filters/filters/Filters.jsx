@@ -6,29 +6,30 @@ import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
 
 import PropTypes from "prop-types"
 import { useSelector } from "react-redux"
-import { selectRouteColumnFilters } from "../columnFiltersSlice"
+import { selectRouteFilters } from "../filtersSlice"
 import { useLocation } from "react-router-dom"
 
 export default function Filters({ table }) {
   const route = useLocation().pathname.split("/")[1]
 
-  const columnFilters = useSelector(selectRouteColumnFilters(route))
+  const filters = useSelector(selectRouteFilters(route))
 
   const columns = routesColumnDefinitions[route]
 
   return (
     <div className="filters">
-      {columnFilters.map((columnFilter) => {
+      {filters.map((filter) => {
         const {
           accessorKey: id,
           header,
           meta: { dataType },
-        } = columns.find((column) => column.accessorKey === columnFilter.id)
+        } = columns.find((column) => column.accessorKey === filter.id)
+        const props = { header, filter }
 
         let content
 
         if (dataType === "str" || dataType === "obj") {
-          content = <SearchFilter header={header} columnFilter={columnFilter} />
+          content = <SearchFilter {...props} />
         } else if (dataType === "type" || dataType === "itr") {
           const flattendArray = table
             .getCoreRowModel()
@@ -38,15 +39,9 @@ export default function Filters({ table }) {
 
           content =
             dataType === "type" ? (
-              <SelectFilter
-                uniqueValues={uniqueValues}
-                columnFilter={columnFilter}
-              />
+              <SelectFilter uniqueValues={uniqueValues} {...props} />
             ) : (
-              <MultiSelectFilter
-                uniqueValues={uniqueValues}
-                columnFilter={columnFilter}
-              />
+              <MultiSelectFilter uniqueValues={uniqueValues} {...props} />
             )
         } else if (
           dataType === "int" ||
@@ -54,13 +49,11 @@ export default function Filters({ table }) {
           dataType === "date" ||
           dataType === "len"
         ) {
-          content = (
-            <EqualitiesFilter header={header} columnFilter={columnFilter} />
-          )
+          content = <EqualitiesFilter {...props} />
         }
 
         return (
-          <div key={columnFilter.id} className="filter">
+          <div key={filter.id} className="filter">
             <strong>{header + ": "}</strong>
             <div className="filter-break" />
             {content}
