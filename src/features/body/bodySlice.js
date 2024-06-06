@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const initialState = { error: {} }
+const initialState = { errors: {}, requirments: [] }
 
 export const bodySlice = createSlice({
   name: "body",
@@ -11,10 +11,12 @@ export const bodySlice = createSlice({
       state[property] = value
     },
     changeError: (state, { payload: { property, error } }) => {
-      state.error[property] = error
+      state.errors[property] = error
     },
-    initializeTags: (state) => {
-      state.tags = []
+    addRequirment: (state, { payload: property }) => {
+      if (!state.requirments.includes(property)) {
+        state.requirments = [...state.requirments, property]
+      }
     },
     initializeArray: (state, { payload: property }) => {
       if (!state[property]) state[property] = []
@@ -49,12 +51,6 @@ export const bodySlice = createSlice({
 
       if (index !== -1) state[property].splice(index, 1, newElement)
     },
-    addTag: (state, { payload: tag }) => {
-      state.tags = [...state.tags, tag]
-    },
-    removeTag: (state, { payload: tagToRemove }) => {
-      state.tags = state.tags.filter((tag) => tag !== tagToRemove)
-    },
   },
 })
 
@@ -66,9 +62,7 @@ export const {
   addElement,
   removeElement,
   editObjectElement,
-  initializeTags,
-  addTag,
-  removeTag,
+  addRequirment,
 } = bodySlice.actions
 
 export const selectBody = (state) => state.body
@@ -76,6 +70,6 @@ export const selectBody = (state) => state.body
 export const selectBodyProperty = (property) => (state) => state.body[property]
 
 export const selectErrorProperty = (property) => (state) =>
-  state.body.error[property]
+  state.body.errors[property]
 
 export default bodySlice.reducer

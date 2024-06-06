@@ -2,18 +2,16 @@ import {
   removeElement,
   editObjectElement,
   selectBodyProperty,
+  addRequirment,
 } from "./bodySlice.js"
-import {
-  getMiniTableInformation,
-  getNameValue,
-} from "../../util/body-utils.jsx"
+import { getMiniTableColumns, getNameValue } from "../../util/body-utils.jsx"
 import Table from "../filters/Table.jsx"
 import ArrayInput from "./input/ArrayInput.jsx"
 import Arrow from "../../components/Arrow.jsx"
 import Button from "../../components/Button.jsx"
 
 import PropTypes from "prop-types"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { FaDeleteLeft } from "react-icons/fa6"
@@ -32,17 +30,21 @@ function Value({ columns, route, value, canInput }) {
 
   return (
     <div className="value">
-      <strong>Value</strong>
-      <Table
-        route={route}
-        columns={columns}
-        data={value}
-        state={{ pagination }}
-        onPaginationChange={setPagination}
-        onDoubleClick={
-          !route.toLowerCase().includes("wares") ? false : () => {}
-        }
-      />
+      {Array.isArray(value) && value.length > 0 && (
+        <>
+          <strong>Value</strong>
+          <Table
+            route={route}
+            columns={columns}
+            data={value || []}
+            state={{ pagination }}
+            onPaginationChange={setPagination}
+            onDoubleClick={
+              !route.toLowerCase().includes("wares") ? false : () => {}
+            }
+          />
+        </>
+      )}
       {canInput && (
         <>
           <strong>Input</strong>
@@ -86,38 +88,46 @@ function Value({ columns, route, value, canInput }) {
 Value.propTypes = {
   columns: PropTypes.array.isRequired,
   route: PropTypes.string.isRequired,
-  value: PropTypes.array,
+  value: PropTypes.any,
   canInput: PropTypes.bool.isRequired,
 }
 
-export default function MiniTable({ value, header, excludedId }) {
-  const nameValue = getNameValue(value)
-  const { route, columns } = getMiniTableInformation(header, excludedId)
+export default function MiniTable({ property, value, header, canInput }) {
+  const dispatch = useDispatch()
+  const path = useLocation().pathname.split("/")
+  const parentRoute = path[1]
+  const excludedId = parentRoute.slice(0, -1) + "Id"
 
-  const action = useLocation().pathname.split("/").at(-1)
-  const isProperAction = action === "edit" || action === "create"
-  const isProperHeader = header === "Wares Sold" || header === "Wares Bought"
-  const canInput = isProperAction && isProperHeader
+  const nameValue = getNameValue(value)
+  const columns = getMiniTableColumns(property, header, excludedId)
 
   const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (value === "Required") {
+      dispatch(addRequirment(property))
+    }
+  })
 
   return (
     <div className="mini-table">
       <div className="header">
         <Arrow onClick={() => setIsOpen(!isOpen)} />
         <div className="header-text">{header}</div>
-        <div className="name-value">{nameValue}</div>
+        <div className="name-value">
+          {typeof value === "object" ? nameValue : value}
+        </div>
         {canInput && (
           <div className="input">
-            <ArrayInput value={value} header={header} />
+            <ArrayInput value={value} header={header} excludedId={excludedId} />
           </div>
         )}
       </div>
       {isOpen && (
         <Value
-          columns={columns}
-          route={route}
+          route={property}
           value={value}
+          columns={columns}
           canInput={canInput}
         />
       )}
@@ -126,7 +136,8 @@ export default function MiniTable({ value, header, excludedId }) {
 }
 
 MiniTable.propTypes = {
-  value: PropTypes.array.isRequired,
+  property: PropTypes.string.isRequired,
+  value: PropTypes.any,
   header: PropTypes.string.isRequired,
-  excludedId: PropTypes.string.isRequired,
+  canInput: PropTypes.bool.isRequired,
 }

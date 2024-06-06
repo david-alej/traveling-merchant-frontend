@@ -55,7 +55,7 @@ export default function PhoneNumberInput({ value }) {
     dispatch(
       changeError({
         property: "phoneNumber",
-        value: newError,
+        error: newError,
       })
     )
 

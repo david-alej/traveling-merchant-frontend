@@ -44,7 +44,8 @@
 }
 
 .data .arrow,
-.mini-data .arrow {
+.mini-data .arrow,
+.mini-table .arrow {
   width: 5%;
   margin: 0;
   display: flex;

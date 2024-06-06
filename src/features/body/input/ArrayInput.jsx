@@ -24,11 +24,14 @@ const initialState = {
   unitPrice: 0,
 }
 
-function PopUpContent({ header }) {
+function PopUpContent({ header, excludedId }) {
   const dispatch = useDispatch()
   const property = header === "Wares Sold" ? "waresTickets" : "ordersWares"
   const route = "wares"
-  const columns = routesColumnDefinitions[route]
+  const columns = routesColumnDefinitions[route].filter(
+    (col) => col.accessorKey !== excludedId
+  )
+
   const [selected, setSelected] = useState(initialState)
   const integers = ["amount", "returned"]
 
@@ -100,7 +103,7 @@ function PopUpContent({ header }) {
           disabled={
             !(
               selected.ware.id &&
-              selected.unitPrice > 0 &&
+              (!selected.unitPrice || selected.unitPrice > 0) &&
               selected.amount &&
               selected.amount >= selected.returned
             )
@@ -128,14 +131,17 @@ function PopUpContent({ header }) {
   )
 }
 
-PopUpContent.propTypes = { header: PropTypes.string.isRequired }
+PopUpContent.propTypes = {
+  header: PropTypes.string.isRequired,
+  excludedId: PropTypes.string,
+}
 
-export default function ArrayInput({ value = [], header }) {
+export default function ArrayInput({ value = [], header, excludedId }) {
   const dispatch = useDispatch()
   const length = value.length
   const property = header === "Wares Sold" ? "waresTickets" : "ordersWares"
 
-  const array = useSelector(selectBodyProperty(property)) || {}
+  const array = useSelector(selectBodyProperty(property)) || []
   const [popupVisisble, setPopupVisible] = useState(false)
 
   const newLength = array.length
@@ -181,7 +187,7 @@ export default function ArrayInput({ value = [], header }) {
               onClick={() => setPopupVisible(!popupVisisble)}
             />
           </div>
-          <PopUpContent header={header} />
+          <PopUpContent header={header} excludedId={excludedId} />
         </div>
       )}
     </>
@@ -191,4 +197,5 @@ export default function ArrayInput({ value = [], header }) {
 ArrayInput.propTypes = {
   value: PropTypes.array,
   header: PropTypes.string.isRequired,
+  excludedId: PropTypes.string,
 }

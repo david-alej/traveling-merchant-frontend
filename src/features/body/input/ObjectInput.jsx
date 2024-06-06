@@ -13,10 +13,9 @@ import { LiaSearchSolid } from "react-icons/lia"
 import { MdOutlineClear } from "react-icons/md"
 import PropTypes from "prop-types"
 
-export default function ObjectInput({ value = {}, header }) {
+export default function ObjectInput({ property, value = {}, header }) {
   const dispatch = useDispatch()
   const name = getNameValue(value)
-  const property = header.toLowerCase()
   const object = useSelector(selectBodyProperty(property)) || {}
   const [popupVisisble, setPopupVisible] = useState(false)
   const route = property + "s"
@@ -105,6 +104,7 @@ export default function ObjectInput({ value = {}, header }) {
 }
 
 ObjectInput.propTypes = {
+  property: PropTypes.string.isRequired,
   value: PropTypes.object,
   header: PropTypes.string.isRequired,
 }

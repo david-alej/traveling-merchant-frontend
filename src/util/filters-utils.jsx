@@ -3,9 +3,9 @@ import {
   formatPhoneNumber,
   formatTagsColumn,
 } from "./formatters"
+import routesColumnDefinitions from "./routesColumnDefinitions"
 
 import { Link } from "react-router-dom"
-import routesColumnDefinitions from "./routesColumnDefinitions"
 
 export const reformColumn = (column, shallow) => {
   const {
@@ -16,7 +16,7 @@ export const reformColumn = (column, shallow) => {
   column.cell = (props) => props.getValue()
 
   switch (dataType) {
-    case "len": {
+    case "arr": {
       column.filterFn = "arrayLengthFilter"
       column.cell = (props) => props.getValue().length
 

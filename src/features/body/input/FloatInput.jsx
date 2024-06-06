@@ -33,7 +33,7 @@ export default function FloatInput({ property, value, floatType }) {
       newError = "a numver with only two decimal points"
     }
 
-    dispatch(changeError({ property, value: newError }))
+    dispatch(changeError({ property, error: newError }))
     dispatch(changeValue({ property, value: newValue }))
   }
 

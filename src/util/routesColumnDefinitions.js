@@ -31,14 +31,14 @@ export default {
       meta: { dataType: "type", isOriginal: true },
     },
     {
-      accessorKey: "waresSold",
+      accessorKey: "waresTickets",
       header: "Wares Sold",
-      meta: { dataType: "len", isForeigns: true },
+      meta: { dataType: "arr", isForeigns: true },
     },
     {
-      accessorKey: "payments",
+      accessorKey: "transactions",
       header: "Payments",
-      meta: { dataType: "len", isForeigns: true },
+      meta: { dataType: "arr", isForeigns: true },
     },
     {
       accessorKey: "description",
@@ -97,7 +97,7 @@ export default {
     {
       accessorKey: "tickets",
       header: "Tickets",
-      meta: { dataType: "len", isForeigns: true },
+      meta: { dataType: "arr", isForeigns: true },
     },
     {
       accessorKey: "description",
@@ -122,9 +122,9 @@ export default {
       meta: { dataType: "str", isOriginal: true },
     },
     {
-      accessorKey: "employees",
+      accessorKey: "clients",
       header: "Employees",
-      meta: { dataType: "len", isForeigns: true },
+      meta: { dataType: "arr", isForeigns: true },
     },
   ],
   wares: [
@@ -155,14 +155,14 @@ export default {
       meta: { dataType: "int" },
     },
     {
-      accessorKey: "bought",
+      accessorKey: "ordersWares",
       header: "Wares Bought",
-      meta: { dataType: "len", isForeigns: true },
+      meta: { dataType: "arr", isForeigns: true },
     },
     {
-      accessorKey: "sold",
+      accessorKey: "waresTickets",
       header: "Wares Sold",
-      meta: { dataType: "len", isForeigns: true },
+      meta: { dataType: "arr", isForeigns: true },
     },
   ],
   orders: [
@@ -187,9 +187,9 @@ export default {
       meta: { dataType: "num", isOptional: true },
     },
     {
-      accessorKey: "waresBought",
+      accessorKey: "ordersWares",
       header: "Wares Bought",
-      meta: { dataType: "len", isForeigns: true },
+      meta: { dataType: "arr", isForeigns: true },
     },
     {
       accessorKey: "expectedAt",
@@ -226,7 +226,7 @@ export default {
     {
       accessorKey: "orders",
       header: "Orders",
-      meta: { dataType: "len", isForeigns: true },
+      meta: { dataType: "arr", isForeigns: true },
     },
   ],
   ordersWares: [

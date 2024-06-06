@@ -13,7 +13,7 @@ export default function Row({ value, header, input = <></> }) {
 }
 
 Row.propTypes = {
-  value: PropTypes.any.isRequired,
+  value: PropTypes.any,
   header: PropTypes.string.isRequired,
   input: PropTypes.object,
 }

@@ -1,4 +1,4 @@
-import { camelToFlat, getColumns, isEditable } from "../../util/body-utils.jsx"
+import { getColumns, isEditable } from "../../util/body-utils.jsx"
 import { useGetDataQuery } from "../../util/query-utils.jsx"
 import Spinner from "../../components/Spinner.jsx"
 import MiniTable from "./MiniTable.jsx"
@@ -14,6 +14,7 @@ export default function View() {
   const path = useLocation().pathname.split("/")
   const route = path[1]
   const action = path.at(-1) || "view"
+  const actionIsEdit = action === "edit"
   const columns = getColumns(route)
 
   const { data, error, isFetching, isSuccess, isError } = useGetDataQuery(
@@ -38,21 +39,24 @@ export default function View() {
         {columns.map((colDef, index) => {
           const {
             accessorKey: property,
+            header,
             meta: { dataType },
             cell,
           } = colDef
           let value = data[property]
-          const header = camelToFlat(property)
-          const props = { key: index, value, header }
+          const props = { key: index, property, value, header }
 
           let row
 
-          if (dataType === "len") {
-            const routeReferenceId = route.slice(0, -1) + "Id"
-
-            row = <MiniTable {...props} excludedId={routeReferenceId} />
+          if (dataType === "arr") {
+            row = (
+              <MiniTable
+                {...props}
+                canInput={actionIsEdit && header.slice(0, 5) === "Wares"}
+              />
+            )
           } else if (dataType === "obj") {
-            if (route === "transactions" && action === "edit") {
+            if (route === "transactions" && actionIsEdit) {
               props.isActive = active[header]
               props.setActivity = () => {
                 const oppisiteHeader = header === "Ticket" ? "Order" : "Ticket"
@@ -74,7 +78,7 @@ export default function View() {
                 ? cell({ getValue: () => value })
                 : value
 
-            if (action === "edit" && isEditable(route, property)) {
+            if (actionIsEdit && isEditable(route, property)) {
               props.input = <Input property={property} value={value} />
             }
 

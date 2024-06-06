@@ -2,9 +2,9 @@ import { createTagOptions } from "../../../util/body-utils"
 import Button from "../../../components/Button"
 import {
   selectBodyProperty,
-  addTag,
-  removeTag,
-  initializeTags,
+  initializeArray,
+  addElement,
+  removeElement,
 } from "../bodySlice"
 import Arrow from "../../../components/Arrow"
 import "./TagsInput.css"
@@ -24,7 +24,7 @@ export default function TagsInput() {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    dispatch(initializeTags())
+    dispatch(initializeArray("tags"))
   }, [dispatch])
 
   const onAddTag = (tag, tagType) => () => {
@@ -37,10 +37,11 @@ export default function TagsInput() {
       isUnique = tags.every((selectedTag) => selectedTag !== tag)
     }
 
-    if (isUnique) dispatch(addTag(tag))
+    if (isUnique) dispatch(addElement({ property: "tags", element: tag }))
   }
 
-  const onClearValue = (tagToRemove) => () => dispatch(removeTag(tagToRemove))
+  const onClearValue = (tagToRemove) => () =>
+    dispatch(removeElement({ property: "tags", element: tagToRemove }))
 
   const tagOptions = createTagOptions(tags, onAddTag, allTags)
 

@@ -1,5 +1,5 @@
 import { useUpdateDataQuery } from "../../util/query-utils.jsx"
-import { filterBody, checkForErrors } from "../../util/body-utils.jsx"
+import { checkForErrors } from "../../util/body-utils.jsx"
 import { selectBody } from "./bodySlice.js"
 import Spinner from "../../components/Spinner.jsx"
 import Button from "../../components/Button.jsx"
@@ -12,7 +12,7 @@ export default function Edit() {
   const { id } = useParams()
   const route = useLocation().pathname.split("/")[1]
 
-  const { error: bodyError, ...body } = useSelector(selectBody)
+  const { errors: bodyError, ...body } = useSelector(selectBody)
 
   const [
     updateData,
@@ -57,8 +57,6 @@ export default function Edit() {
     <form
       onSubmit={async (e) => {
         e.preventDefault()
-
-        filterBody(body)
 
         try {
           await updateData({ id, ...body })

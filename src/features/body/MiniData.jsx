@@ -1,17 +1,17 @@
 import { getMiniDataColumns, getNameValue } from "../../util/body-utils.jsx"
-import { changeValue, selectBodyProperty } from "./bodySlice.js"
+import { addRequirment, changeValue, selectBodyProperty } from "./bodySlice.js"
 import ObjectInput from "./input/ObjectInput.jsx"
 import Arrow from "../../components/Arrow.jsx"
 
 import PropTypes from "prop-types"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import Button from "../../components/Button.jsx"
 
 function DataValue({ value, foreign, columns }) {
   let createSubValues =
-    value && foreign
+    typeof value === "object" && foreign
       ? (property, cell) => (
           <>
             <div className="sub-value">
@@ -52,27 +52,40 @@ function DataValue({ value, foreign, columns }) {
 }
 
 DataValue.propTypes = {
-  value: PropTypes.object,
+  value: PropTypes.any,
   foreign: PropTypes.object,
   header: PropTypes.string.isRequired,
   columns: PropTypes.array,
 }
 
-export default function MiniData({ value, header, isActive, setActivity }) {
+export default function MiniData({
+  property,
+  value,
+  header,
+  isActive,
+  setActivity,
+}) {
   const dispatch = useDispatch()
-  const columns = getMiniDataColumns(header)
+  const columns = getMiniDataColumns(property)
   const action = useLocation().pathname.split("/").at(-1)
-  const nameValue =
-    action !== "create" ? value && getNameValue(value) : "Required"
+  const nameValue = typeof value === "object" ? getNameValue(value) : "Required"
   const isProperAction = action === "edit" || action === "create"
   const hasActivity = setActivity
 
-  const foreign = useSelector(selectBodyProperty(header.toLowerCase()))
+  const foreign = useSelector(selectBodyProperty(property))
   const [isOpen, setIsOpen] = useState(false)
+  useEffect(() => {
+    if (value === "Required") {
+      dispatch(addRequirment(property))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
 
-  if (hasActivity && !isActive && foreign && Object.keys(foreign).length) {
-    dispatch(changeValue({ property: header.toLowerCase(), value: undefined }))
-  }
+  useEffect(() => {
+    if (hasActivity && !isActive && foreign && Object.keys(foreign).length) {
+      dispatch(changeValue({ property, value: undefined }))
+    }
+  }, [property, hasActivity, isActive, foreign, dispatch])
 
   return (
     <div
@@ -102,11 +115,11 @@ export default function MiniData({ value, header, isActive, setActivity }) {
         </div>
         {isProperAction && (!hasActivity || isActive) && (
           <div className="input">
-            <ObjectInput value={value} header={header} />
+            <ObjectInput property={property} value={value} header={header} />
           </div>
         )}
       </div>
-      {isOpen && (value || foreign) && (
+      {isOpen && (typeof value === "object" || foreign) && (
         <div className="value">
           <DataValue
             value={value}
@@ -121,7 +134,8 @@ export default function MiniData({ value, header, isActive, setActivity }) {
 }
 
 MiniData.propTypes = {
-  value: PropTypes.object,
+  property: PropTypes.string.isRequired,
+  value: PropTypes.any,
   header: PropTypes.string.isRequired,
   isActive: PropTypes.bool,
   setActivity: PropTypes.func,

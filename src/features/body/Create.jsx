@@ -1,10 +1,10 @@
 import { selectBody } from "./bodySlice"
-import { camelToFlat, filterBody } from "../../util/body-utils"
+import { camelToFlat, checkForErrors } from "../../util/body-utils"
 import routesColumnDefinitions from "../../util/routesColumnDefinitions"
-import { orderColDefs } from "../../util/create-utils"
 import Button from "../../components/Button"
 import Input from "./input/Input"
 import MiniData from "./MiniData"
+import MiniTable from "./MiniTable"
 import Row from "./Row"
 
 import { useLocation } from "react-router-dom"
@@ -14,7 +14,7 @@ import { useSelector } from "react-redux"
 export default function Create() {
   const route = useLocation().pathname.split("/")[1]
   const routeColDefs = routesColumnDefinitions[route]
-  const { error: bodyError, ...body } = useSelector(selectBody)
+  const { errors: bodyError, requirments, ...body } = useSelector(selectBody)
   const [active, setActive] = useState({
     Ticket: true,
     Order: false,
@@ -24,35 +24,33 @@ export default function Create() {
     <form
       onSubmit={(e) => {
         e.preventDefault()
-        console.log(body)
-        filterBody(body)
-        console.log(body, bodyError)
+        console.log(body, bodyError, requirments, checkForErrors(bodyError))
       }}
     >
       <div className="create">
-        {orderColDefs(routeColDefs).map(
+        {routeColDefs.map(
           (
             {
               accessorKey: property,
+              header,
               meta: { isOriginal, isForeign, isForeigns },
             },
             index
           ) => {
-            const header = camelToFlat(property)
-            const props = { key: index, header }
+            const props = { key: index, property, header, value: "Required" }
 
             let content
 
             if (isForeign) {
               if (route === "transactions") {
-                props.isActive = active[header]
+                props.isActive = active[property]
                 props.setActivity = () => {
                   const oppisiteHeader =
-                    header === "Ticket" ? "Order" : "Ticket"
-                  const newState = !active[header]
+                    property === "ticket" ? "order" : "ticket"
+                  const newState = !active[property]
 
                   setActive(() => ({
-                    [header]: newState,
+                    [property]: newState,
                     [oppisiteHeader]: !newState,
                   }))
                 }
@@ -60,12 +58,16 @@ export default function Create() {
 
               content = <MiniData {...props} />
             } else if (isForeigns) {
-              //
+              content = header.includes("Wares") ? (
+                <MiniTable {...props} canInput={true} />
+              ) : (
+                content
+              )
             } else {
-              props.value = isOriginal || isForeign ? "Required" : "Optional"
               props.input = (
                 <Input property={property} header={camelToFlat(property)} />
               )
+              if (!isOriginal) props.value = "Optional"
 
               content = <Row {...props} />
             }

@@ -36,45 +36,19 @@ export const getNameValue = (value) => {
   return nameValue || ""
 }
 
-export const getMiniTableInformation = (header, excludedId) => {
-  const beginning = header.slice(0, 5)
-  let route = header.toLowerCase()
-  let ware = []
+export const getMiniTableColumns = (property, header, excludedId) => {
+  const ware =
+    header.slice(0, 5) === "Wares"
+      ? [
+          {
+            accessorKey: "ware",
+            header: "Ware",
+            meta: { dataType: "obj", property: "name" },
+          },
+        ]
+      : []
 
-  switch (beginning) {
-    case "Wares": {
-      route = header.slice(6) === "Sold" ? "waresTickets" : "ordersWares"
-      ware = [
-        {
-          accessorKey: "ware",
-          header: "Ware",
-          meta: { dataType: "obj", property: "name" },
-        },
-      ]
-      break
-    }
-
-    case "Sold": {
-      route = "waresTickets"
-      break
-    }
-
-    case "Bough": {
-      route = "ordersWares"
-      break
-    }
-
-    case "Payme": {
-      route = "transactions"
-      break
-    }
-
-    case "Emplo": {
-      route = "clients"
-    }
-  }
-
-  const columns = ware.concat(routesColumnDefinitions[route])
+  const columns = ware.concat(routesColumnDefinitions[property])
   let newColumns = []
 
   for (let i = 0; i < columns.length; i++) {
@@ -83,11 +57,11 @@ export const getMiniTableInformation = (header, excludedId) => {
     if (
       excludedId === col.accessorKey ||
       excludedId === col.accessorKey + "Id" ||
-      col.meta.dataType === "len"
+      col.meta.dataType === "arr"
     ) {
       continue
     } else if (col.meta.dataType === "obj" && col.accessorKey !== "ware") {
-      if (route === "transactions") continue
+      if (property === "transactions") continue
 
       col = JSON.parse(JSON.stringify(col))
 
@@ -102,8 +76,8 @@ export const getMiniTableInformation = (header, excludedId) => {
   }
 
   if (
-    route !== "waresTickets" &&
-    route !== "ordersWares" &&
+    property !== "waresTickets" &&
+    property !== "ordersWares" &&
     newColumns[0].accessorKey !== "id"
   ) {
     newColumns = [
@@ -115,11 +89,11 @@ export const getMiniTableInformation = (header, excludedId) => {
     ].concat(newColumns)
   }
 
-  return { route, columns: newColumns }
+  return newColumns
 }
 
-export const getMiniDataColumns = (header) => {
-  let columns = routesColumnDefinitions[header.toLowerCase() + "s"]
+export const getMiniDataColumns = (property) => {
+  let columns = routesColumnDefinitions[property + "s"]
 
   if (columns[0].accessorKey !== "id") {
     columns = [
@@ -136,7 +110,7 @@ export const getMiniDataColumns = (header) => {
   for (let i = 0; i < columns.length; i++) {
     let col = columns[parseInt(i)]
 
-    if (col.meta.dataType === "len") {
+    if (col.meta.dataType === "arr") {
       continue
     } else if (col.meta.dataType === "obj") {
       col = JSON.parse(JSON.stringify(col))
@@ -230,12 +204,4 @@ export const checkForErrors = (bodyError) => {
   }
 
   return false
-}
-
-export const filterBody = (body) => {
-  for (const [key, value] of Object.entries(body)) {
-    if ((Array.isArray(value) && !value.length) || !value) {
-      delete body[key]
-    }
-  }
 }
