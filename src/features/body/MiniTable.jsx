@@ -2,7 +2,7 @@ import {
   removeElement,
   editObjectElement,
   selectBodyProperty,
-  addRequirment,
+  addRequirement,
 } from "./bodySlice.js"
 import { getMiniTableColumns, getNameValue } from "../../util/body-utils.jsx"
 import Table from "../filters/Table.jsx"
@@ -105,7 +105,7 @@ export default function MiniTable({ property, value, header, canInput }) {
 
   useEffect(() => {
     if (value === "Required") {
-      dispatch(addRequirment(property))
+      dispatch(addRequirement(property))
     }
   })
 
@@ -119,7 +119,12 @@ export default function MiniTable({ property, value, header, canInput }) {
         </div>
         {canInput && (
           <div className="input">
-            <ArrayInput value={value} header={header} excludedId={excludedId} />
+            <ArrayInput
+              property={property}
+              value={value}
+              header={header}
+              excludedId={excludedId}
+            />
           </div>
         )}
       </div>

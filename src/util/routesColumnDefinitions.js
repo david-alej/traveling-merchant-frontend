@@ -2,7 +2,7 @@ export default {
   tickets: [
     {
       accessorKey: "client",
-      header: "Client Name",
+      header: "Client",
       meta: { dataType: "obj", property: "fullname", isForeign: true },
     },
     {
@@ -156,12 +156,12 @@ export default {
     },
     {
       accessorKey: "ordersWares",
-      header: "Wares Bought",
+      header: "Bought",
       meta: { dataType: "arr", isForeigns: true },
     },
     {
       accessorKey: "waresTickets",
-      header: "Wares Sold",
+      header: "Sold",
       meta: { dataType: "arr", isForeigns: true },
     },
   ],

@@ -1,5 +1,10 @@
 import { getMiniDataColumns, getNameValue } from "../../util/body-utils.jsx"
-import { addRequirment, changeValue, selectBodyProperty } from "./bodySlice.js"
+import {
+  addRequirement,
+  removeRequirement,
+  selectBodyProperty,
+  changeValue,
+} from "./bodySlice.js"
 import ObjectInput from "./input/ObjectInput.jsx"
 import Arrow from "../../components/Arrow.jsx"
 
@@ -76,10 +81,14 @@ export default function MiniData({
   const [isOpen, setIsOpen] = useState(false)
   useEffect(() => {
     if (value === "Required") {
-      dispatch(addRequirment(property))
+      if (!setActivity || (setActivity && isActive)) {
+        dispatch(addRequirement(property))
+      } else {
+        dispatch(removeRequirement(property))
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  }, [property, value, isActive])
 
   useEffect(() => {
     if (hasActivity && !isActive && foreign && Object.keys(foreign).length) {
@@ -102,7 +111,7 @@ export default function MiniData({
                 type="button"
                 className="object-activity-button on"
                 onClick={setActivity}
-                text={action === "create" ? "Required" : "On"}
+                text="On"
               />
             ) : (
               <Button

@@ -1,6 +1,18 @@
 import PropTypes from "prop-types"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { addRequirement } from "./bodySlice"
 
-export default function Row({ value, header, input = <></> }) {
+export default function Row({ property, value, header, input = <></> }) {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (value === "Required") {
+      dispatch(addRequirement(property))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [property, value])
+
   return (
     <div className="row">
       <div className="header">
@@ -13,6 +25,7 @@ export default function Row({ value, header, input = <></> }) {
 }
 
 Row.propTypes = {
+  property: PropTypes.string.isRequired,
   value: PropTypes.any,
   header: PropTypes.string.isRequired,
   input: PropTypes.object,

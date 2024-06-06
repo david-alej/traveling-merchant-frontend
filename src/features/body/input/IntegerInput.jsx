@@ -1,14 +1,10 @@
-import { camelToFlat } from "../../../util/body-utils"
-
 import PropTypes from "prop-types"
 
 export default function IntegerInput({ property, selected, setSelected }) {
-  const integer = selected[property]
-
   return (
     <input
       placeholder="integer"
-      value={integer}
+      value={selected[property]}
       onChange={({ target }) =>
         setSelected((prev) => ({ ...prev, [property]: target.value }))
       }

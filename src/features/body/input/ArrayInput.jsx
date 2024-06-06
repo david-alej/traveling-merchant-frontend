@@ -136,10 +136,14 @@ PopUpContent.propTypes = {
   excludedId: PropTypes.string,
 }
 
-export default function ArrayInput({ value = [], header, excludedId }) {
+export default function ArrayInput({
+  property,
+  value = [],
+  header,
+  excludedId,
+}) {
   const dispatch = useDispatch()
-  const length = value.length
-  const property = header === "Wares Sold" ? "waresTickets" : "ordersWares"
+  const length = typeof value === "object" ? value.length : 0
 
   const array = useSelector(selectBodyProperty(property)) || []
   const [popupVisisble, setPopupVisible] = useState(false)
@@ -150,7 +154,8 @@ export default function ArrayInput({ value = [], header, excludedId }) {
     dispatch(initializeArray(property))
   }, [dispatch, property])
 
-  const handleClear = () => dispatch(changeValue({ property, value: [] }))
+  const handleClear = () =>
+    dispatch(changeValue({ property, value: undefined }))
 
   return (
     <>
@@ -195,7 +200,8 @@ export default function ArrayInput({ value = [], header, excludedId }) {
 }
 
 ArrayInput.propTypes = {
-  value: PropTypes.array,
+  property: PropTypes.string.isRequired,
+  value: PropTypes.any,
   header: PropTypes.string.isRequired,
   excludedId: PropTypes.string,
 }

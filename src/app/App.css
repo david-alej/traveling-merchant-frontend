@@ -2,6 +2,7 @@
   --main-color: #000;
   --secondary-color: #777;
   --faded-color: #bbb;
+  --error-color: #f00;
 }
 
 /* Logo CSS */
@@ -82,4 +83,10 @@ button:disabled.not-active {
 .arrow.down {
   transform: rotate(90deg);
   transition: 0.2s ease transform;
+}
+
+/* Input Errors */
+input.error {
+  outline: none;
+  border: 0.15rem solid var(--error-color);
 }

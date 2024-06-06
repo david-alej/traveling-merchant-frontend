@@ -105,6 +105,6 @@ export default function ObjectInput({ property, value = {}, header }) {
 
 ObjectInput.propTypes = {
   property: PropTypes.string.isRequired,
-  value: PropTypes.object,
+  value: PropTypes.any,
   header: PropTypes.string.isRequired,
 }

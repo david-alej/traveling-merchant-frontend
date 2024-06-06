@@ -54,6 +54,18 @@ input.array:focus {
   outline: none;
 }
 
+/* Date Input */
+.date-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.data-input-button {
+  border: 0.1rem solid var(--faded-color);
+  margin: 0.1rem;
+}
+
 /* Pop Up */
 .pop-up {
   position: fixed;

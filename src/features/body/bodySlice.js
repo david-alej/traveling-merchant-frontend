@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const initialState = { errors: {}, requirments: [] }
+const initialState = { errors: {}, requirements: [] }
 
 export const bodySlice = createSlice({
   name: "body",
@@ -13,10 +13,15 @@ export const bodySlice = createSlice({
     changeError: (state, { payload: { property, error } }) => {
       state.errors[property] = error
     },
-    addRequirment: (state, { payload: property }) => {
-      if (!state.requirments.includes(property)) {
-        state.requirments = [...state.requirments, property]
+    addRequirement: (state, { payload: property }) => {
+      if (!state.requirements.includes(property)) {
+        state.requirements = [...state.requirements, property]
       }
+    },
+    removeRequirement: (state, { payload: requirementToRemove }) => {
+      state.requirements = state.requirements.filter(
+        (requirement) => requirement !== requirementToRemove
+      )
     },
     initializeArray: (state, { payload: property }) => {
       if (!state[property]) state[property] = []
@@ -62,7 +67,8 @@ export const {
   addElement,
   removeElement,
   editObjectElement,
-  addRequirment,
+  addRequirement,
+  removeRequirement,
 } = bodySlice.actions
 
 export const selectBody = (state) => state.body

@@ -9,11 +9,10 @@ import {
 import PropTypes from "prop-types"
 import { useDispatch, useSelector } from "react-redux"
 
-export default function FloatInput({ property, value, floatType }) {
+export default function FloatInput({ property, value, header, floatType }) {
   const dispatch = useDispatch()
   const float = useSelector(selectBodyProperty(property))
   const error = useSelector(selectErrorProperty(property))
-  const header = camelToFlat(property)
 
   const handleChange = ({ target }) => {
     const { value: newValue } = target
@@ -40,13 +39,13 @@ export default function FloatInput({ property, value, floatType }) {
   return (
     <>
       <input
-        className="float"
+        className={"float" + (error ? " error" : "")}
         placeholder={value || `${camelToFlat(floatType)} Number`}
         value={float || ""}
         onChange={handleChange}
       />
       {error && (
-        <span className="error">{`${header} field must be ${error}.`}</span>
+        <span className="float-error">{`${header} field must be ${error}.`}</span>
       )}
     </>
   )
@@ -55,5 +54,6 @@ export default function FloatInput({ property, value, floatType }) {
 FloatInput.propTypes = {
   property: PropTypes.string.isRequired,
   value: PropTypes.number,
+  header: PropTypes.string.isRequired,
   floatType: PropTypes.string,
 }

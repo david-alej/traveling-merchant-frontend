@@ -10,9 +10,9 @@ import PropTypes from "prop-types"
 const allStrColumns = ["description", "paymentPlan", "address"]
 const allNumColumns = ["cost", "payment", "unitPrice", "tax", "shipment"]
 
-export default function Input({ property, value }) {
+export default function Input({ property, value, header }) {
   const lowerCase = property.toLowerCase()
-  const props = { property, value }
+  const props = { property, value, header }
 
   let content
 
@@ -45,4 +45,5 @@ export default function Input({ property, value }) {
 Input.propTypes = {
   property: PropTypes.string.isRequired,
   value: PropTypes.any,
+  header: PropTypes.string.isRequired,
 }

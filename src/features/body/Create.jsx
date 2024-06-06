@@ -1,5 +1,5 @@
 import { selectBody } from "./bodySlice"
-import { camelToFlat, checkForErrors } from "../../util/body-utils"
+import { checkCreateBody } from "../../util/body-utils"
 import routesColumnDefinitions from "../../util/routesColumnDefinitions"
 import Button from "../../components/Button"
 import Input from "./input/Input"
@@ -14,17 +14,17 @@ import { useSelector } from "react-redux"
 export default function Create() {
   const route = useLocation().pathname.split("/")[1]
   const routeColDefs = routesColumnDefinitions[route]
-  const { errors: bodyError, requirments, ...body } = useSelector(selectBody)
+  const fullBody = useSelector(selectBody)
   const [active, setActive] = useState({
-    Ticket: true,
-    Order: false,
+    ticket: true,
+    order: false,
   })
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault()
-        console.log(body, bodyError, requirments, checkForErrors(bodyError))
+        console.log(fullBody)
       }}
     >
       <div className="create">
@@ -33,7 +33,7 @@ export default function Create() {
             {
               accessorKey: property,
               header,
-              meta: { isOriginal, isForeign, isForeigns },
+              meta: { isOriginal, isOptional, isForeign, isForeigns },
             },
             index
           ) => {
@@ -63,11 +63,9 @@ export default function Create() {
               ) : (
                 content
               )
-            } else {
-              props.input = (
-                <Input property={property} header={camelToFlat(property)} />
-              )
-              if (!isOriginal) props.value = "Optional"
+            } else if (isOriginal || isOptional) {
+              props.input = <Input property={property} header={header} />
+              if (isOptional) props.value = "Optional"
 
               content = <Row {...props} />
             }
@@ -81,10 +79,9 @@ export default function Create() {
           type="submit"
           className="submit-button"
           text="Submit"
-          // disabled={checkForErrors(bodyError)}
+          disabled={checkCreateBody(fullBody)}
         />
       </div>
-      {/* {checkForErrors(bodyError) && <span>Please fill valid inputs above</span>} */}
     </form>
   )
 }

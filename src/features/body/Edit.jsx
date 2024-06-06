@@ -12,7 +12,7 @@ export default function Edit() {
   const { id } = useParams()
   const route = useLocation().pathname.split("/")[1]
 
-  const { errors: bodyError, ...body } = useSelector(selectBody)
+  const { errors, ...body } = useSelector(selectBody)
 
   const [
     updateData,
@@ -71,10 +71,9 @@ export default function Edit() {
           type="submit"
           className="submit-button"
           text="Submit"
-          disabled={checkForErrors(bodyError)}
+          disabled={checkForErrors(errors, body)}
         />
       </div>
-      {checkForErrors(bodyError) && <span>Please fill valid inputs above</span>}
     </form>
   )
 }

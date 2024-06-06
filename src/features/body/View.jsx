@@ -79,7 +79,7 @@ export default function View() {
                 : value
 
             if (actionIsEdit && isEditable(route, property)) {
-              props.input = <Input property={property} value={value} />
+              props.input = <Input {...props} />
             }
 
             row = <Row {...props} />

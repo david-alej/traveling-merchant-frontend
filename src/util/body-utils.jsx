@@ -13,12 +13,12 @@ export const camelToFlat = (property) => {
   return flat.slice(0, -1)
 }
 
-export const flatToCamel = (str) =>
-  str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
-      return index == 0 ? word.toLowerCase() : word.toUpperCase()
-    })
-    .replace(/\s+/g, "")
+// export const flatToCamel = (str) =>
+//   str
+//     .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+//       return index == 0 ? word.toLowerCase() : word.toUpperCase()
+//     })
+//     .replace(/\s+/g, "")
 
 export const getNameValue = (value) => {
   if (!value) return ""
@@ -198,10 +198,50 @@ export const createTagOptions = (tags, onAddTag, allTags) => {
   return tagOptions
 }
 
-export const checkForErrors = (bodyError) => {
-  for (const value of Object.values(bodyError)) {
+export const checkForErrors = (body, errors) => {
+  if (!body) return true
+
+  for (const value of Object.values(errors)) {
     if (value) return true
+  }
+}
+
+export const checkCreateBody = ({ errors, requirements, ...body }) => {
+  const hasErrors = checkForErrors(body, errors)
+
+  if (hasErrors) return hasErrors
+
+  for (const property of requirements) {
+    const value = body[property]
+
+    if (Array.isArray(value) && value.length === 0) {
+      return true
+    } else if (
+      typeof value === "object" &&
+      value !== null &&
+      Object.keys(value).length === 0
+    ) {
+      return true
+    } else if (!value) {
+      return true
+    }
   }
 
   return false
+}
+
+export const filterBody = (body) => {
+  for (const value of Object.values(body)) {
+    if (Array.isArray(value) && value.length === 0) {
+      return true
+    } else if (
+      typeof value === "object" &&
+      value !== null &&
+      Object.keys(value).length === 0
+    ) {
+      return true
+    } else if (!value) {
+      return true
+    }
+  }
 }
