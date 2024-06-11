@@ -16,6 +16,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FaFilter, FaCirclePlus } from "react-icons/fa6"
 import PropTypes from "prop-types"
+import Delete from "../body/Delete.jsx"
 
 Table.propTypes = {
   route: PropTypes.string.isRequired,
@@ -47,6 +48,7 @@ export default function Table({
 }) {
   const navigate = useNavigate()
   const [filtersIsOpened, setFiltersIsOpened] = useState(false)
+  const [popUp, setPopUp] = useState(<></>)
 
   if (editableColumns?.length) {
     for (const col of columns) {
@@ -238,14 +240,21 @@ export default function Table({
                     {hasActions && (
                       <>
                         <ActionButton
-                          type={"edit"}
+                          type="edit"
                           route={route}
                           id={row.original.id}
                         />
                         <ActionButton
-                          type={"delete"}
-                          route={route}
-                          id={row.original.id}
+                          type="delete"
+                          onClick={() => {
+                            setPopUp(
+                              <Delete
+                                columns={columns}
+                                data={row.original}
+                                closePopUp={() => setPopUp(undefined)}
+                              />
+                            )
+                          }}
                         />
                       </>
                     )}
@@ -290,6 +299,7 @@ export default function Table({
           text={">>"}
         />
       </div>
+      {popUp}
     </>
   )
 }

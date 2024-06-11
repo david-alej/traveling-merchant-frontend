@@ -6,7 +6,6 @@ import Datum from "../features/filters/Datum"
 import Data from "../features/body/Data"
 import View from "../features/body/View"
 import Edit from "../features/body/Edit"
-import Delete from "../features/body/Delete"
 import Create from "../features/body/Create"
 import "./App.css"
 
@@ -30,7 +29,6 @@ const router = createBrowserRouter(
         <Route path=":id" element={<Data />}>
           <Route index path="" element={<View />} />
           <Route path="edit" element={<Edit />} />
-          <Route path="delete" element={<Delete />} />
         </Route>
       </Route>
     </Route>

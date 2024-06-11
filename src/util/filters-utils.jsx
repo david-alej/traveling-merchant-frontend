@@ -2,6 +2,7 @@ import {
   formatSimpleDate,
   formatPhoneNumber,
   formatTagsColumn,
+  formatFullDate,
 } from "./formatters"
 import routesColumnDefinitions from "./routesColumnDefinitions"
 
@@ -45,7 +46,9 @@ export const reformColumn = (column, shallow) => {
     case "date": {
       column.sortingFn = "dateSorting"
       column.filterFn = "dateFilter"
-      column.cell = (props) => <p>{formatSimpleDate(props.getValue())}</p>
+      column.cell = shallow
+        ? (props) => <p>{formatSimpleDate(props.getValue())}</p>
+        : (props) => <p>{formatFullDate(props.getValue())}</p>
 
       break
     }

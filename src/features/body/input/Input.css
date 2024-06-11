@@ -70,41 +70,6 @@ input.array.disabled {
 }
 
 /* Pop Up */
-.pop-up {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.5);
-  background-color: #fff;
-  width: 90%;
-  border-radius: 1rem;
-  z-index: 1;
-}
-
-.pop-up .sorting-buttons {
-  align-items: flex-end;
-}
-
-.pop-up-header {
-  display: flex;
-  flex-direction: row;
-}
-
-.pop-up-header strong,
-.pop-up-header .no-visibility-button {
-  margin: 0.5rem;
-}
-
-.pop-up-header strong {
-  flex: 1;
-  font-size: 2rem;
-}
-
-.pop-up-header .no-visibility-button {
-  flex: 0.1;
-}
-
 .add-element {
   display: flex;
   flex-direction: row;

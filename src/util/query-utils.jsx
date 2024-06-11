@@ -37,3 +37,11 @@ export const useCreateDataQuery = (route) => {
     `useCreate${route[0].toUpperCase() + route.slice(1, -1)}Mutation`
   ]()
 }
+
+export const useDeleteDataQuery = (route) => {
+  const routeApi = getRouteApi(route)
+
+  return routeApi[
+    `useDelete${route[0].toUpperCase() + route.slice(1, -1)}Mutation`
+  ]()
+}

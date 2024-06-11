@@ -1,9 +1,10 @@
+import { addRequirement } from "./bodySlice"
+
 import PropTypes from "prop-types"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { addRequirement } from "./bodySlice"
 
-export default function Row({ property, value, header, input = <></> }) {
+export default function Row({ property, value, header, input }) {
   const dispatch = useDispatch()
 
   useEffect(() => {

@@ -114,20 +114,20 @@ export default function MiniTable({ property, value, header, canInput }) {
       <div className="header">
         <Arrow onClick={() => setIsOpen(!isOpen)} />
         <div className="header-text">{header}</div>
-        <div className="name-value">
-          {typeof value === "object" ? nameValue : value}
-        </div>
-        {canInput && (
-          <div className="input">
-            <ArrayInput
-              property={property}
-              value={value}
-              header={header}
-              excludedId={excludedId}
-            />
-          </div>
-        )}
       </div>
+      <div className="name-value">
+        {typeof value === "object" ? nameValue : value}
+      </div>
+      {canInput && (
+        <div className="input">
+          <ArrayInput
+            property={property}
+            value={value}
+            header={header}
+            excludedId={excludedId}
+          />
+        </div>
+      )}
       {isOpen && (
         <Value
           route={property}

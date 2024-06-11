@@ -54,6 +54,7 @@
 
 /* Rows */
 .row,
+.non-input-row,
 .sub-row {
   display: flex;
   flex-direction: row;
@@ -70,13 +71,20 @@
   padding: 0 0 0 1rem;
 }
 
+.delete .header {
+  width: 50%;
+}
+
 .value,
 .name-value {
-  /* flex: 1; */
   width: 35%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+
+.delete .value {
+  width: 35%;
 }
 
 /* Mini Data & Mini Table */
@@ -168,6 +176,41 @@ button.on {
 
 .sub-value {
   flex: 1;
+}
+
+/* Delete */
+.delete {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete .data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-header {
+  font-size: 1.5rem;
+}
+
+.delete .row {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+}
+
+.delete-boolean-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.delete-boolean-button {
+  font-size: 1.5rem;
+  margin: 1rem;
 }
 
 /* Submit Button */
