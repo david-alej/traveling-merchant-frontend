@@ -24,11 +24,11 @@ const initialState = {
   unitPrice: 0,
 }
 
-function PopUpContent({ header, excludedId }) {
+function PopUpContent({ header, excludedId, arrayOn }) {
   const dispatch = useDispatch()
   const property = header === "Wares Sold" ? "waresTickets" : "ordersWares"
   const route = "wares"
-  const columns = routesColumnDefinitions[route].filter(
+  let columns = routesColumnDefinitions[route].filter(
     (col) => col.accessorKey !== excludedId
   )
 
@@ -38,7 +38,7 @@ function PopUpContent({ header, excludedId }) {
   const { data, error, isFetching, isSuccess, isError } =
     useGetDatumQuery(route)
 
-  reformColumns(columns)
+  columns = reformColumns(columns)
 
   let content
 
@@ -105,7 +105,8 @@ function PopUpContent({ header, excludedId }) {
               selected.ware.id &&
               (!selected.unitPrice || selected.unitPrice > 0) &&
               selected.amount &&
-              selected.amount >= selected.returned
+              selected.amount >= selected.returned &&
+              arrayOn
             )
           }
           onClick={() => {
@@ -134,6 +135,7 @@ function PopUpContent({ header, excludedId }) {
 PopUpContent.propTypes = {
   header: PropTypes.string.isRequired,
   excludedId: PropTypes.string,
+  arrayOn: PropTypes.bool,
 }
 
 export default function ArrayInput({
@@ -147,24 +149,38 @@ export default function ArrayInput({
 
   const array = useSelector(selectBodyProperty(property)) || []
   const [popupVisisble, setPopupVisible] = useState(false)
+  const [arrayOn, setArrayOn] = useState(false)
 
   const newLength = array.length
 
   useEffect(() => {
-    dispatch(initializeArray(property))
-  }, [dispatch, property])
+    if (array.length === 0 && arrayOn) {
+      dispatch(initializeArray(property))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [property])
 
   const handleClear = () =>
     dispatch(changeValue({ property, value: undefined }))
 
   return (
-    <>
-      <div className="array-header">
+    <div className="input-switch">
+      <Button
+        type="button"
+        className="input-switch-button"
+        onClick={() => {
+          handleClear()
+          setArrayOn(!arrayOn)
+        }}
+        text={arrayOn ? "On" : "Off"}
+      />
+      <div className={"array-header" + (!arrayOn ? " disabled" : "")}>
         <Button
           className="visibility-button"
           icon={<LiaSearchSolid />}
           type="button"
           onClick={() => setPopupVisible(true)}
+          disabled={!arrayOn}
         ></Button>
         {newLength !== 0 && (
           <Button
@@ -192,10 +208,14 @@ export default function ArrayInput({
               onClick={() => setPopupVisible(!popupVisisble)}
             />
           </div>
-          <PopUpContent header={header} excludedId={excludedId} />
+          <PopUpContent
+            header={header}
+            excludedId={excludedId}
+            arrayOn={arrayOn}
+          />
         </div>
       )}
-    </>
+    </div>
   )
 }
 

@@ -187,8 +187,28 @@ export default {
       meta: { dataType: "num", isOptional: true },
     },
     {
+      accessorKey: "paid",
+      header: "Paid",
+      meta: { dataType: "num" },
+    },
+    {
+      accessorKey: "returned",
+      header: "Returned",
+      meta: { dataType: "num" },
+    },
+    {
+      accessorKey: "owed",
+      header: "Owed",
+      meta: { dataType: "num" },
+    },
+    {
       accessorKey: "ordersWares",
       header: "Wares Bought",
+      meta: { dataType: "arr", isForeigns: true },
+    },
+    {
+      accessorKey: "transactions",
+      header: "Payments",
       meta: { dataType: "arr", isForeigns: true },
     },
     {

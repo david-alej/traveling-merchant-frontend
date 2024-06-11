@@ -26,6 +26,7 @@ export const bodySlice = createSlice({
     initializeArray: (state, { payload: property }) => {
       if (!state[property]) state[property] = []
     },
+
     addElement: (state, { payload: { property, element: elementToAdd } }) => {
       const isUnique =
         typeof elementToAdd === "object"
@@ -48,6 +49,9 @@ export const bodySlice = createSlice({
         )
       }
     },
+    clearArray: (state, { payload: property }) => {
+      state[property] = undefined
+    },
     editObjectElement: (
       state,
       { payload: { property, element: newElement } }
@@ -66,6 +70,7 @@ export const {
   initializeArray,
   addElement,
   removeElement,
+  clearArray,
   editObjectElement,
   addRequirement,
   removeRequirement,

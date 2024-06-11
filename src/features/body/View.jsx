@@ -44,7 +44,7 @@ export default function View() {
             cell,
           } = colDef
           let value = data[property]
-          const props = { key: index, property, value, header }
+          const props = { key: index, property, value, header, cell }
 
           let row
 
@@ -71,16 +71,11 @@ export default function View() {
 
             row = <MiniData {...props} />
           } else {
-            props.value =
-              property === "id"
-                ? value
-                : cell
-                ? cell({ getValue: () => value })
-                : value
-
             if (actionIsEdit && isEditable(route, property)) {
               props.input = <Input {...props} />
             }
+
+            props.value = cell({ getValue: () => value })
 
             row = <Row {...props} />
           }

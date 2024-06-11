@@ -8,9 +8,11 @@
   height: 100%;
 }
 
-input {
+input,
+textarea {
   border-radius: 1rem;
   padding: 0.3rem;
+  border: 0.15rem solid #000;
 }
 
 /* PhoneNumber Input */
@@ -20,12 +22,8 @@ input.phone-number {
 }
 
 /* String Input */
-.auto-resize-input {
-  font-size: 1rem;
-  padding: 0.12rem;
-  border: 0.09rem solid #ccc;
-  box-sizing: content-box;
-  transition: width 0.2s ease;
+.input textarea.string {
+  max-width: 100%;
 }
 
 #hidden-span {
@@ -54,16 +52,21 @@ input.array:focus {
   outline: none;
 }
 
+input.array.disabled {
+  color: var(--faded-color);
+}
+
 /* Date Input */
-.date-input {
+.input-switch {
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
 }
 
-.data-input-button {
+.input-switch-button {
   border: 0.1rem solid var(--faded-color);
-  margin: 0.1rem;
+  margin: 0.3rem;
 }
 
 /* Pop Up */

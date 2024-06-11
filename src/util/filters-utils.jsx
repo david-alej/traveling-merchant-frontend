@@ -75,6 +75,11 @@ export const reformColumn = (column, shallow) => {
       break
     }
 
+    case "num": {
+      column.cell = (props) => `$${props.getValue()}`
+      break
+    }
+
     case "int": {
       if (column.accessorKey.toLowerCase().includes("id")) {
         const route = column.accessorKey.slice(0, -2) + "s"
@@ -100,6 +105,7 @@ export const reformColumns = (columns, shallow = true) => {
         accessorKey: "id",
         header: "Id",
         meta: { dataType: "int" },
+        cell: (props) => props.getValue(),
       },
     ].concat(columns)
   }

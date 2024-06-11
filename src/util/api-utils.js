@@ -19,7 +19,7 @@ export const createEndpointOptions = (tagType) => ({
       }),
       providesTags: (result) => providesList(result, tagType),
     }),
-    [`add${tagType}`]: build.mutation({
+    [`create${tagType}`]: build.mutation({
       query: (body) => ({
         url: `${tagType.toLowerCase()}s`,
         method: "POST",

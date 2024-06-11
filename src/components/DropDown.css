@@ -20,7 +20,7 @@
 .select-box {
   border-radius: 1rem;
   background-color: #fff;
-  border: 1px solid #000;
+  border: 0.15rem solid #000;
   display: flex;
   justify-content: space-between;
   align-items: center;

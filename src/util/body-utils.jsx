@@ -166,7 +166,7 @@ export const getColumns = (route) => {
     },
   ])
 
-  columns = reformColumns(columns, true)
+  columns = reformColumns(columns, false)
 
   return columns
 }
@@ -230,18 +230,22 @@ export const checkCreateBody = ({ errors, requirements, ...body }) => {
   return false
 }
 
-export const filterBody = (body) => {
-  for (const value of Object.values(body)) {
-    if (Array.isArray(value) && value.length === 0) {
-      return true
+export const formatBody = (body) => {
+  const newBody = {}
+
+  for (const [property, value] of Object.entries(body)) {
+    if (Array.isArray(value) && value.length > 0) {
+      newBody[property] = value
     } else if (
       typeof value === "object" &&
       value !== null &&
-      Object.keys(value).length === 0
+      Object.keys(value).length > 0
     ) {
-      return true
-    } else if (!value) {
-      return true
+      newBody[property + "Id"] = value.id
+    } else if (value) {
+      newBody[property] = value
     }
   }
+
+  return newBody
 }

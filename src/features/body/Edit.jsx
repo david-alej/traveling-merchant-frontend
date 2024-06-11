@@ -1,5 +1,5 @@
 import { useUpdateDataQuery } from "../../util/query-utils.jsx"
-import { checkForErrors } from "../../util/body-utils.jsx"
+import { checkForErrors, formatBody } from "../../util/body-utils.jsx"
 import { selectBody } from "./bodySlice.js"
 import Spinner from "../../components/Spinner.jsx"
 import Button from "../../components/Button.jsx"
@@ -12,16 +12,16 @@ export default function Edit() {
   const { id } = useParams()
   const route = useLocation().pathname.split("/")[1]
 
-  const { errors, ...body } = useSelector(selectBody)
+  // eslint-disable-next-line no-unused-vars
+  const { errors, requirements, ...body } = useSelector(selectBody)
 
   const [
     updateData,
     {
-      data: updatedData,
-      error,
-      isSuccess: isUpdated,
+      // data: updatedData,
+      error: response,
       isLoading: isUpdating,
-      isError: isUpdatedError,
+      isError,
     },
   ] = useUpdateDataQuery(route)
 
@@ -29,26 +29,21 @@ export default function Edit() {
 
   if (isUpdating) {
     content = <Spinner />
-  } else if (isUpdatedError) {
-    content = (
-      <div>
-        <div>Update Error</div>
-        {Object.keys(error).map((key, index) => (
-          <p key={index}>{`${key}: ${error[key]}`}</p>
-        ))}
-      </div>
-    )
-  } else if (isUpdated) {
-    content = (
-      <>
-        <p>Success</p>
+  } else if (isError) {
+    content =
+      response.originalStatus < 300 ? (
+        <>
+          <p>Success</p>
+          <div>{response.data}</div>
+        </>
+      ) : (
         <div>
-          {Object.keys(updatedData).map((key, index) => (
-            <p key={index}>{`${key}: ${updatedData[key]}`}</p>
+          <div>Update Error</div>
+          {Object.keys(response).map((key, index) => (
+            <p key={index}>{`${key}: ${response[key]}`}</p>
           ))}
         </div>
-      </>
-    )
+      )
   } else {
     content = <View />
   }
@@ -58,8 +53,10 @@ export default function Edit() {
       onSubmit={async (e) => {
         e.preventDefault()
 
+        const formattedBody = formatBody(body)
+
         try {
-          await updateData({ id, ...body })
+          await updateData({ id, ...formattedBody })
         } catch (err) {
           console.log(err)
         }
@@ -71,7 +68,7 @@ export default function Edit() {
           type="submit"
           className="submit-button"
           text="Submit"
-          disabled={checkForErrors(errors, body)}
+          disabled={checkForErrors(body, errors)}
         />
       </div>
     </form>

@@ -29,3 +29,11 @@ export const useUpdateDataQuery = (route) => {
     `useUpdate${route[0].toUpperCase() + route.slice(1, -1)}Mutation`
   ]()
 }
+
+export const useCreateDataQuery = (route) => {
+  const routeApi = getRouteApi(route)
+
+  return routeApi[
+    `useCreate${route[0].toUpperCase() + route.slice(1, -1)}Mutation`
+  ]()
+}

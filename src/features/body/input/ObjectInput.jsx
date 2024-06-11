@@ -19,13 +19,13 @@ export default function ObjectInput({ property, value = {}, header }) {
   const object = useSelector(selectBodyProperty(property)) || {}
   const [popupVisisble, setPopupVisible] = useState(false)
   const route = property + "s"
-  const columns = routesColumnDefinitions[route]
+  let columns = routesColumnDefinitions[route]
   const newName = getNameValue(object)
 
   const { data, error, isFetching, isSuccess, isError } =
     useGetDatumQuery(route)
 
-  reformColumns(columns)
+  columns = reformColumns(columns)
 
   let content
 

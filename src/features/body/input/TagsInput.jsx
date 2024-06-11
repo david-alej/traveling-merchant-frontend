@@ -5,6 +5,7 @@ import {
   initializeArray,
   addElement,
   removeElement,
+  clearArray,
 } from "../bodySlice"
 import Arrow from "../../../components/Arrow"
 import "./TagsInput.css"
@@ -22,12 +23,17 @@ export default function TagsInput() {
   const tags = useSelector(selectBodyProperty("tags")) || []
   const [newTag, setNewTag] = useState("")
   const [isOpen, setIsOpen] = useState(false)
+  const [tagsOn, setTagsOn] = useState(false)
 
   useEffect(() => {
-    dispatch(initializeArray("tags"))
-  }, [dispatch])
+    if (tags.length === 0 && tagsOn) {
+      dispatch(initializeArray("tags"))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tags, tagsOn])
 
   const onAddTag = (tag, tagType) => () => {
+    if (tagsOn === false) return
     let isUnique
 
     if (tagType) {
@@ -40,24 +46,35 @@ export default function TagsInput() {
     if (isUnique) dispatch(addElement({ property: "tags", element: tag }))
   }
 
-  const onClearValue = (tagToRemove) => () =>
+  const onRemoveValue = (tagToRemove) => () =>
     dispatch(removeElement({ property: "tags", element: tagToRemove }))
+
+  const clear = () => dispatch(clearArray("tags"))
 
   const tagOptions = createTagOptions(tags, onAddTag, allTags)
 
   return (
-    <>
+    <div className="input-switch">
+      <Button
+        type="button"
+        className="input-switch-button"
+        onClick={() => {
+          clear()
+          setTagsOn(!tagsOn)
+        }}
+        text={tagsOn ? "Tags On" : "Tags Off"}
+      />
       <input className="tags" value={tags} readOnly hidden></input>
       <div className="tags-input-container">
-        <div className="custom-select">
-          <div className="select-box">
+        <div className={"custom-select"}>
+          <div className={"select-box" + (!tagsOn ? " disabled" : "")}>
             <div className="selected-options">
               {tags?.map((selectedTag) => (
                 <span className="tag" key={selectedTag}>
                   {selectedTag}
                   <span
                     className="remove-tag"
-                    onClick={onClearValue(selectedTag)}
+                    onClick={onRemoveValue(selectedTag)}
                   >
                     &times;
                   </span>
@@ -94,6 +111,7 @@ export default function TagsInput() {
                     className="add-tag-button"
                     onClick={onAddTag(newTag)}
                     icon={<MdOutlineAddCircle size={26} />}
+                    disabled={tagsOn === false}
                   />
                 )}
               </div>
@@ -102,6 +120,6 @@ export default function TagsInput() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

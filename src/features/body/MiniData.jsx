@@ -16,7 +16,7 @@ import Button from "../../components/Button.jsx"
 
 function DataValue({ value, foreign, columns }) {
   let createSubValues =
-    typeof value === "object" && foreign
+    typeof value === "object" && value !== null && foreign
       ? (property, cell) => (
           <>
             <div className="sub-value">
@@ -128,7 +128,7 @@ export default function MiniData({
           </div>
         )}
       </div>
-      {isOpen && (typeof value === "object" || foreign) && (
+      {isOpen && ((typeof value === "object" && value !== null) || foreign) && (
         <div className="value">
           <DataValue
             value={value}

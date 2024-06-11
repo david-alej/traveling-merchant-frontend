@@ -12,13 +12,18 @@ import { useDispatch, useSelector } from "react-redux"
 
 export default function StringInput({ property, value }) {
   const dispatch = useDispatch()
-  const string = useSelector(selectBodyProperty(property))
+  const string = useSelector(selectBodyProperty(property)) || ""
   const error = useSelector(selectErrorProperty(property))
   const [width, setWidth] = useState("25%")
   const span = useRef()
 
+  value = value || "Text"
+
   useEffect(() => {
-    if (span.current) {
+    if (
+      span.current &&
+      span.current.offsetWidth < span.current.parentElement.offsetWidth
+    ) {
       const parentWidth = span.current.parentElement.offsetWidth
       const minWidth = parentWidth / 2
       const newWidth = `${Math.min(
@@ -47,14 +52,15 @@ export default function StringInput({ property, value }) {
 
   return (
     <>
-      <input
-        placeholder={value || "Text"}
+      <textarea
+        className="string"
+        placeholder={value}
         value={string || ""}
         onChange={handleChange}
         style={{ width }}
       />
       <span id="hidden-span" ref={span}>
-        {string}
+        {string.length > value.length ? string : value}
       </span>
       {error && <span className="error">{error}</span>}
     </>

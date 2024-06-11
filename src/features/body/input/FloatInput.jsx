@@ -15,7 +15,8 @@ export default function FloatInput({ property, value, header, floatType }) {
   const error = useSelector(selectErrorProperty(property))
 
   const handleChange = ({ target }) => {
-    const { value: newValue } = target
+    let { value: newValue } = target
+    newValue = newValue.replace(/[^0-9.-]/g, "")
     let newError
 
     if (newValue !== 0 && !newValue) {
@@ -29,7 +30,7 @@ export default function FloatInput({ property, value, header, floatType }) {
     } else if (floatType === "positive" && newValue <= 0) {
       newError = "positive"
     } else if (newValue?.split(".")[1]?.length > 2) {
-      newError = "a numver with only two decimal points"
+      newError = "a number with only two decimal points"
     }
 
     dispatch(changeError({ property, error: newError }))

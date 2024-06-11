@@ -33,6 +33,8 @@ export const formatDate = (dateString) => {
   return formatter.format(dateObj)
 }
 
+export const getTodayIsoDate = () => new Date().toISOString()
+
 export const formatFullDate = (dateString) =>
   formatDate(dateString).replaceAll(",", "")
 

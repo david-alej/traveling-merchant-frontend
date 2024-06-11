@@ -1,7 +1,9 @@
 import { selectBody } from "./bodySlice"
-import { checkCreateBody } from "../../util/body-utils"
+import { checkCreateBody, formatBody } from "../../util/body-utils"
+import { useCreateDataQuery } from "../../util/query-utils"
 import routesColumnDefinitions from "../../util/routesColumnDefinitions"
 import Button from "../../components/Button"
+import Spinner from "../../components/Spinner"
 import Input from "./input/Input"
 import MiniData from "./MiniData"
 import MiniTable from "./MiniTable"
@@ -20,68 +22,113 @@ export default function Create() {
     order: false,
   })
 
+  const [
+    createData,
+    {
+      // data: updatedData,
+      error: response,
+      isLoading: isCreating,
+      isError,
+    },
+  ] = useCreateDataQuery(route)
+
+  let content
+
+  if (isCreating) {
+    content = <Spinner />
+  } else if (isError) {
+    content =
+      response.originalStatus < 300 ? (
+        <>
+          <p>Success</p>
+          <div>{response.data}</div>
+        </>
+      ) : (
+        <div>
+          <div>Create Error</div>
+          {Object.keys(response).map((key, index) => (
+            <p key={index}>{`${key}: ${response[key]}`}</p>
+          ))}
+        </div>
+      )
+  } else {
+    content = (
+      <>
+        <div className="create">
+          {routeColDefs.map(
+            (
+              {
+                accessorKey: property,
+                header,
+                meta: { isOriginal, isOptional, isForeign, isForeigns },
+              },
+              index
+            ) => {
+              const props = { key: index, property, header, value: "Required" }
+
+              let content
+
+              if (isForeign) {
+                if (route === "transactions") {
+                  props.isActive = active[property]
+                  props.setActivity = () => {
+                    const oppisiteHeader =
+                      property === "ticket" ? "order" : "ticket"
+                    const newState = !active[property]
+
+                    setActive(() => ({
+                      [property]: newState,
+                      [oppisiteHeader]: !newState,
+                    }))
+                  }
+                }
+
+                content = <MiniData {...props} />
+              } else if (isForeigns) {
+                content = header.includes("Wares") ? (
+                  <MiniTable {...props} canInput={true} />
+                ) : (
+                  content
+                )
+              } else if (isOriginal || isOptional) {
+                props.input = <Input property={property} header={header} />
+                if (isOptional) props.value = "Optional"
+
+                content = <Row {...props} />
+              }
+
+              return content
+            }
+          )}
+        </div>
+        <div className="submit-edit">
+          <Button
+            type="submit"
+            className="submit-button"
+            text="Submit"
+            disabled={checkCreateBody(fullBody)}
+          />
+        </div>
+      </>
+    )
+  }
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault()
-        console.log(fullBody)
+        // eslint-disable-next-line no-unused-vars
+        const { errors, requirements, ...body } = fullBody
+        const formattedBody = formatBody(body)
+
+        try {
+          createData(formattedBody)
+        } catch (err) {
+          console.log(err)
+        }
       }}
     >
-      <div className="create">
-        {routeColDefs.map(
-          (
-            {
-              accessorKey: property,
-              header,
-              meta: { isOriginal, isOptional, isForeign, isForeigns },
-            },
-            index
-          ) => {
-            const props = { key: index, property, header, value: "Required" }
-
-            let content
-
-            if (isForeign) {
-              if (route === "transactions") {
-                props.isActive = active[property]
-                props.setActivity = () => {
-                  const oppisiteHeader =
-                    property === "ticket" ? "order" : "ticket"
-                  const newState = !active[property]
-
-                  setActive(() => ({
-                    [property]: newState,
-                    [oppisiteHeader]: !newState,
-                  }))
-                }
-              }
-
-              content = <MiniData {...props} />
-            } else if (isForeigns) {
-              content = header.includes("Wares") ? (
-                <MiniTable {...props} canInput={true} />
-              ) : (
-                content
-              )
-            } else if (isOriginal || isOptional) {
-              props.input = <Input property={property} header={header} />
-              if (isOptional) props.value = "Optional"
-
-              content = <Row {...props} />
-            }
-
-            return content
-          }
-        )}
-      </div>
-      <div className="submit-edit">
-        <Button
-          type="submit"
-          className="submit-button"
-          text="Submit"
-          disabled={checkCreateBody(fullBody)}
-        />
-      </div>
+      {content}
     </form>
   )
 }

@@ -28,7 +28,13 @@ export default function Input({ property, value, header }) {
     content = (
       <FloatInput
         {...props}
-        floatType={property === "unitPrice" ? "positive" : "nonNegative"}
+        floatType={
+          property === "unitPrice"
+            ? "positive"
+            : property === "payment"
+            ? "all"
+            : "nonNegative"
+        }
       />
     )
   } else if (
