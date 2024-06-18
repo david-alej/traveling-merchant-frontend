@@ -35,11 +35,10 @@ export const formatDate = (dateString) => {
 
 export const getTodayIsoDate = () => new Date().toISOString()
 
-export const formatFullDate = (dateString) =>
-  formatDate(dateString).replaceAll(",", "")
+export const formatFullDate = (dateString) => formatDate(dateString)
 
 export const formatSimpleDate = (dateString) =>
-  formatDate(dateString).split(",").slice(0, -1).join().replace(",", "")
+  formatDate(dateString).split(",").slice(0, -1).join()
 
 export const formatTagsColumn = (arrayTags) => {
   let tagsString = `${arrayTags[0]}`

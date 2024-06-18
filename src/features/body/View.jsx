@@ -1,6 +1,6 @@
-import { isEditable } from "../../util/body-utils.jsx"
+import { isEditable } from "../../util/body-util.jsx"
 import MiniTable from "./MiniTable.jsx"
-import MiniData from "./MiniData.jsx"
+import MiniDatum from "./MiniDatum.jsx"
 import Row from "./Row.jsx"
 import Input from "./input/Input.jsx"
 
@@ -11,7 +11,10 @@ export default function View() {
   const { id } = useParams()
   const path = useLocation().pathname.split("/")
   const route = path[1]
-  const action = path.at(-1) || "view"
+  const action =
+    !isNaN(path.at(-1)) && !isNaN(parseFloat(path.at(-1)))
+      ? "view"
+      : path.at(-1)
   const actionIsEdit = action === "edit"
   const [columns, data] = useOutletContext()
 
@@ -21,7 +24,10 @@ export default function View() {
   })
 
   return (
-    <div className="data" key={`${route}-${id}`}>
+    <div
+      key={`${route}-${id}`}
+      className={"datum" + (action === "view" ? " view-only" : "")}
+    >
       {columns.map((colDef, index) => {
         const {
           accessorKey: property,
@@ -55,7 +61,7 @@ export default function View() {
             }
           }
 
-          row = <MiniData {...props} />
+          row = <MiniDatum canInput={actionIsEdit} {...props} />
         } else {
           if (actionIsEdit && isEditable(route, property)) {
             props.input = <Input {...props} />

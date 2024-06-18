@@ -1,18 +1,17 @@
-import { getMiniDataColumns, getNameValue } from "../../util/body-utils.jsx"
 import {
   addRequirement,
   removeRequirement,
   selectBodyProperty,
   changeValue,
 } from "./bodySlice.js"
+import { getMiniDatumColumns, getNameValue } from "../../util/body-util.jsx"
 import ObjectInput from "./input/ObjectInput.jsx"
 import Arrow from "../../components/Arrow.jsx"
+import Button from "../../components/Button.jsx"
 
 import PropTypes from "prop-types"
 import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import Button from "../../components/Button.jsx"
 
 function DataValue({ value, foreign, columns }) {
   let createSubValues =
@@ -47,7 +46,7 @@ function DataValue({ value, foreign, columns }) {
   return (
     <div className="data-value">
       {columns.map(({ accessorKey: property, header, cell }, index) => (
-        <div className={"sub-row" + (index ? " not-first" : "")} key={index}>
+        <div className="sub-row" key={index}>
           <div className="sub-header">{header}</div>
           {createSubValues(property, cell)}
         </div>
@@ -63,22 +62,22 @@ DataValue.propTypes = {
   columns: PropTypes.array,
 }
 
-export default function MiniData({
+export default function MiniDatum({
   property,
   value,
   header,
+  canInput = false,
   isActive,
   setActivity,
 }) {
   const dispatch = useDispatch()
-  const columns = getMiniDataColumns(property)
-  const action = useLocation().pathname.split("/").at(-1)
-  const nameValue = typeof value === "object" ? getNameValue(value) : "Required"
-  const isProperAction = action === "edit" || action === "create"
+  const columns = getMiniDatumColumns(property)
+  const nameValue = typeof value === "object" ? getNameValue(value) : value
   const hasActivity = setActivity
 
   const foreign = useSelector(selectBodyProperty(property))
   const [isOpen, setIsOpen] = useState(false)
+
   useEffect(() => {
     if (value === "Required") {
       if (!setActivity || (setActivity && isActive)) {
@@ -98,12 +97,12 @@ export default function MiniData({
 
   return (
     <div
-      className={"mini-data" + (hasActivity && !isActive ? " not-active" : "")}
+      className={"mini-datum" + (hasActivity && !isActive ? " not-active" : "")}
     >
       <div className="header">
-        <Arrow state={isOpen} onClick={() => setIsOpen(!isOpen)} />
         <div className="header-text">{header}</div>
         <div className="name-value">
+          <Arrow state={isOpen} onClick={() => setIsOpen(!isOpen)} />
           <div className="object-name-value">{nameValue}</div>
           {hasActivity &&
             (isActive ? (
@@ -122,7 +121,7 @@ export default function MiniData({
               />
             ))}
         </div>
-        {isProperAction && (!hasActivity || isActive) && (
+        {canInput && (!hasActivity || isActive) && (
           <div className="input">
             <ObjectInput property={property} value={value} header={header} />
           </div>
@@ -142,10 +141,11 @@ export default function MiniData({
   )
 }
 
-MiniData.propTypes = {
+MiniDatum.propTypes = {
   property: PropTypes.string.isRequired,
   value: PropTypes.any,
   header: PropTypes.string.isRequired,
+  canInput: PropTypes.bool,
   isActive: PropTypes.bool,
   setActivity: PropTypes.func,
 }

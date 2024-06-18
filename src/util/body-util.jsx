@@ -1,4 +1,4 @@
-import { reformColumn, reformColumns } from "./filters-utils"
+import { reformColumn, reformColumns } from "./filters-util"
 import routesColumnDefinitions from "./routesColumnDefinitions"
 
 export const camelToFlat = (property) => {
@@ -12,13 +12,6 @@ export const camelToFlat = (property) => {
 
   return flat.slice(0, -1)
 }
-
-// export const flatToCamel = (str) =>
-//   str
-//     .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
-//       return index == 0 ? word.toLowerCase() : word.toUpperCase()
-//     })
-//     .replace(/\s+/g, "")
 
 export const getNameValue = (value) => {
   if (!value) return ""
@@ -92,7 +85,7 @@ export const getMiniTableColumns = (property, header, excludedId) => {
   return newColumns
 }
 
-export const getMiniDataColumns = (property) => {
+export const getMiniDatumColumns = (property) => {
   let columns = routesColumnDefinitions[property + "s"]
 
   if (columns[0].accessorKey !== "id") {
@@ -242,7 +235,7 @@ export const formatBody = (body) => {
       Object.keys(value).length > 0
     ) {
       newBody[property + "Id"] = value.id
-    } else if (value) {
+    } else if (value || value === 0) {
       newBody[property] = value
     }
   }

@@ -1,7 +1,7 @@
 import { changeValue, selectBodyProperty } from "../bodySlice"
-import { getNameValue } from "../../../util/body-utils"
-import { reformColumns } from "../../../util/filters-utils"
-import { useGetDatumQuery } from "../../../util/query-utils"
+import { getNameValue } from "../../../util/body-util"
+import { reformColumns } from "../../../util/filters-util"
+import { useGetDataQuery } from "../../../util/query-util"
 import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
 import Spinner from "../../../components/Spinner"
 import Table from "../../filters/Table"
@@ -22,8 +22,7 @@ export default function ObjectInput({ property, value = {}, header }) {
   let columns = routesColumnDefinitions[route]
   const newName = getNameValue(object)
 
-  const { data, error, isFetching, isSuccess, isError } =
-    useGetDatumQuery(route)
+  const { data, error, isFetching, isSuccess, isError } = useGetDataQuery(route)
 
   columns = reformColumns(columns)
 
@@ -39,6 +38,7 @@ export default function ObjectInput({ property, value = {}, header }) {
         columns={columns}
         data={data}
         route={route}
+        hasFilters={true}
         onDoubleClick={(row) => () => {
           dispatch(
             changeValue({

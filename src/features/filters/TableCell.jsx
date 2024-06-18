@@ -16,7 +16,7 @@ export default function TableCell({ getValue, row, column, table }) {
   return (
     <input
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={({ target }) => setValue(target.value.replace(/[^0-9]/g, ""))}
       onBlur={onBlur}
     />
   )

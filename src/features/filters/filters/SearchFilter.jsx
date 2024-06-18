@@ -12,10 +12,10 @@ export default function SearchFilter({ header, filter: { id, value } }) {
   const dispatch = useDispatch()
   const route = useLocation().pathname.split("/")[1]
 
-  const onFilterChange = (id) => (e) =>
+  const onFilterChange = (e) =>
     dispatch(changeValue({ route, id, value: e.target.value }))
 
-  const onSearchClearHandler = (id) => () =>
+  const onSearchClearHandler = () =>
     dispatch(changeValue({ route, id, value: "" }))
 
   return (
@@ -23,10 +23,10 @@ export default function SearchFilter({ header, filter: { id, value } }) {
       <div className="search-box">
         {value?.length > 0 ? (
           <Button
-            onClick={onSearchClearHandler(id)}
-            type="button"
             className="search-filter-clear-button"
+            type="button"
             icon={<MdOutlineClear />}
+            onClick={onSearchClearHandler}
           />
         ) : (
           <div className="search-filter-icon">
@@ -37,8 +37,8 @@ export default function SearchFilter({ header, filter: { id, value } }) {
           className="search-filter"
           type="text"
           value={value}
-          onChange={onFilterChange(id)}
           placeholder={`Search by ${header}`}
+          onChange={onFilterChange}
         />
       </div>
     </div>

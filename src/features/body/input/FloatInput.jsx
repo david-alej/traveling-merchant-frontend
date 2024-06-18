@@ -1,4 +1,4 @@
-import { camelToFlat } from "../../../util/body-utils"
+import { camelToFlat } from "../../../util/body-util"
 import {
   changeError,
   changeValue,

@@ -24,6 +24,10 @@ const createInitialState = () => {
         value = ""
       }
 
+      if ((id === "ticket" || id === "order") && route === "transactions") {
+        value = ["", ""]
+      }
+
       return { id, value }
     })
   }

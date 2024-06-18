@@ -1,5 +1,5 @@
-import { useUpdateDataQuery } from "../../util/query-utils.jsx"
-import { checkForErrors, formatBody } from "../../util/body-utils.jsx"
+import { useUpdateDataMutation } from "../../util/query-util.jsx"
+import { checkForErrors, formatBody } from "../../util/body-util.jsx"
 import { selectBody } from "./bodySlice.js"
 import Spinner from "../../components/Spinner.jsx"
 import Button from "../../components/Button.jsx"
@@ -23,7 +23,7 @@ export default function Edit() {
       isLoading: isUpdating,
       isError,
     },
-  ] = useUpdateDataQuery(route)
+  ] = useUpdateDataMutation(route)
 
   let content
 
@@ -63,7 +63,7 @@ export default function Edit() {
       }}
     >
       {content}
-      <div className="submit-edit">
+      <div className="submit-container">
         <Button
           type="submit"
           className="submit-button"

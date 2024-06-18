@@ -1,5 +1,3 @@
-import { createTagOptions } from "../../../util/body-utils"
-import Button from "../../../components/Button"
 import {
   selectBodyProperty,
   initializeArray,
@@ -7,6 +5,8 @@ import {
   removeElement,
   clearArray,
 } from "../bodySlice"
+import { createTagOptions } from "../../../util/body-util"
+import Button from "../../../components/Button"
 import Arrow from "../../../components/Arrow"
 import "./TagsInput.css"
 

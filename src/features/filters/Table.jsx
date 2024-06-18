@@ -1,6 +1,7 @@
 import Button from "../../components/Button.jsx"
 import ActionButton from "../../components/ActionButton.jsx"
 import Filters from "./filters/Filters.jsx"
+import Delete from "../body/Delete.jsx"
 import TableCell from "./TableCell.jsx"
 import "./Table.css"
 
@@ -14,9 +15,8 @@ import {
 } from "@tanstack/react-table"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { FaFilter, FaCirclePlus } from "react-icons/fa6"
+import { FaFilter } from "react-icons/fa6"
 import PropTypes from "prop-types"
-import Delete from "../body/Delete.jsx"
 
 Table.propTypes = {
   route: PropTypes.string.isRequired,
@@ -27,7 +27,7 @@ Table.propTypes = {
   onPaginationChange: PropTypes.func,
   disabledDoubleClick: PropTypes.bool,
   onDoubleClick: PropTypes.any,
-  hasExtraOptions: PropTypes.bool,
+  hasFilters: PropTypes.bool,
   hasActions: PropTypes.bool,
   customAction: PropTypes.func,
   editableColumns: PropTypes.array,
@@ -41,7 +41,7 @@ export default function Table({
   state = {},
   onPaginationChange,
   onDoubleClick,
-  hasExtraOptions = false,
+  hasFilters = false,
   hasActions = false,
   customAction,
   editableColumns,
@@ -69,6 +69,15 @@ export default function Table({
       },
     },
     filterFns: {
+      rangeFilter: (row, columnId, filterValue) => {
+        const value = row.getValue(columnId)
+        const [min, max] = filterValue
+        const minCondition =
+          !min || typeof Number(min) !== "number" || min <= value
+        const maxCondition =
+          !max || typeof Number(max) !== "number" || max >= value
+        return minCondition && maxCondition
+      },
       typeFilter: (row, columnId, filterValue) => {
         const type = row.getValue(columnId)
 
@@ -145,39 +154,41 @@ export default function Table({
 
   return (
     <>
-      {hasExtraOptions && (
-        <div className="datum-headers">
-          <div className="datum-header">
+      {hasFilters && (
+        <div className="table-headers">
+          <div className="table-header">
             <Button
               className="title"
-              isActive={filtersIsOpened}
-              onClick={() => setFiltersIsOpened(!filtersIsOpened)}
+              type="button"
               text={<strong>Filter Search</strong>}
               icon={<FaFilter size={23} />}
+              isActive={filtersIsOpened}
+              onClick={() => setFiltersIsOpened(!filtersIsOpened)}
             />
-            <div
-              className={"filters-box" + (filtersIsOpened ? " is-open" : "")}
-            >
-              <Filters table={table} />
-            </div>
+            {filtersIsOpened && (
+              <div className="filters-box">
+                <Filters route={route} table={table} />
+              </div>
+            )}
           </div>
-          {!filtersIsOpened && (
-            <div className="datum-header">
-              <Button
-                className="title"
-                onClick={() => navigate(`/${route}/create`)}
-                text={<strong>Create</strong>}
-                icon={<FaCirclePlus size={23} />}
-              />
-            </div>
-          )}
         </div>
       )}
       <table>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
+              {(hasActions || customAction
+                ? headerGroup.headers.concat([
+                    {
+                      id: headerGroup.headers.length + 1,
+                      column: {
+                        columnDef: { header: "Actions" },
+                        getCanSort: () => false,
+                      },
+                    },
+                  ])
+                : headerGroup.headers
+              ).map((header) => (
                 <th key={header.id}>
                   <div className="header-cell">
                     <div className="header-container">
@@ -215,13 +226,6 @@ export default function Table({
                   </div>
                 </th>
               ))}
-              {(hasActions || customAction) && (
-                <th key="actions" className="actions">
-                  <div className="header-cell">
-                    <div className="header-text">Actions</div>
-                  </div>
-                </th>
-              )}
             </tr>
           ))}
         </thead>
@@ -276,27 +280,31 @@ export default function Table({
       <div className="page-buttons">
         <Button
           className="page-button"
+          type="button"
+          text="<<"
           onClick={() => table.firstPage()}
           disabled={!table.getCanPreviousPage()}
-          text={"<<"}
         />
         <Button
           className="page-button"
+          type="button"
+          text="<"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          text={"<"}
         />
         <Button
           className="page-button"
+          text=">"
+          type="button"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          text={">"}
         />
         <Button
           className="page-button"
+          text=">>"
+          type="button"
           onClick={() => table.lastPage()}
           disabled={!table.getCanNextPage()}
-          text={">>"}
         />
       </div>
       {popUp}

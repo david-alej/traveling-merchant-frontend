@@ -1,12 +1,39 @@
-// import routeApis from "../api/routeApis"
-// import { tagTypes } from "../api/apiSlice"
-
-// const loadData = (tagType) => {
-//   return routeApis[`${tagType.toLowerCase()}Api`][`useGet${tagType}sQuery`]()
-// }
+import { getPartialColumns } from "../util/filters-util"
+import { useGetDataQuery } from "../util/query-util"
+import Table from "../features/filters/Table"
+import Spinner from "./Spinner"
+import "./Dashboard.css"
 
 export default function Dashboard() {
-  // for (const tagType of tagTypes) loadData(tagType)
+  const {
+    data = [],
+    error,
+    isFetching,
+    isSuccess,
+    isError,
+  } = useGetDataQuery("tickets", {
+    pending: true,
+  })
 
-  return <h1 className="dashboard">Dashboard</h1>
+  let content
+
+  if (isFetching) {
+    content = <Spinner />
+  } else if (isError) {
+    content = <div>{error.toString()}</div>
+  } else if (isSuccess) {
+    const columns = getPartialColumns("tickets")
+
+    content = <Table route="tickets" columns={columns} data={data} />
+  }
+
+  return (
+    <div className="dashboard">
+      <h1 className="header">Dashboard</h1>
+      <div className="open-tickets">
+        <h2>Open Tickets</h2>
+        {content}
+      </div>
+    </div>
+  )
 }

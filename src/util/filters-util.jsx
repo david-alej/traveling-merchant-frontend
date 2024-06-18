@@ -80,10 +80,13 @@ export const reformColumn = (column, shallow) => {
 
     case "num": {
       column.cell = (props) => `$${props.getValue()}`
+      column.filterFn = "rangeFilter"
+
       break
     }
 
     case "int": {
+      column.filterFn = "rangeFilter"
       if (column.accessorKey.toLowerCase().includes("id")) {
         const route = column.accessorKey.slice(0, -2) + "s"
 
@@ -97,12 +100,14 @@ export const reformColumn = (column, shallow) => {
   }
 }
 
+export const isReformed = (columns) => (columns.at(-1).cell ? true : false)
+
 export const reformColumns = (columns, shallow = true) => {
   columns.forEach((column) => reformColumn(column, shallow))
 
   let newColumns = columns
 
-  if (columns[0].accessorKey !== "id") {
+  if (newColumns[0].accessorKey !== "id") {
     newColumns = [
       {
         accessorKey: "id",
@@ -113,11 +118,21 @@ export const reformColumns = (columns, shallow = true) => {
     ].concat(columns)
   }
 
+  if (
+    newColumns[1].accessorKey === "ticket" &&
+    newColumns[2].accessorKey === "order"
+  ) {
+    newColumns[1].filterFn = "rangeFilter"
+    newColumns[2].filterFn = "rangeFilter"
+  }
+
   return newColumns
 }
 
 export const getPartialColumns = (route) => {
   let columns = routesColumnDefinitions[route]
 
-  return reformColumns(columns)
+  columns = reformColumns(columns)
+
+  return columns
 }

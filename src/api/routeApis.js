@@ -1,5 +1,5 @@
+import { createEndpointOptions } from "../util/api-util"
 import { tagTypes, rootSplitApi } from "./apiSlice"
-import { createEndpointOptions } from "../util/api-utils"
 
 const addInjectionEndpoints = (route) =>
   rootSplitApi.injectEndpoints(createEndpointOptions(route))

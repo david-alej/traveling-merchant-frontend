@@ -4,16 +4,16 @@ export const getRouteApi = (route) => {
   return routeApis[route.toLowerCase().slice(0, -1) + "Api"]
 }
 
-export const useGetDatumQuery = (route) => {
+export const useGetDataQuery = (route, body = {}) => {
   const routeApi = getRouteApi(route)
 
   return routeApi[`useGet${route[0].toUpperCase() + route.slice(1)}Query`](
-    {},
+    body,
     { refetchOnMountOrArgChange: true }
   )
 }
 
-export const useGetDataQuery = (route, id) => {
+export const useGetDatumQuery = (route, id) => {
   const routeApi = getRouteApi(route)
 
   return routeApi[`useGet${route[0].toUpperCase() + route.slice(1, -1)}Query`](
@@ -22,7 +22,7 @@ export const useGetDataQuery = (route, id) => {
   )
 }
 
-export const useUpdateDataQuery = (route) => {
+export const useUpdateDataMutation = (route) => {
   const routeApi = getRouteApi(route)
 
   return routeApi[
@@ -30,7 +30,7 @@ export const useUpdateDataQuery = (route) => {
   ]()
 }
 
-export const useCreateDataQuery = (route) => {
+export const useCreateDataMutation = (route) => {
   const routeApi = getRouteApi(route)
 
   return routeApi[
@@ -38,7 +38,7 @@ export const useCreateDataQuery = (route) => {
   ]()
 }
 
-export const useDeleteDataQuery = (route) => {
+export const useDeleteDataMutation = (route) => {
   const routeApi = getRouteApi(route)
 
   return routeApi[

@@ -1,12 +1,12 @@
 import { selectBody } from "./bodySlice"
-import { checkCreateBody, formatBody } from "../../util/body-utils"
-import { useCreateDataQuery } from "../../util/query-utils"
+import { checkCreateBody, formatBody } from "../../util/body-util"
+import { useCreateDataMutation } from "../../util/query-util"
 import routesColumnDefinitions from "../../util/routesColumnDefinitions"
 import Button from "../../components/Button"
 import Spinner from "../../components/Spinner"
 import Input from "./input/Input"
-import MiniData from "./MiniData"
 import MiniTable from "./MiniTable"
+import MiniDatum from "./MiniDatum"
 import Row from "./Row"
 
 import { useLocation } from "react-router-dom"
@@ -22,15 +22,8 @@ export default function Create() {
     order: false,
   })
 
-  const [
-    createData,
-    {
-      // data: updatedData,
-      error: response,
-      isLoading: isCreating,
-      isError,
-    },
-  ] = useCreateDataQuery(route)
+  const [createData, { error: response, isLoading: isCreating, isError }] =
+    useCreateDataMutation(route)
 
   let content
 
@@ -83,7 +76,7 @@ export default function Create() {
                   }
                 }
 
-                content = <MiniData {...props} />
+                content = <MiniDatum {...props} canInput={true} />
               } else if (isForeigns) {
                 content = header.includes("Wares") ? (
                   <MiniTable {...props} canInput={true} />
@@ -101,7 +94,7 @@ export default function Create() {
             }
           )}
         </div>
-        <div className="submit-edit">
+        <div className="submit-container">
           <Button
             type="submit"
             className="submit-button"

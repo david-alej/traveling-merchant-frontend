@@ -50,7 +50,7 @@ export const bodySlice = createSlice({
       }
     },
     clearArray: (state, { payload: property }) => {
-      state[property] = undefined
+      state[property] = []
     },
     editObjectElement: (
       state,

@@ -1,12 +1,12 @@
 import {
   addElement,
-  changeValue,
+  clearArray,
   initializeArray,
   selectBodyProperty,
 } from "../bodySlice"
 import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
-import { useGetDatumQuery } from "../../../util/query-utils"
-import { reformColumns } from "../../../util/filters-utils"
+import { useGetDataQuery } from "../../../util/query-util"
+import { reformColumns } from "../../../util/filters-util"
 import Button from "../../../components/Button"
 import Spinner from "../../../components/Spinner"
 import Table from "../../filters/Table"
@@ -35,8 +35,7 @@ function PopUpContent({ header, excludedId, arrayOn }) {
   const [selected, setSelected] = useState(initialState)
   const integers = ["amount", "returned"]
 
-  const { data, error, isFetching, isSuccess, isError } =
-    useGetDatumQuery(route)
+  const { data, error, isFetching, isSuccess, isError } = useGetDataQuery(route)
 
   columns = reformColumns(columns)
 
@@ -52,6 +51,7 @@ function PopUpContent({ header, excludedId, arrayOn }) {
         columns={columns}
         data={data}
         route={route}
+        hasFilters={true}
         onDoubleClick={(row) => () => {
           setSelected((prev) => ({ ...prev, ware: row.original }))
         }}
@@ -158,10 +158,11 @@ export default function ArrayInput({
       dispatch(initializeArray(property))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [property])
+  }, [arrayOn, property])
 
-  const handleClear = () =>
-    dispatch(changeValue({ property, value: undefined }))
+  const handleClear = () => {
+    dispatch(clearArray(property))
+  }
 
   return (
     <div className="input-switch">
@@ -177,17 +178,17 @@ export default function ArrayInput({
       <div className={"array-header" + (!arrayOn ? " disabled" : "")}>
         <Button
           className="visibility-button"
-          icon={<LiaSearchSolid />}
           type="button"
-          onClick={() => setPopupVisible(true)}
+          icon={<LiaSearchSolid />}
           disabled={!arrayOn}
+          onClick={() => setPopupVisible(true)}
         ></Button>
         {newLength !== 0 && (
           <Button
-            onClick={handleClear}
-            type="button"
             className="array-clear-button"
+            type="button"
             icon={<MdOutlineClear />}
+            onClick={handleClear}
           />
         )}
         <input

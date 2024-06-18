@@ -4,7 +4,7 @@ import {
   selectBodyProperty,
   addRequirement,
 } from "./bodySlice.js"
-import { getMiniTableColumns, getNameValue } from "../../util/body-utils.jsx"
+import { getMiniTableColumns, getNameValue } from "../../util/body-util.jsx"
 import Table from "../filters/Table.jsx"
 import ArrayInput from "./input/ArrayInput.jsx"
 import Arrow from "../../components/Arrow.jsx"
@@ -18,7 +18,8 @@ import { FaDeleteLeft } from "react-icons/fa6"
 
 function Value({ columns, route, value, canInput }) {
   const dispatch = useDispatch()
-  const array = useSelector(selectBodyProperty(route)) || []
+  const array = useSelector(selectBodyProperty(route))
+
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 5,
@@ -45,7 +46,7 @@ function Value({ columns, route, value, canInput }) {
           />
         </>
       )}
-      {canInput && (
+      {canInput && array && (
         <>
           <strong>Input</strong>
           <Table
@@ -112,22 +113,22 @@ export default function MiniTable({ property, value, header, canInput }) {
   return (
     <div className="mini-table">
       <div className="header">
-        <Arrow onClick={() => setIsOpen(!isOpen)} />
         <div className="header-text">{header}</div>
-      </div>
-      <div className="name-value">
-        {typeof value === "object" ? nameValue : value}
-      </div>
-      {canInput && (
-        <div className="input">
-          <ArrayInput
-            property={property}
-            value={value}
-            header={header}
-            excludedId={excludedId}
-          />
+        <div className="name-value">
+          <Arrow state={isOpen} onClick={() => setIsOpen(!isOpen)} />
+          {typeof value === "object" ? nameValue : value}
         </div>
-      )}
+        {canInput && (
+          <div className="input">
+            <ArrayInput
+              property={property}
+              value={value}
+              header={header}
+              excludedId={excludedId}
+            />
+          </div>
+        )}
+      </div>
       {isOpen && (
         <Value
           route={property}

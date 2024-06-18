@@ -1,22 +1,23 @@
-import { useGetDataQuery } from "../../util/query-utils"
-import { getColumns } from "../../util/body-utils"
+import { useGetDatumQuery } from "../../util/query-util"
+import { getColumns } from "../../util/body-util"
 import ActionButton from "../../components/ActionButton"
 import Spinner from "../../components/Spinner"
 import Delete from "./Delete"
-import "./Data.css"
+import "./Datum.css"
 
 import { Outlet } from "react-router-dom"
 import { useParams, useLocation } from "react-router-dom"
 import { useState } from "react"
+import ApiError from "../../components/ApiError"
 
-export default function Data() {
+export default function Datum() {
   const { id } = useParams()
   const route = useLocation().pathname.split("/")[1]
   const currentAction = useLocation().pathname.split("/")[3] || "view"
   const columns = getColumns(route)
   const [popUp, setPopUp] = useState()
 
-  const { data, error, isFetching, isSuccess, isError } = useGetDataQuery(
+  const { data, error, isFetching, isSuccess, isError } = useGetDatumQuery(
     route,
     id
   )
@@ -26,18 +27,18 @@ export default function Data() {
   if (isFetching) {
     content = <Spinner />
   } else if (isError) {
-    content = <div>{error.toString()}</div>
+    content = <ApiError error={error} />
   } else if (isSuccess) {
     content = <Outlet context={[columns, data]} />
   }
 
   return (
     <>
-      <div className="data-headers">
+      <div className="datum-headers">
         {["view", "edit", "delete"].map((action, index) => {
           const props = {
             className:
-              "data-header" + (action === currentAction ? " active" : ""),
+              "datum-header" + (action === currentAction ? " active" : ""),
             type: action,
             route: route,
             id: parseInt(id),

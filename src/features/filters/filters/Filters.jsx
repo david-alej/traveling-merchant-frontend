@@ -1,34 +1,27 @@
-import SearchFilter from "./SearchFilter"
-import MultiSelectFilter from "./MultiSelectFilter"
-import SelectFilter from "./SelectFilter"
-import EqualitiesFilter from "./EqualitiesFilter"
+import { useSelector } from "react-redux"
 import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
+import { selectRouteFilters } from "../filtersSlice"
+import EqualitiesFilter from "./EqualitiesFilter"
+import MultiSelectFilter from "./MultiSelectFilter"
+import SearchFilter from "./SearchFilter"
+import SelectFilter from "./SelectFilter"
 
 import PropTypes from "prop-types"
-import { useSelector } from "react-redux"
-import { selectRouteFilters } from "../filtersSlice"
-import { useLocation } from "react-router-dom"
 
-export default function Filters({ table }) {
-  const route = useLocation().pathname.split("/")[1]
-
+export default function Filters({ route, table }) {
   const filters = useSelector(selectRouteFilters(route))
-
   const columns = routesColumnDefinitions[route]
 
   return (
     <div className="filters">
-      {filters.map((filter) => {
-        const {
-          accessorKey: id,
-          header,
-          meta: { dataType },
-        } = columns.find((column) => column.accessorKey === filter.id)
+      {columns.map(({ accessorKey: id, header, meta: { dataType } }, index) => {
+        const filter = filters[index]
         const props = { header, filter }
+        const { value } = filter
 
         let content
 
-        if (dataType === "str" || dataType === "obj") {
+        if (typeof value === "string" && dataType !== "type") {
           content = <SearchFilter {...props} />
         } else if (dataType === "type" || dataType === "itr") {
           const flattendArray = table
@@ -43,17 +36,12 @@ export default function Filters({ table }) {
             ) : (
               <MultiSelectFilter uniqueValues={uniqueValues} {...props} />
             )
-        } else if (
-          dataType === "int" ||
-          dataType === "num" ||
-          dataType === "date" ||
-          dataType === "len"
-        ) {
+        } else if (value.length === 2) {
           content = <EqualitiesFilter {...props} />
         }
 
         return (
-          <div key={filter.id} className="filter">
+          <div key={index} className="filter">
             <strong>{header + ": "}</strong>
             <div className="filter-break" />
             {content}
@@ -65,5 +53,6 @@ export default function Filters({ table }) {
 }
 
 Filters.propTypes = {
+  route: PropTypes.string.isRequired,
   table: PropTypes.object.isRequired,
 }

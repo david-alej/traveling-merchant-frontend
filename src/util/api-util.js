@@ -13,9 +13,10 @@ export const createEndpointOptions = (tagType) => ({
       providesTags: (result, error, id) => [{ type: tagType, id }],
     }),
     [`get${tagType}s`]: build.query({
-      query: () => ({
+      query: (body) => ({
         url: `${tagType.toLowerCase()}s/search`,
         method: "POST",
+        body,
       }),
       providesTags: (result) => providesList(result, tagType),
     }),

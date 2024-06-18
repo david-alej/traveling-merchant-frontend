@@ -1,12 +1,12 @@
-import { useDeleteDataQuery } from "../../util/query-utils.jsx"
 import { selectBody } from "./bodySlice.js"
+import { useDeleteDataMutation } from "../../util/query-util.jsx"
 import Spinner from "../../components/Spinner.jsx"
+import Button from "../../components/Button.jsx"
 import Row from "./Row.jsx"
 
 import { useLocation } from "react-router-dom"
 import { useSelector } from "react-redux"
 import PropTypes from "prop-types"
-import Button from "../../components/Button.jsx"
 import { MdOutlineClear } from "react-icons/md"
 
 export default function Delete({ columns, data, closePopUp }) {
@@ -15,7 +15,7 @@ export default function Delete({ columns, data, closePopUp }) {
   const { errors, requirements, ...body } = useSelector(selectBody)
 
   const [deleteData, { error: response, isLoading: isDeleting, isError }] =
-    useDeleteDataQuery(route)
+    useDeleteDataMutation(route)
 
   let content
 
@@ -43,7 +43,7 @@ export default function Delete({ columns, data, closePopUp }) {
           Are you sure you want to <strong>delete</strong> the following{" "}
           <strong>{route.slice(0, -1)}</strong>?
         </div>
-        <div className="data" key={`${route}-${data.id}`}>
+        <div className="datum view-only" key={`${route}-${data.id}`}>
           {columns.map(({ accessorKey: property, header, cell }, index) => (
             <Row
               key={index}
@@ -58,12 +58,11 @@ export default function Delete({ columns, data, closePopUp }) {
   }
 
   return (
-    // <div className="pop-up">
     <form
       className="pop-up"
       onSubmit={async (e) => {
         e.preventDefault()
-        console.log(data.id)
+
         try {
           await deleteData(data.id)
         } catch (err) {
@@ -96,12 +95,11 @@ export default function Delete({ columns, data, closePopUp }) {
       </div>
       <br />
     </form>
-    // </div>
   )
 }
 
 Delete.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.object.isRequired,
-  closePopUp: PropTypes.func,
+  closePopUp: PropTypes.func.isRequired,
 }

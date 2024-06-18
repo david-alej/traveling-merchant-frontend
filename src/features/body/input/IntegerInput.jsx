@@ -1,18 +1,51 @@
-import PropTypes from "prop-types"
+import {
+  changeError,
+  changeValue,
+  selectBodyProperty,
+  selectErrorProperty,
+} from "../bodySlice"
 
-export default function IntegerInput({ property, selected, setSelected }) {
+import PropTypes from "prop-types"
+import { useDispatch, useSelector } from "react-redux"
+
+export default function IdInput({ property }) {
+  const dispatch = useDispatch()
+  const integer = useSelector(selectBodyProperty(property))
+  const error = useSelector(selectErrorProperty(property))
+
+  const handleChange = ({ target }) => {
+    let { value: newValue } = target
+    newValue = newValue.replace(/[^0-9.-]/g, "")
+    let newError
+
+    if (newValue !== 0 && !newValue) {
+      newError = ""
+    } else if (isNaN(newValue)) {
+      newError = "a number"
+    } else if (newValue <= 0) {
+      newError = "positive"
+    } else if (Number.isInteger(newValue)) {
+      newError = "an integer"
+    }
+
+    dispatch(changeError({ property, error: newError }))
+    dispatch(changeValue({ property, value: newValue }))
+  }
+
   return (
-    <input
-      placeholder="integer"
-      value={selected[property]}
-      onChange={({ target }) =>
-        setSelected((prev) => ({ ...prev, [property]: target.value }))
-      }
-    />
+    <>
+      <input
+        placeholder="Positive Integer"
+        value={integer || ""}
+        onChange={handleChange}
+      />
+      {error && (
+        <span className="float-error">{`Id field must be ${error}.`}</span>
+      )}
+    </>
   )
 }
-IntegerInput.propTypes = {
+
+IdInput.propTypes = {
   property: PropTypes.string.isRequired,
-  selected: PropTypes.object.isRequired,
-  setSelected: PropTypes.func.isRequired,
 }

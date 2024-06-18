@@ -1,7 +1,6 @@
 import PropTypes from "prop-types"
 
 export default function Button({
-  key,
   className,
   text,
   icon,
@@ -13,7 +12,6 @@ export default function Button({
 }) {
   return (
     <button
-      key={key}
       className={
         className +
         (isActive ? " active" : "") +
@@ -30,7 +28,6 @@ export default function Button({
 }
 
 Button.propTypes = {
-  key: PropTypes.number,
   className: PropTypes.string.isRequired,
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   icon: PropTypes.any,
