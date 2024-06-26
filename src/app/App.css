@@ -79,6 +79,7 @@ button:disabled.not-active {
 .parent-headers {
   display: inline-flex;
   width: 100%;
+  height: 5%;
 }
 
 .parent-header {
@@ -153,11 +154,15 @@ input.error {
 }
 
 /* Api Error */
-
 .api-error {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 3rem;
+}
+
+.api-error .message {
+  margin-left: 1%;
 }

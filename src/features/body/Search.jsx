@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { MdFindInPage } from "react-icons/md"
 import { useDispatch, useSelector } from "react-redux"
+import ApiResponse from "../../components/ApiResponse"
 
 export default function Search() {
   const dispatch = useDispatch()
@@ -47,13 +48,7 @@ export default function Search() {
   if (isFetching) {
     content = <Spinner />
   } else if (isError) {
-    content = (
-      <div>
-        {Object.keys(error).map((key, index) => (
-          <p key={index}>{`${key}: ${error[key]}`}</p>
-        ))}
-      </div>
-    )
+    content = <ApiResponse response={error} />
   } else if (isSuccess) {
     content = (
       <Table

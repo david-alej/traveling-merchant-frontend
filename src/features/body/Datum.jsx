@@ -1,6 +1,7 @@
 import { useGetDatumQuery } from "../../util/query-util"
 import { getColumns } from "../../util/body-util"
 import ActionButton from "../../components/ActionButton"
+import ApiResponse from "../../components/ApiResponse"
 import Spinner from "../../components/Spinner"
 import Delete from "./Delete"
 import "./Datum.css"
@@ -8,7 +9,6 @@ import "./Datum.css"
 import { Outlet } from "react-router-dom"
 import { useParams, useLocation } from "react-router-dom"
 import { useState } from "react"
-import ApiError from "../../components/ApiError"
 
 export default function Datum() {
   const { id } = useParams()
@@ -27,7 +27,11 @@ export default function Datum() {
   if (isFetching) {
     content = <Spinner />
   } else if (isError) {
-    content = <ApiError error={error} />
+    content = (
+      <div className="datum">
+        <ApiResponse response={error} />
+      </div>
+    )
   } else if (isSuccess) {
     content = <Outlet context={[columns, data]} />
   }

@@ -13,6 +13,8 @@ export const isIsoStr = (str) =>
   /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)
 
 export const formatDate = (dateString) => {
+  if (!dateString) return ""
+
   if (!isIsoStr(dateString)) {
     throw new Error("Input is not a date in ISO string format.")
   }

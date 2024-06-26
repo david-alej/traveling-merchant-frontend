@@ -7,6 +7,7 @@ import View from "./View.jsx"
 
 import { useParams, useLocation } from "react-router-dom"
 import { useSelector } from "react-redux"
+import ApiResponse from "../../components/ApiResponse.jsx"
 
 export default function Edit() {
   const { id } = useParams()
@@ -30,20 +31,11 @@ export default function Edit() {
   if (isUpdating) {
     content = <Spinner />
   } else if (isError) {
-    content =
-      response.originalStatus < 300 ? (
-        <>
-          <p>Success</p>
-          <div>{response.data}</div>
-        </>
-      ) : (
-        <div>
-          <div>Update Error</div>
-          {Object.keys(response).map((key, index) => (
-            <p key={index}>{`${key}: ${response[key]}`}</p>
-          ))}
-        </div>
-      )
+    content = (
+      <div className="datum">
+        <ApiResponse response={response} />
+      </div>
+    )
   } else {
     content = <View />
   }

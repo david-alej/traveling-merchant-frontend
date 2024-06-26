@@ -12,6 +12,7 @@ import Row from "./Row"
 import { useLocation } from "react-router-dom"
 import { useState } from "react"
 import { useSelector } from "react-redux"
+import ApiResponse from "../../components/ApiResponse"
 
 export default function Create() {
   const route = useLocation().pathname.split("/")[1]
@@ -30,20 +31,11 @@ export default function Create() {
   if (isCreating) {
     content = <Spinner />
   } else if (isError) {
-    content =
-      response.originalStatus < 300 ? (
-        <>
-          <p>Success</p>
-          <div>{response.data}</div>
-        </>
-      ) : (
-        <div>
-          <div>Create Error</div>
-          {Object.keys(response).map((key, index) => (
-            <p key={index}>{`${key}: ${response[key]}`}</p>
-          ))}
-        </div>
-      )
+    content = (
+      <div className="create">
+        <ApiResponse response={response} />
+      </div>
+    )
   } else {
     content = (
       <>

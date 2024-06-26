@@ -2,7 +2,9 @@ import { selectRouteFilters } from "./filtersSlice.js"
 import { useGetDataQuery } from "../../util/query-util.jsx"
 import { getPartialColumns } from "../../util/filters-util.jsx"
 import Spinner from "../../components/Spinner.jsx"
+import ApiResponse from "../../components/ApiResponse.jsx"
 import Table from "./Table.jsx"
+import "./Data.css"
 
 import { useLocation } from "react-router-dom"
 import { useSelector } from "react-redux"
@@ -18,13 +20,7 @@ export default function Data() {
   if (isFetching) {
     content = <Spinner />
   } else if (isError) {
-    content = (
-      <div>
-        {Object.keys(error).map((key, index) => (
-          <p key={index}>{`${key}: ${error[key]}`}</p>
-        ))}
-      </div>
-    )
+    content = <ApiResponse response={error} />
   } else if (isSuccess) {
     content = (
       <Table
@@ -38,5 +34,5 @@ export default function Data() {
     )
   }
 
-  return content
+  return <div className="data">{content}</div>
 }

@@ -1,5 +1,5 @@
 import Login from "../features/session/Login"
-import Dashboard from "../components/Dashboard"
+import Dashboard from "../components/dashboard/Dashboard"
 import Root from "../components/root/Root"
 import ParentRoute from "../components/ParentRoute"
 import Data from "../features/filters/Data"

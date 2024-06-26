@@ -22,7 +22,7 @@ export default function StringInput({ property, value }) {
   useEffect(() => {
     if (
       span.current &&
-      span.current.offsetWidth < span.current.parentElement.offsetWidth
+      span.current.offsetWidth !== span.current.parentElement.offsetWidth
     ) {
       const parentWidth = span.current.parentElement.offsetWidth
       const minWidth = parentWidth / 2
@@ -30,6 +30,7 @@ export default function StringInput({ property, value }) {
         Math.max(minWidth, span.current.offsetWidth + 2),
         parentWidth
       )}px`
+
       setWidth(newWidth)
     }
   }, [string])

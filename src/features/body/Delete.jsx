@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom"
 import { useSelector } from "react-redux"
 import PropTypes from "prop-types"
 import { MdOutlineClear } from "react-icons/md"
+import ApiResponse from "../../components/ApiResponse.jsx"
 
 export default function Delete({ columns, data, closePopUp }) {
   const route = useLocation().pathname.split("/")[1]
@@ -22,38 +23,48 @@ export default function Delete({ columns, data, closePopUp }) {
   if (isDeleting) {
     content = <Spinner />
   } else if (isError) {
-    content =
-      response.originalStatus < 300 ? (
-        <>
-          <p>Success</p>
-          <div>{response.data}</div>
-        </>
-      ) : (
-        <div>
-          <div>Update Error</div>
-          {Object.keys(response).map((key, index) => (
-            <p key={index}>{`${key}: ${response[key]}`}</p>
-          ))}
-        </div>
-      )
-  } else {
+    content = <ApiResponse response={response} />
+  } else if (!data) {
     content = (
       <div className="delete">
-        <div className="delete-header">
-          Are you sure you want to <strong>delete</strong> the following{" "}
-          <strong>{route.slice(0, -1)}</strong>?
-        </div>
-        <div className="datum view-only" key={`${route}-${data.id}`}>
-          {columns.map(({ accessorKey: property, header, cell }, index) => (
-            <Row
-              key={index}
-              property={property}
-              value={cell({ getValue: () => data[property] })}
-              header={header}
-            />
-          ))}
-        </div>
+        <ApiResponse
+          response={{
+            originalStatus: 404,
+            data: `${route[0].toUpperCase() + route.slice(1, -1)} not found.`,
+          }}
+        />
       </div>
+    )
+  } else {
+    content = (
+      <>
+        <div className="delete">
+          <div className="delete-header">
+            Are you sure you want to <strong>delete</strong> the following{" "}
+            <strong>{route.slice(0, -1)}</strong>?
+          </div>
+          <div className="datum view-only" key={`${route}-${data.id}`}>
+            {columns.map(({ accessorKey: property, header, cell }, index) => (
+              <Row
+                key={index}
+                property={property}
+                value={cell({ getValue: () => data[property] })}
+                header={header}
+              />
+            ))}
+          </div>
+        </div>
+        <br />
+        <div className="delete-boolean-buttons">
+          <Button className="delete-boolean-button" text="Yes" />
+          <Button
+            className="delete-boolean-button"
+            type="button"
+            text="No"
+            onClick={closePopUp}
+          />
+        </div>
+      </>
     )
   }
 
@@ -83,16 +94,6 @@ export default function Delete({ columns, data, closePopUp }) {
       </div>
       <br />
       {content}
-      <br />
-      <div className="delete-boolean-buttons">
-        <Button className="delete-boolean-button" text="Yes" />
-        <Button
-          className="delete-boolean-button"
-          type="button"
-          text="No"
-          onClick={closePopUp}
-        />
-      </div>
       <br />
     </form>
   )
