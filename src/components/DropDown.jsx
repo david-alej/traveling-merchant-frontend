@@ -17,14 +17,12 @@ export default function DropDown({
     <div className="select-container">
       <div className="custom-select single">
         <div className="select-box">
-          {value.length > 0 && (
+          {value?.length > 0 && (
             <div className="select-filter-clear-icon" onClick={onClearValue}>
               <MdOutlineClear />
             </div>
           )}
-          <span className="selected-option" key={value}>
-            {value}
-          </span>
+          <span className="selected-option">{value}</span>
           <Arrow
             state={selectIsOpened}
             onClick={() => setSelectIsOpened(!selectIsOpened)}

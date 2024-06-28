@@ -6,8 +6,10 @@ import { getPartialColumns } from "../../util/filters-util"
 import Spinner from "../../components/Spinner"
 import Table from "../filters/Table"
 import Button from "../../components/Button"
+import ApiResponse from "../../components/ApiResponse"
 import IntegerInput from "./input/IntegerInput"
 import Input from "./input/Input"
+import SearchDate from "./SearchDate"
 import MiniDatum from "./MiniDatum"
 import Row from "./Row"
 
@@ -15,7 +17,6 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { MdFindInPage } from "react-icons/md"
 import { useDispatch, useSelector } from "react-redux"
-import ApiResponse from "../../components/ApiResponse"
 
 export default function Search() {
   const dispatch = useDispatch()
@@ -153,6 +154,8 @@ export default function Search() {
                         }
 
                         content = <MiniDatum {...props} />
+                      } else if (property.slice(-2) === "At") {
+                        content = <SearchDate {...props} />
                       } else if (isOriginal || isOptional) {
                         props.input = (
                           <Input property={property} header={header} />

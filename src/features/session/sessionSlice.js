@@ -30,20 +30,14 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk(
   "session/logout",
-  async (arg, { getState, rejectWithValue }) => {
+  async (arg, { getState }) => {
     const { headers } = getState().session
     const requestBody = {}
 
-    const { status } = await axios.post("/logout", requestBody, {
+    await axios.post("/logout", requestBody, {
       headers,
       withCredentials: true,
     })
-
-    if (status !== 200) {
-      return rejectWithValue(
-        "Log out did not work please try again or contact developer."
-      )
-    }
   }
 )
 

@@ -81,7 +81,7 @@ export default function BarChart({
     plugins: {
       title: {
         display: true,
-        text: `${title}`,
+        text: title,
         font: { size: 32 },
       },
     },

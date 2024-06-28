@@ -227,14 +227,17 @@ export const formatBody = (body) => {
   const newBody = {}
 
   for (const [property, value] of Object.entries(body)) {
-    if (Array.isArray(value) && value.length > 0) {
-      newBody[property] = value
-    } else if (
+    if (
       typeof value === "object" &&
       value !== null &&
+      !Array.isArray(value) &&
       Object.keys(value).length > 0
     ) {
-      newBody[property + "Id"] = value.id
+      if (property.slice(-2) === "At") {
+        newBody[property] = value
+      } else {
+        newBody[property + "Id"] = value.id
+      }
     } else if (value || value === 0) {
       newBody[property] = value
     }

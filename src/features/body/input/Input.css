@@ -69,6 +69,23 @@ input.array.disabled {
   margin: 0.3rem;
 }
 
+/* General Date Input */
+.value.search-date {
+  display: inline-flex;
+  justify-content: center;
+}
+
+.value.search-date .select-text {
+  min-width: 7.5rem;
+  width: 20%;
+  margin-right: 2.5%;
+}
+
+.value.search-date .select-value {
+  min-width: 10rem;
+  width: 30%;
+}
+
 /* Pop Up */
 .add-element {
   display: flex;

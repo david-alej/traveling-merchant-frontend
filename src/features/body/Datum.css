@@ -52,6 +52,15 @@
   justify-content: center;
 }
 
+/* Create */
+.create {
+  margin-top: 1%;
+}
+
+.create .submit-container {
+  margin-top: 1%;
+}
+
 /* Rows */
 .row,
 .sub-row {

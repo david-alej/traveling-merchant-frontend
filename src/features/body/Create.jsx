@@ -100,6 +100,7 @@ export default function Create() {
 
   return (
     <form
+      className="create"
       onSubmit={(e) => {
         e.preventDefault()
         // eslint-disable-next-line no-unused-vars

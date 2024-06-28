@@ -1,4 +1,5 @@
 import { useGetDataQuery } from "../../util/query-util"
+import MonthlyReport from "./MonthlyReport"
 import DailyReport from "./DailyReport"
 import OpenTickets from "./OpenTickets"
 import OpenOrders from "./OpenOrders"
@@ -8,7 +9,6 @@ import "./Dashboard.css"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { useEffect, useState } from "react"
 import dayjs from "dayjs"
-import MonthlyReport from "./MonthlyReport"
 
 const months = [
   "Jan",
@@ -173,7 +173,7 @@ export default function Dashboard() {
       />
       <BarChart
         id="yearly-report"
-        title={year}
+        title={`${year}`}
         labels={months}
         sales={sales}
         payments={payments}

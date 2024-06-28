@@ -4,7 +4,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { reset } from "../features/body/bodySlice"
-import { FaSearch, FaTable } from "react-icons/fa"
+import { FaSearch } from "react-icons/fa"
 import { FaCirclePlus } from "react-icons/fa6"
 
 function ParentRoute() {
@@ -22,8 +22,7 @@ function ParentRoute() {
     <>
       <div key={route} className="parent-headers">
         {[
-          { type: "", icon: <FaTable size={23} /> },
-          { type: "search", icon: <FaSearch /> },
+          { type: "", icon: <FaSearch /> },
           { type: "create", icon: <FaCirclePlus size={23} /> },
         ].map(({ type, icon }, index) => (
           <Button
