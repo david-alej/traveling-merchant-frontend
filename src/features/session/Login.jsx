@@ -1,9 +1,11 @@
 import { login } from "./sessionSlice.js"
+import Button from "../../components/Button.jsx"
+import ErrorBox from "../../components/ErrorBox.jsx"
+import "./Login.css"
 
 import { useDispatch, useSelector } from "react-redux"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import Button from "../../components/Button.jsx"
 
 export default function Login() {
   const dispatch = useDispatch()
@@ -31,9 +33,9 @@ export default function Login() {
     if (usernameIsInvalid || passwordIsInvalid) {
       setFailedLogin(failedLoginMsg)
     } else {
-      await dispatch(login({ username, password }))
+      const { error } = await dispatch(login({ username, password }))
 
-      if (!hasError) navigate("/dashboard")
+      if (!error) navigate("/dashboard")
 
       setFailedLogin(failedLoginMsg)
     }
@@ -52,39 +54,47 @@ export default function Login() {
   }
 
   return (
-    <section className="login">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <p>{failedLogin}</p>
-        </div>
-        <div>
-          <label>Username</label>
-          <input
-            id="username"
-            name="username"
-            value={username}
-            onChange={handleUsernameChange}
-            maxLength="20"
-            required
-          />
-          <label>Password</label>
-          <input
-            id="password"
-            name="password"
-            value={password}
-            onChange={handlePasswordChange}
-            maxLength="20"
-            required
-          />
-          <Button
-            type="submit"
-            className="primary"
-            text="Sign In"
-            onClick={() => {}}
-          />
-        </div>
-      </form>
+    <section id="login-container">
+      <div id="login">
+        <h1>Login</h1>
+        <form onSubmit={handleSubmit}>
+          <div id="login-inputs">
+            <ErrorBox className="login" exists={hasError}>
+              {failedLogin}
+            </ErrorBox>
+            <div className="login-input username">
+              <label>Username</label>
+              <input
+                id="username"
+                name="username"
+                value={username}
+                onChange={handleUsernameChange}
+                maxLength="20"
+                required
+              />
+            </div>
+            <div className="login-input password">
+              <label>Password</label>
+              <input
+                id="password"
+                name="password"
+                value={password}
+                onChange={handlePasswordChange}
+                maxLength="20"
+                required
+              />
+            </div>
+          </div>
+          <div id="login-submit">
+            <Button
+              type="submit"
+              className="primary"
+              text="Sign In"
+              onClick={() => {}}
+            />
+          </div>
+        </form>
+      </div>
     </section>
   )
 }

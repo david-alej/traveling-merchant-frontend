@@ -1,12 +1,13 @@
+import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
+import { useGetDataQuery } from "../../../util/query-util"
+import { reformColumns } from "../../../util/filters-util"
 import {
   addElement,
   clearArray,
   initializeArray,
   selectBodyProperty,
 } from "../bodySlice"
-import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
-import { useGetDataQuery } from "../../../util/query-util"
-import { reformColumns } from "../../../util/filters-util"
+import ApiResponse from "../../../components/ApiResponse"
 import Button from "../../../components/Button"
 import Spinner from "../../../components/Spinner"
 import Table from "../../filters/Table"
@@ -44,7 +45,7 @@ function PopUpContent({ header, excludedId, arrayOn }) {
   if (isFetching) {
     content = <Spinner />
   } else if (isError) {
-    content = <div>{error.toString()}</div>
+    content = <ApiResponse response={error} />
   } else if (isSuccess) {
     content = (
       <Table

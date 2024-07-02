@@ -4,6 +4,7 @@ import {
   selectBodyProperty,
   selectErrorProperty,
 } from "../bodySlice"
+import ErrorBox from "../../../components/ErrorBox"
 
 import PropTypes from "prop-types"
 import { useDispatch, useSelector } from "react-redux"
@@ -39,9 +40,10 @@ export default function IdInput({ property }) {
         value={integer || ""}
         onChange={handleChange}
       />
-      {error && (
-        <span className="float-error">{`Id field must be ${error}.`}</span>
-      )}
+      <ErrorBox
+        className="integer"
+        exists={error}
+      >{`Id field must be ${error}.`}</ErrorBox>
     </>
   )
 }

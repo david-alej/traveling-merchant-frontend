@@ -4,6 +4,7 @@ import {
   selectBodyProperty,
   selectErrorProperty,
 } from "../bodySlice"
+import ErrorBox from "../../../components/ErrorBox"
 
 import PropTypes from "prop-types"
 import { useEffect, useRef, useState } from "react"
@@ -63,7 +64,9 @@ export default function StringInput({ property, value }) {
       <span id="hidden-span" ref={span}>
         {string.length > value.length ? string : value}
       </span>
-      {error && <span className="error">{error}</span>}
+      <ErrorBox className="string" exists={error}>
+        {error}
+      </ErrorBox>
     </>
   )
 }

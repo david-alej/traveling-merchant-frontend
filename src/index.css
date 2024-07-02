@@ -15,5 +15,5 @@ body,
 
 #root {
   display: grid;
-  grid-template: repeat(10, 1fr) / repeat(7, 1fr);
+  grid-template: repeat(10, 1fr) / repeat(9, 1fr);
 }

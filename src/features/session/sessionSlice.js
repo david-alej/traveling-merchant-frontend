@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
 export const login = createAsyncThunk(
   "session/login",
-  async (merchantCredentials, { getState }) => {
+  async (merchantCredentials, { getState, rejectWithValue }) => {
     let session = getState().session
     session = { ...session }
 
@@ -12,18 +12,15 @@ export const login = createAsyncThunk(
 
     if (merchantName && merchantName.length > 0) return session
 
-    const {
-      status,
-      data: { csrfToken },
-    } = await axios.post("/login", merchantCredentials, {
+    const { status, data } = await axios.post("/login", merchantCredentials, {
       headers,
     })
 
-    if (status !== 200) return session
+    if (status !== 200) return rejectWithValue(data)
 
     return {
       merchantName: merchantCredentials.username,
-      headers: { ["x-csrf-token"]: csrfToken },
+      headers: { ["x-csrf-token"]: data.csrfToken },
     }
   }
 )
@@ -55,9 +52,9 @@ export const sessionSlice = createSlice({
       state.hasError = false
     })
 
-    builder.addCase(login.rejected, (state) => {
+    builder.addCase(login.rejected, (state, { payload }) => {
       state.isLoading = false
-      state.hasError = true
+      state.hasError = payload
     })
 
     builder.addCase(login.fulfilled, (state, { payload }) => {

@@ -5,6 +5,7 @@ import {
   selectBodyProperty,
   selectErrorProperty,
 } from "../bodySlice"
+import ErrorBox from "../../../components/ErrorBox"
 
 import PropTypes from "prop-types"
 import { useDispatch, useSelector } from "react-redux"
@@ -45,9 +46,10 @@ export default function FloatInput({ property, value, header, floatType }) {
         value={float || ""}
         onChange={handleChange}
       />
-      {error && (
-        <span className="float-error">{`${header} field must be ${error}.`}</span>
-      )}
+      <ErrorBox
+        className="float"
+        exists={error}
+      >{`${header} field must be ${error}.`}</ErrorBox>
     </>
   )
 }

@@ -5,6 +5,7 @@ import {
   selectBodyProperty,
   selectErrorProperty,
 } from "../bodySlice"
+import ErrorBox from "../../../components/ErrorBox"
 
 import PropTypes from "prop-types"
 import { useRef } from "react"
@@ -83,7 +84,9 @@ export default function PhoneNumberInput({ value }) {
         onChange={handleChange}
         maxLength="14"
       ></input>
-      {error && <span className="error">{}</span>}
+      <ErrorBox className="phone-number" exists={error}>
+        {error}
+      </ErrorBox>
     </>
   )
 }

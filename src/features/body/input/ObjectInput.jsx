@@ -1,8 +1,9 @@
-import { changeValue, selectBodyProperty } from "../bodySlice"
 import { getNameValue } from "../../../util/body-util"
 import { reformColumns } from "../../../util/filters-util"
 import { useGetDataQuery } from "../../../util/query-util"
 import routesColumnDefinitions from "../../../util/routesColumnDefinitions"
+import { changeValue, selectBodyProperty } from "../bodySlice"
+import ApiResponse from "../../../components/ApiResponse"
 import Spinner from "../../../components/Spinner"
 import Table from "../../filters/Table"
 import Button from "../../../components/Button"
@@ -31,7 +32,7 @@ export default function ObjectInput({ property, value = {}, header }) {
   if (isFetching) {
     content = <Spinner />
   } else if (isError) {
-    content = <div>{error.toString()}</div>
+    content = <ApiResponse response={error} />
   } else if (isSuccess) {
     content = (
       <Table
