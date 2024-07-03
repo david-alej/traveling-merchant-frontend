@@ -3,6 +3,7 @@ import {
   formatDate,
   formatFullDate,
   formatSimpleDate,
+  formatTagsColumn,
 } from "./formatters"
 
 import "@testing-library/jest-dom"
@@ -72,13 +73,21 @@ describe("Util formatters", function () {
   })
 
   describe("Helper formatDate", function () {
+    it("When input is falsy, Then an empty string is returned", function () {
+      const input = undefined
+
+      const response = formatDate(input)
+
+      expect(response).toBe("")
+    })
+
     it("When input is not a date in ISO string, Then error is thrown", function () {
       const isNotAString = 23421
       const utcString = "Wed, 14 Jun 2017 07:00:00 GMT"
 
       const tryToLocalDate = (input) => {
         try {
-          formatFullDate(input)
+          formatDate(input)
         } catch (err) {
           expect(err.message)
         }
@@ -103,7 +112,7 @@ describe("Util formatters", function () {
 
       const result = formatFullDate(dateString)
 
-      expect(result).toBe(`${month} ${day} ${year} ${time}`)
+      expect(result).toBe(`${month} ${day}, ${year}, ${time}`)
     })
   })
 
@@ -113,7 +122,27 @@ describe("Util formatters", function () {
 
       const result = formatSimpleDate(dateString)
 
-      expect(result).toBe(`${month} ${day} ${year}`)
+      expect(result).toBe(`${month} ${day}, ${year}`)
+    })
+  })
+
+  describe("formatTagsColumn", function () {
+    const tags = ["one", "two", "three", "four"]
+
+    it("When tags is an array of strings and shallow equals false, Then tags array is returned with all the elements in string form seperated by commas", function () {
+      const shallow = false
+
+      const result = formatTagsColumn(tags, shallow)
+
+      expect(result).toBe("one, two, three, four")
+    })
+
+    it("When tags is an array of strings and shallow equals true, Then tags array is returned with the first three elements in string form seperated by commas", function () {
+      const shallow = true
+
+      const result = formatTagsColumn(tags, shallow)
+
+      expect(result).toBe("one, two, three, ...")
     })
   })
 })

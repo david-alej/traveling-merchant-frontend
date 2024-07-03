@@ -13,5 +13,5 @@ export default function ErrorBox({ className = "", exists, children }) {
 
 ErrorBox.propTypes = {
   className: PropTypes.string.isRequired,
-  exists: PropTypes.any.isRequired,
+  exists: PropTypes.any,
 }

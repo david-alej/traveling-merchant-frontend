@@ -47,8 +47,8 @@ export const reformColumn = (column, shallow) => {
       column.sortingFn = "dateSorting"
       column.filterFn = "dateFilter"
       column.cell = shallow
-        ? (props) => <p>{formatSimpleDate(props.getValue())}</p>
-        : (props) => <p>{formatFullDate(props.getValue())}</p>
+        ? (props) => formatSimpleDate(props.getValue())
+        : (props) => formatFullDate(props.getValue())
 
       break
     }
@@ -71,7 +71,7 @@ export const reformColumn = (column, shallow) => {
     }
 
     case "itr": {
-      column.cell = (props) => formatTagsColumn(props.getValue())
+      column.cell = (props) => formatTagsColumn(props.getValue(), shallow)
       column.enableSorting = false
       column.filterFn = "tagsFilter"
 
@@ -93,7 +93,7 @@ export const reformColumn = (column, shallow) => {
         column.cell = (props) => {
           const id = props.getValue()
 
-          return id ? <Link to={`/${route}/${id}`}>{id}</Link> : <p>{id}</p>
+          return id ? <Link to={`/${route}/${id}`}>{id}</Link> : id
         }
       }
     }
@@ -130,9 +130,7 @@ export const reformColumns = (columns, shallow = true) => {
 }
 
 export const getPartialColumns = (route) => {
-  let columns = routesColumnDefinitions[route]
+  const columns = routesColumnDefinitions[route]
 
-  columns = reformColumns(columns)
-
-  return columns
+  return reformColumns(columns)
 }

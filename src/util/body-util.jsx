@@ -15,9 +15,9 @@ export const camelToFlat = (property) => {
 
 export const getNameValue = (value) => {
   if (!value) return ""
-  let nameValue = value.length
+  let nameValue = ""
 
-  if (value.length !== 0 && !Array.isArray(value) && value) {
+  if (typeof value === "object" && !Array.isArray(value)) {
     const obj = value
 
     const nameKey =
@@ -26,7 +26,7 @@ export const getNameValue = (value) => {
     nameValue = obj[nameKey]
   }
 
-  return nameValue || ""
+  return nameValue
 }
 
 export const getMiniTableColumns = (property, header, excludedId) => {

@@ -42,13 +42,13 @@ export const formatFullDate = (dateString) => formatDate(dateString)
 export const formatSimpleDate = (dateString) =>
   formatDate(dateString).split(",").slice(0, -1).join()
 
-export const formatTagsColumn = (arrayTags) => {
+export const formatTagsColumn = (arrayTags, shallow) => {
   let tagsString = `${arrayTags[0]}`
 
   for (let i = 1; i < arrayTags.length; i++) {
     tagsString += `, ${arrayTags[i]}`
 
-    if (i === 2) {
+    if (i === 2 && shallow) {
       tagsString += ", ..."
       break
     }
