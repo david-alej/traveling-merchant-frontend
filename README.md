@@ -6,6 +6,8 @@ Traveling Merchant is a front end application that uses Reactjs to use traveling
 
 Merchant can use basic CRUD operations to change and view the data. The app provides a dashboard that present relevant daily, monthly, and yearly for the users sales. The dashboard also provides the pending money from customers and orders from providers.
 
+[](public/videos/app-video.gif)
+
 ## How to use
 
 The following are the requirements:
